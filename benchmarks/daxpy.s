@@ -27,7 +27,7 @@ main:
 	bl	m5_dump_stats
 
 	ldr     x0, N
-    	ldr     x10, =Alpha
+    	ldr     d10, =Alpha
     	ldr     x2, =X
     	ldr     x3, =Y
 	ldr     x4, =Z
@@ -43,11 +43,11 @@ main:
 	cmp x5, x7          // Comparar x5 con N
 	b.ge .L1            // Si x5 >= N, salir del bucle
 
-	ldr 	x6, [x2, x5, lsl #3] // Cargar el valor de X[i] en x6
-	ldr 	x8, [x3, x5, lsl #3] // Cargar el valor de Y[i] en x8
-	mul 	x6, x6, x10     // Multiplicar X[i] por Alpha
-	add 	x8, x8, x6      // Sumar Y[i] + Alpha*X[i]
-	str 	x8, [x4, x5, lsl #3] // Guardar el valor en Z[i]
+	ldr 	d6, [x2, x5, lsl #3] // Cargar el valor de X[i] en x6
+	ldr 	d8, [x3, x5, lsl #3] // Cargar el valor de Y[i] en x8
+	fmul 	d6, d6, d10     // Multiplicar X[i] por Alpha
+	fadd 	d8, d8, d6      // Sumar Y[i] + Alpha*X[i]
+	str 	d8, [x4, x5, lsl #3] // Guardar el valor en Z[i]
 
 	add x5, x5, x11     // Incrementar x5
 

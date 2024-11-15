@@ -50,7 +50,7 @@ main:
 	str 	d8, [x4, x5, lsl #3] // Guardar el valor en Z[i]
 
 	add x5, x5, x11     // Incrementar x5
-
+	b .L2               // Volver al bucle
 .L1:
 
 //---------------------- END CODE -------------------------------------

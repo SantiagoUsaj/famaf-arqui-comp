@@ -1,6 +1,8 @@
 	.data
 	N:       .dword 4096	// Number of elements in the vectors
 	Alpha:   .dword 2      // scalar value
+	Cero:    .dword 0      // Constante 0
+	Uno:     .dword 1      // Constante 1
 	
 	.bss 
 	X: .zero  32768        // vector X(4096)*8

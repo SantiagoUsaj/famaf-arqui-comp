@@ -32,7 +32,24 @@ main:
 
 //---------------------- CODE HERE ------------------------------------
 
+// En el vide de presentación dice usar instrucciones flotantes pero qsy ya esta todo con registros enteros
 
+	ldr 	x5, =Cero      // Cargar el valor de Cero en x5
+	ldr 	x11, =Uno      // Cargar el valor de Uno en x11
+	ldr 	x7, = N        // Cargar el valor de N en x7
+.L2:
+	cmp x5, x7          // Comparar x5 con N
+	b.ge .L1            // Si x5 >= N, salir del bucle
+
+	ldr 	x6, [x2, x5, lsl #3] // Cargar el valor de X[i] en x6
+	ldr 	x8, [x3, x5, lsl #3] // Cargar el valor de Y[i] en x8
+	mul 	x6, x6, x10     // Multiplicar X[i] por Alpha
+	add 	x8, x8, x6      // Sumar Y[i] + Alpha*X[i]
+	str 	x8, [x4, x5, lsl #3] // Guardar el valor en Z[i]
+
+	add x5, x5, x11     // Incrementar x5
+
+.L1:
 
 //---------------------- END CODE -------------------------------------
 

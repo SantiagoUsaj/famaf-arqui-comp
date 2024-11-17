@@ -1,0 +1,42 @@
+
+There are no discarded input sections
+
+Configuración de la Memoria
+
+Nombre           Origen             Longitud           Atributos
+ram              0x0000000040080000 0x0000000000400000
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Guión del enlazador y mapa de memoria
+
+LOAD main.o
+
+.text           0x0000000040080000      0x1e8
+ *(.text*)
+ .text          0x0000000040080000      0x1e8 main.o
+                0x0000000040080000                _start
+
+.data           0x00000000400801e8    0x10030
+ .data          0x00000000400801e8    0x10030 main.o
+
+.bss            0x0000000040090218        0x0
+ *(.bss*)
+ .bss           0x0000000040090218        0x0 main.o
+OUTPUT(main.elf elf64-littleaarch64)
+LOAD linker stubs
+
+.debug_line     0x0000000000000000       0x9d
+ .debug_line    0x0000000000000000       0x9d main.o
+
+.debug_info     0x0000000000000000       0x2e
+ .debug_info    0x0000000000000000       0x2e main.o
+
+.debug_abbrev   0x0000000000000000       0x14
+ .debug_abbrev  0x0000000000000000       0x14 main.o
+
+.debug_aranges  0x0000000000000000       0x30
+ .debug_aranges
+                0x0000000000000000       0x30 main.o
+
+.debug_str      0x0000000000000000       0xc0
+ .debug_str     0x0000000000000000       0xc0 main.o

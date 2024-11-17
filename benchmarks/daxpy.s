@@ -32,10 +32,30 @@ main:
 
 //---------------------- CODE HERE ------------------------------------
 
+	// Inicialización		
+	ldr     d10, [x10]      // Cargar Alpha en d10
+	
+	mov     x5, 0           // Inicializar índice i
 
+.L2:
+	cmp     x5, x0          // Comparar i con N
+	b.ge    .L1             // Si i >= N, salir del bucle
+
+	// Operación Z[i] = Alpha * X[i] + Y[i]
+	ldr     d0, [x2, x5, lsl #3] // Cargar X[i] en d0
+	ldr     d1, [x3, x5, lsl #3] // Cargar Y[i] en d1
+	fmul    d2, d10, d0     // Multiplicar Alpha * X[i] -> d2
+	fadd    d3, d2, d1      // Sumar Y[i] + (Alpha * X[i]) -> d3
+	str     d3, [x4, x5, lsl #3] // Guardar Z[i] en memoria
+
+	// Incrementar índice
+	add     x5, x5, 1       // i++
+
+	b       .L2             // Repetir el bucle
+
+.L1:
 
 //---------------------- END CODE -------------------------------------
-
 	mov 	x0, 0
 	mov 	x1, 0
 	bl	m5_dump_stats
@@ -50,3 +70,4 @@ main:
 	.size	main, .-main
 	.ident	"GCC: (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0"
 	.section	.note.GNU-stack,"",@progbits
+

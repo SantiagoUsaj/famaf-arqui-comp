@@ -32,26 +32,49 @@ main:
 
 //---------------------- CODE HERE ------------------------------------
 
-	// Inicialización		
-	ldr     d10, [x10]      // Cargar Alpha en d10
-	
-	mov     x5, 0           // Inicializar índice i
+// Cargar Alpha en d10
+ldr     d10, [x10]
+
+// Inicializar índice y tamaño del desenrollado
+mov     x5, 0               // Índice i
+mov     x6, 8               // Desenrollar 8 iteraciones por ciclo
 
 .L2:
-	cmp     x5, x0          // Comparar i con N
-	b.ge    .L1             // Si i >= N, salir del bucle
+    cmp     x5, x0          // Comparar i con N
+    b.ge    .L1             // Si i >= N, salir del bucle
 
-	// Operación Z[i] = Alpha * X[i] + Y[i]
-	ldr     d0, [x2, x5, lsl #3] // Cargar X[i] en d0
-	ldr     d1, [x3, x5, lsl #3] // Cargar Y[i] en d1
-	fmul    d2, d10, d0     // Multiplicar Alpha * X[i] -> d2
-	fadd    d3, d2, d1      // Sumar Y[i] + (Alpha * X[i]) -> d3
-	str     d3, [x4, x5, lsl #3] // Guardar Z[i] en memoria
+    // Prefetch para minimizar conflictos
+    prfm    pldl1strm, [x2, x5, lsl #3] // Prefetch X
+    prfm    pldl1strm, [x3, x5, lsl #3] // Prefetch Y
+    prfm    pldl1strm, [x4, x5, lsl #3] // Prefetch Z
 
-	// Incrementar índice
-	add     x5, x5, 1       // i++
+    // Procesar la primera iteración del bucle
+    ldr     d0, [x2, x5, lsl #3]
+    ldr     d1, [x3, x5, lsl #3]
+    fmul    d2, d10, d0
+    fadd    d3, d2, d1
+    str     d3, [x4, x5, lsl #3]
 
-	b       .L2             // Repetir el bucle
+    // Procesar la segunda iteración
+    add     x7, x5, 1       // Calcular índice i + 1
+    ldr     d4, [x2, x7, lsl #3]
+    ldr     d5, [x3, x7, lsl #3]
+    fmul    d6, d10, d4
+    fadd    d7, d6, d5
+    str     d7, [x4, x7, lsl #3]
+
+    // Procesar la tercera iteración
+    add     x8, x5, 2       // Calcular índice i + 2
+    ldr     d8, [x2, x8, lsl #3]
+    ldr     d9, [x3, x8, lsl #3]
+    fmul    d10, d10, d8
+    fadd    d11, d10, d9
+    str     d11, [x4, x8, lsl #3]
+
+    // Incrementar índice
+    add     x5, x5, x6       // i += 8
+
+    b       .L2             // Repetir el bucle
 
 .L1:
 

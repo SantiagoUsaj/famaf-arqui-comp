@@ -1,4 +1,4 @@
-	.data
+.data
 	N:       .dword 4096	// Number of elements in the vectors
 	Alpha:   .dword 2      // scalar value
 	
@@ -70,4 +70,4 @@ main:
 	.size	main, .-main
 	.ident	"GCC: (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0"
 	.section	.note.GNU-stack,"",@progbits
-
+	

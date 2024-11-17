@@ -14,6 +14,11 @@ four:   .double 4.0                 // Constante para división
     .global _start
 
 _start:
+    // Habilitar el coprocesador flotante (FPU)
+	mrs     x1, cpacr_el1
+	mov     x0, #(3 << 20)
+	orr     x0, x1, x0
+	msr     cpacr_el1, x0
     // Inicializar la matriz
     LDR     X0, =N                  // Tamaño de la matriz (64)
     LDR     X1, =t_amb              // Dirección de t_amb

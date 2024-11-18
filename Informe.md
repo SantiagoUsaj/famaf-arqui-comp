@@ -634,13 +634,13 @@ Luego elegir el predictor por torneos (similar al utilizado en el procesador alp
 
 ### Analisis
 
-En el codigo podemos observar varios bucles que son predecibles, por ejemplo:
+En el código podemos observar varios bucles que son predecibles, por ejemplo:
 
 * Bucle de Inicialización (initialize_loop): Este bucle es altamente predecible ya que itera un número fijo de veces (N*N).
 
 * Bucle de Iteración (outer_loop, row_loop, column_loop): Estos bucles también son predecibles ya que iteran un número fijo de veces (N y n_iter).
 
-El predictor por torneos es mejor que el local porque combina las ventajas de los predictores locales y globales, adaptándose dinámicamente a diferentes patrones de saltos. Mientras que el predictor local se basa en los ultimos saltos hechos por una instrucción, como en este codigo tenemos multiples tipos de instrucciones de saltos generando asi multiples ramas, dificultando la precisión de la predicción. Tambien afecta a la baja precisión de predicción tener saltos condicionales con dependencia de datos ya que se deberan calcular previamente, si estas se modifican frecuentemente, esto llevara a multiples fallos en la predicción.
+El predictor por torneos es mejor que el local porque combina las ventajas de los predictores locales y globales, adaptándose dinámicamente a diferentes patrones de saltos. Mientras que el predictor local se basa en los últimos saltos hechos por una instrucción, en este código tenemos múltiples tipos de instrucciones de saltos generando así múltiples ramas, dificultando la precisión de la predicción. También afecta a la baja precisión de predicción tener saltos condicionales con dependencia de datos ya que se deberán calcular previamente, si estas se modifican frecuentemente, esto llevará a múltiples fallos en la predicción.
 
 ## e)
 
@@ -648,9 +648,9 @@ Ejecutar la simulación utilizando el procesador out-of-order con las caracterí
 
 ### Resultados
 
-#### [Mejor desempeño de punto c)](./resultados/ej2/32kb-2assoc-local.txt)
+#### [Mejor optimización de procesador in-order](./resultados/ej2/32kb-2assoc-torneo.txt)
 
-#### [Predictor de salto por torneo](./resultados/ej2/32kb-2assoc-torneo.txt)
+#### [Procesador out-of-order](./resultados/ej2/out-of-order.txt)
 
 ### Graficos
 
@@ -667,6 +667,8 @@ Ejecutar la simulación utilizando el procesador out-of-order con las caracterí
 |-----------------|----------------|
 | ![Gráficos de resultados 5](./graficos/grafico_overallHits_out-of-order_ej2.png) | ![Gráficos de resultados 6](./graficos/grafico_readReq.hits_out-of-order_ej2.png) |
 
+Se puede observar que obtenemos una cantidad similar de hits a la memoria, pero al ver los ciclos ociosos, el procesador out-of-order es ampliamente mejor que el in-order ya que apenas genera ciclos ociosos.
 
+Esto se debe a la capacidad que tiene el procesador out-of-order de ejecutar las instrucciones en un orden diferente al que fue escrito, evitando así secuencias de instrucciones con dependencias de valores (hazards) dejando la menor cantidad de de ciclos de espera.
 
 ## 3. Ejercicio 3

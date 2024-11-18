@@ -646,20 +646,26 @@ El predictor por torneos es mejor que el local porque combina las ventajas de lo
 
 Ejecutar la simulación utilizando el procesador out-of-order con las características de la caché que obtuvo la mejor performance en el punto c) y un predictor de saltos por torneos. Comparar los resultados obtenidos con el punto d).
 
+### Resultados
+
+#### [Mejor desempeño de punto c)](./resultados/ej2/32kb-2assoc-local.txt)
+
+#### [Predictor de salto por torneo](./resultados/ej2/32kb-2assoc-torneo.txt)
+
 ### Graficos
 
 !Aclaración: La dimensión "y" de los siguientes graficos son la cantidad de ciclos.
 
 | Cantidad de ciclos ociosos | Cantidad de ciclos |
 |-----------------|----------------|
-| ![Gráficos de resultados 5](./graficos/grafico_idleCycles_out-of-order.png) | ![Gráficos de resultados 6](./graficos/grafico_numCycles_out-of-order.png) |
+| ![Gráficos de resultados 5](./graficos/grafico_idleCycles_out-of-order_ej2.png) | ![Gráficos de resultados 6](./graficos/grafico_numCycles_out-of-order_ej2.png) |
 
 
 !Aclaración: La dimensión "y" de los siguientes graficos son la cantidad de accesos a caché.
 
 | Cantidad de hits en la caché | Cantidad de hits de lectura en la caché |
 |-----------------|----------------|
-| ![Gráficos de resultados 5](./graficos/grafico_overallHits_out-of-order.png) | ![Gráficos de resultados 6](./graficos/grafico_readReq.hits_out-of-order.png) |
+| ![Gráficos de resultados 5](./graficos/grafico_overallHits_out-of-order_ej2.png) | ![Gráficos de resultados 6](./graficos/grafico_readReq.hits_out-of-order_ej2.png) |
 
 
 

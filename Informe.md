@@ -244,10 +244,117 @@ Podemos ver la misma relación que con los **overallHits**. Segun aumentamos la 
 
 Reescribir el código utilizando técnicas estáticas de mejora, como loop unrolling, instrucciones condicionales, etc., para mejorar el rendimiento utilizando una caché de mapeo directo (1 vía) y el tamaño de 32KB para obtener rendimientos similares a los de 2 vías.
 
+```
+// Cargar Alpha en d10
+ldr     d10, [x10]
+
+// Inicializar índice y tamaño del desenrollado
+mov     x5, 0               // Índice i
+mov     x6, 8               // Desenrollar 8 iteraciones por ciclo
+
+.L2:
+    cmp     x5, x0          // Comparar i con N
+    b.ge    .L1             // Si i >= N, salir del bucle
+
+    // Prefetch para minimizar conflictos
+    prfm    pldl1strm, [x2, x5, lsl #3] // Prefetch X
+    prfm    pldl1strm, [x3, x5, lsl #3] // Prefetch Y
+    prfm    pldl1strm, [x4, x5, lsl #3] // Prefetch Z
+
+    // Procesar la primera iteración del bucle
+    ldr     d0, [x2, x5, lsl #3]
+    ldr     d1, [x3, x5, lsl #3]
+    fmul    d2, d10, d0
+    fadd    d3, d2, d1
+    str     d3, [x4, x5, lsl #3]
+
+    // Procesar la segunda iteración
+    add     x7, x5, 1       // Calcular índice i + 1
+    ldr     d4, [x2, x7, lsl #3]
+    ldr     d5, [x3, x7, lsl #3]
+    fmul    d6, d10, d4
+    fadd    d7, d6, d5
+    str     d7, [x4, x7, lsl #3]
+
+    // Procesar la tercera iteración
+    add     x8, x5, 2       // Calcular índice i + 2
+    ldr     d8, [x2, x8, lsl #3]
+    ldr     d9, [x3, x8, lsl #3]
+    fmul    d10, d10, d8
+    fadd    d11, d10, d9
+    str     d11, [x4, x8, lsl #3]
+
+    // Incrementar índice
+    add     x5, x5, x6       // i += 8
+
+    b       .L2             // Repetir el bucle
+
+.L1:
+```
+
+### Resultados obtenidos
+
+#### [Caché de mapeo directo y tamaño de 32kB](./resultados/32kb-1assoc-opt.txt)
+
+
+#### [Caché de dos vias y tamaño de 32kB](./resultados/32kb-2assoc-opt.txt)
+
+### Graficos
+
+
 ## f)
 
 Ejecutar la simulación utilizando el procesador out-of-order con las características de la caché utilizada en el punto e) y comparar los resultados.
 
-## 3. Ejercicio 2
+## 2. Ejercicio 2
 
-## 2. Ejercicio 3
+En este ejercicio se nos pide simular el flujo de calor en una placa de un material uniforme.
+
+## a) 
+
+A partir del código dado, reescribir el algoritmo de la simulación física en assembler ARMv8 y verificar su funcionamiento en qemu.
+
+```c
+const int n_iter, fc_x, fc_y;
+float fc_temp,sum, x[N*N], x_tmp[N*N], t_amb;
+
+// Esta parte inicializa la matriz, solo es necesaria para verificar el código
+for (int i = 0; i < N*N; ++i)
+	x[i] = t_amb;
+
+x[fc_x*N+fc_y] = fc_temp;
+
+// -------------------------------------------------------------------------------
+
+for(int k = 0; k < n_iter; ++k) {
+	for(int i = 0; i < N; ++i) {
+		for(int j = 0; j < N; ++j) {
+			if((i*N+j) != (fc_x*N+fc_y)){
+				sum = 0;
+				if(i + 1 < N)
+					sum = sum + x[(i+1)*N + j];
+				else
+					sum = sum + t_amb;
+				if(i - 1 >= 0)
+					sum = sum + x[(i-1)*N + j];
+				else
+					sum = sum + t_amb;
+				if(j + 1 < N)
+					sum = sum + x[i*N + j+1];
+				else
+					sum = sum + t_amb;
+				if(j - 1 >= 0)
+					sum = sum + x[i*N + j-1];
+				else
+					sum = sum + t_amb;
+				x_tmp[i*N + j] = sum / 4;
+			}
+		}
+	}
+	for (int i = 0; i < N*N; ++i)
+		if(i != (fc_x*N+fc_y))
+			x[i] = x_tmp[i];
+}
+```
+
+## 3. Ejercicio 3

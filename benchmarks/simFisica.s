@@ -43,12 +43,12 @@ main:
     mov     x5, #0                  // i = 0
     mul     x6, x0, x0              // N*N
 
-/* initialize_loop:
+initialize_loop:
     cmp     x5, x6                  // Comparar i con N*N
     bge     end_initialize          // Salir si i >= N*N
     str     d1, [x1, x5, lsl #3]    // Almacenar t_amb en x[i] (8 bytes por celda)
     add     x5, x5, #1              // Incrementar i
-    b       initialize_loop         // Repetir */
+    b       initialize_loop         // Repetir
 
 end_initialize:
     // Establecer x[fc_x*N + fc_y] = fc_temp

@@ -7350,7 +7350,7 @@
                         "addr_ranges": [
                             "0:18446744073709551615"
                         ],
-                        "assoc": 4,
+                        "assoc": 1,
                         "clk_domain": "system.cpu_cluster.clk_domain",
                         "clusivity": "mostly_incl",
                         "compressor": null,
@@ -7460,7 +7460,7 @@
                             "cxx_class": "gem5::BaseSetAssoc",
                             "name": "tags",
                             "path": "system.cpu_cluster.cpus.dcache.tags",
-                            "assoc": 4,
+                            "assoc": 1,
                             "block_size": 64,
                             "clk_domain": "system.cpu_cluster.clk_domain",
                             "entry_size": 64,
@@ -7470,7 +7470,7 @@
                                 "cxx_class": "gem5::SetAssociative",
                                 "name": "indexing_policy",
                                 "path": "system.cpu_cluster.cpus.dcache.tags.indexing_policy",
-                                "assoc": 4,
+                                "assoc": 1,
                                 "entry_size": 64,
                                 "eventq_index": 0,
                                 "size": 32768

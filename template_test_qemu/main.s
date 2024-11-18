@@ -1,180 +1,69 @@
-.data
-N:      .dword 2                   // Tamaño de la matriz
-n_iter: .dword 1                    // Número de iteraciones
-fc_x:   .dword 32                   // Fila central
-fc_y:   .dword 32                   // Columna central
-fc_temp:.double 100.0               // Temperatura del centro
-t_amb:  .double 25.0                // Temperatura ambiente
-x:      .space 32768                // Matriz x (64x64 = 4096 elementos, cada uno de 8 bytes)
-x_tmp:  .space 32768                // Matriz temporal (igual tamaño que x)
-zero:   .double 0.0                 // Constante para inicialización
-four:   .double 4.0                 // Constante para división
+.section .data
+vector: 
+    .space 4000                // Espacio para 1000 elementos (4 bytes cada uno)
+    len: .word 1000            // Longitud del vector
 
-.text
+.section .rodata
+random_const:
+    .word 1103515245           // Constante del generador pseudoaleatorio
+
+.section .text
 .global _start
 
 _start:
-    // Habilitar el coprocesador flotante (FPU)
-    mrs     x1, cpacr_el1
-    mov     x0, #(3 << 20)
-    orr     x0, x1, x0
-    msr     cpacr_el1, x0
+    // Inicialización del vector con valores aleatorios (simulación)
+    ldr x0, =vector            // Dirección base del vector
+    mov x1, 1000               // Número de elementos
+    bl init_vector             // Llama a la función para inicializar el vector
 
-    // Inicializar la matriz
-    ldr     x0, =N                  // Tamaño de la matriz (64)
-    ldr     x0, [x0]                // Cargar el valor de N
-    ldr     x1, =x                  // Dirección de x
-    ldr     x2, =x_tmp              // Dirección de x_tmp
-    ldr     x3, =n_iter             // Dirección de n_iter
-    ldr     x3, [x3]                // Cargar el valor de n_iter
-    ldr     x4, =t_amb              // Dirección de t_amb
-    ldr     d1, [x4]                // Cargar t_amb en d1
-    mov     x5, #0                  // i = 0
-    mul     x6, x0, x0              // N*N
+    // Ordenamiento por burbuja
+    ldr x0, =vector            // Dirección base del vector
+    mov x1, 1000               // Longitud del vector
+    bl bubble_sort             // Llama al algoritmo de ordenamiento
 
-initialize_loop:
-    cmp     x5, x6                  // Comparar i con N*N
-    bge     end_initialize          // Salir si i >= N*N
-    str     d1, [x1, x5, lsl #3]    // Almacenar t_amb en x[i] (8 bytes por celda)
-    add     x5, x5, #1              // Incrementar i
-    b       initialize_loop         // Repetir
+    // Finaliza la ejecución
+    mov x8, 93                 // syscall exit
+    mov x0, 0                  // Código de salida 0
+    svc 0
 
-end_initialize:
-    // Establecer x[fc_x*N + fc_y] = fc_temp
-    ldr     x16, =fc_x              // Dirección de fc_x
-    ldr     x16, [x16]              // Cargar fc_x en x16
-    ldr     x17, =fc_y              // Dirección de fc_y
-    ldr     x17, [x17]              // Cargar fc_y en x17
-    ldr     x18, =N                 // Dirección de N
-    ldr     x18, [x18]              // Cargar N en x18
-    mul     x16, x16, x18           // fc_x * N
-    add     x16, x16, x17           // fc_x * N + fc_y
-    ldr     x19, =fc_temp           // Dirección de fc_temp
-    ldr     d5, [x19]               // Cargar fc_temp en d5
-    ldr     x20, =x                 // Dirección de x
-    str     d5, [x20, x16, lsl #3]  // Almacenar fc_temp en x[fc_x * N + fc_y]
+// Función para inicializar el vector con valores aleatorios
+init_vector:
+    mov x2, 42                 // Semilla inicial
+1: 
+    ldr w3, random_const       // Carga la constante desde la memoria
+    mul x2, x2, x3             // Genera un número pseudoaleatorio
+    add x2, x2, 123          // Ajusta la constante aditiva
+    and x2, x2, 0x7FFFFFFF     // Limita el valor al rango positivo
 
-iterate_matrix:
-    mov     x7, #0                  // k = 0
+    str w2, [x0], #4           // Almacena el valor en el vector y avanza
+    sub x1, x1, 1              // Decrementa el contador
+    cbnz x1, 1b                // Si x1 != 0, repite el ciclo
+    ret
 
-outer_loop:
-    cmp     x7, x3                  // Comparar k con n_iter
-    bge     end_iterate             // Salir si k >= n_iter
-    mov     x8, #0                  // i = 0
+// Algoritmo de ordenamiento por burbuja
+bubble_sort:
+    sub x1, x1, 1              // Tamaño del vector - 1
+1:
+    mov x2, x1                 // Resetea el índice del bucle interno
+    mov x3, 0                  // Bandera para verificar si hubo intercambios
+2:
+    sub x4, x2, 1              // Índice para el elemento anterior
+    add x5, x0, x2, LSL #2     // Dirección del elemento actual
+    add x6, x0, x4, LSL #2     // Dirección del elemento anterior
 
-row_loop:
-    cmp     x8, x0                  // Comparar i con N
-    bge     next_iteration          // Salir si i >= N
-    mov     x9, #0                  // j = 0
+    ldr w7, [x5]               // Carga el elemento actual
+    ldr w8, [x6]               // Carga el elemento anterior
+    cmp w7, w8                 // Compara ambos elementos
+    bge 3f                     // Si están en orden, salta
+    str w8, [x5]               // Intercambia los valores
+    str w7, [x6]
+    mov x3, 1                  // Marca que hubo un intercambio
+3:
+    sub x2, x2, 1              // Decrementa el índice interno
+    cbnz x2, 2b                // Si no llegó al inicio, repite
 
-column_loop:
-    cmp     x9, x0                  // Comparar j con N
-    bge     next_row                // Salir si j >= N
-    mul     x10, x8, x0             // i * N
-    add     x10, x10, x9            // i * N + j
-    mul     x11, x16, x0            // fc_x * N
-    add     x11, x11, x17           // fc_x * N + fc_y
-    cmp     x10, x11                // Comparar (i*N + j) con (fc_x*N + fc_y)
-    beq     skip_cell               // Saltar si son iguales
-
-    // Calcular la suma de los vecinos
-    fmov    d2, d0                  // sum = 0
-    add     x12, x8, #1             // i + 1
-    cmp     x12, x0                 // Comparar i + 1 con N
-    bge     add_t_amb1              // Si i + 1 >= N, usar t_amb
-    mul     x13, x12, x0            // (i + 1) * N
-    add     x13, x13, x9            // (i + 1) * N + j
-    ldr     d3, [x1, x13, lsl #3]   // Cargar x[(i + 1)*N + j]
-    b       add_sum1
-
-add_t_amb1:
-    ldr     d3, [x4]                // Cargar t_amb en d3
-
-add_sum1:
-    fadd    d2, d2, d3              // sum = sum + x[(i + 1)*N + j] o t_amb
-
-    sub     x12, x8, #1             // i - 1
-    cmp     x12, #0                 // Comparar i - 1 con 0
-    blt     add_t_amb2              // Si i - 1 < 0, usar t_amb
-    mul     x13, x12, x0            // (i - 1) * N
-    add     x13, x13, x9            // (i - 1) * N + j
-    ldr     d3, [x1, x13, lsl #3]   // Cargar x[(i - 1)*N + j]
-    b       add_sum2
-
-add_t_amb2:
-    ldr     d3, [x4]                // Cargar t_amb en d3
-
-add_sum2:
-    fadd    d2, d2, d3              // sum = sum + x[(i - 1)*N + j] o t_amb
-
-    add     x12, x9, #1             // j + 1
-    cmp     x12, x0                 // Comparar j + 1 con N
-    bge     add_t_amb3              // Si j + 1 >= N, usar t_amb
-    mul     x13, x8, x0             // i * N
-    add     x13, x13, x12           // i * N + (j + 1)
-    ldr     d3, [x1, x13, lsl #3]   // Cargar x[i*N + j + 1]
-    b       add_sum3
-
-add_t_amb3:
-    ldr     d3, [x4]                // Cargar t_amb en d3
-
-add_sum3:
-    fadd    d2, d2, d3              // sum = sum + x[i*N + j + 1] o t_amb
-
-    sub     x12, x9, #1             // j - 1
-    cmp     x12, #0                 // Comparar j - 1 con 0
-    blt     add_t_amb4              // Si j - 1 < 0, usar t_amb
-    mul     x13, x8, x0             // i * N
-    add     x13, x13, x12           // i * N + (j - 1)
-    ldr     d3, [x1, x13, lsl #3]   // Cargar x[i*N + j - 1]
-    b       add_sum4
-
-add_t_amb4:
-    ldr     d3, [x4]                // Cargar t_amb en d3
-
-add_sum4:
-    fadd    d2, d2, d3              // sum = sum + x[i*N + j - 1] o t_amb
-
-    // Dividir la suma por 4 y almacenar en x_tmp
-    ldr     x14, =x_tmp             // Dirección de x_tmp
-    ldr     x15, =four              // Dirección de la constante 4.0
-    ldr     d4, [x15]               // Cargar 4.0 en d4
-    fdiv    d2, d2, d4              // sum / 4
-    str     d2, [x14, x10, lsl #3]  // Almacenar sum / 4 en x_tmp[i*N + j]
-
-skip_cell:
-    add     x9, x9, #1              // Incrementar j
-    b       column_loop             // Repetir para la siguiente columna
-
-next_row:
-    add     x8, x8, #1              // Incrementar i
-    b       row_loop                // Repetir para la siguiente fila
-
-next_iteration:
-    ldr     x1, =x                  // Dirección de x
-    ldr     x14, =x_tmp             // Dirección de x_tmp
-    mov     x15, #0                 // i = 0
-
-copy_loop:
-    cmp     x15, x6                 // Comparar i con N*N
-    bge     end_copy                // Salir si i >= N*N
-    mul     x10, x8, x0             // fc_x * N
-    add     x10, x10, x9            // fc_x * N + fc_y
-    cmp     x15, x10                // Comparar i con fc_x*N + fc_y
-    beq     skip_copy               // Saltar si son iguales
-    ldr     d2, [x14, x15, lsl #3]  // Cargar x_tmp[i]
-    str     d2, [x1, x15, lsl #3]   // Almacenar en x[i]
-
-skip_copy:
-    add     x15, x15, #1            // Incrementar i
-    b       copy_loop               // Repetir
-
-end_copy:
-    add     x7, x7, #1              // Incrementar k
-    b       outer_loop              // Repetir para la siguiente iteración
-
-end_iterate:
-    // Fin del programa
-    mov     x0, #0                  // Código de salida 0
-    mov     x8, #93                 // syscall: exit
-    svc     #0
+    cbz x3, 4f                 // Si no hubo intercambios, termina
+    sub x1, x1, 1              // Reduce el rango del bucle externo
+    cbnz x1, 1b                // Si no llegó al final, repite
+4:
+    ret

@@ -8,8 +8,9 @@
 	four:   .double 4.0                  // Constante para división
 	
 	.bss 
-	x: .zero  3072        
-	x_tmp: .zero  3072    
+	x: .zero  32768        // 64 * 64 * 8 bytes (double)
+    x_tmp: .zero  32768   // 64 * 64 * 8 bytes (double)
+    
 
 	.arch armv8-a
 	.text

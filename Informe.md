@@ -579,6 +579,8 @@ Ejecutar en gem5 la simulación considerando una caché de datos de mapeo direct
 
 Evaluar la cantidad de ciclos que toma su ejecución utilizando cachés asociativa por conjuntos de 2, 4 y 8 vías. Determinar en qué caso se obtiene la mejor performance y explicar por qué.
 
+### Resultados
+
 #### [Caché asociativa por conjunto de 2 vias y tamaño de 32kB](./resultados/ej2/32kb_2assoc.txt)
 
 * Ciclos de ejecución: 3413403.0
@@ -605,5 +607,60 @@ Evaluar la cantidad de ciclos que toma su ejecución utilizando cachés asociati
 
 
 Llegamos a la conclusión que el mejor caso es donde utilizamos una caché asociativa de dos vías. Esto se debe a que con dos vías, con poca diferencia con cuatro u ocho vías, se logra un equilibrio óptimo entre la complejidad del hardware y la eficiencia en la tasa de aciertos de la caché, reduciendo significativamente los ciclos de ejecución y los ciclos ociosos en comparación con la configuración de mapeo directo.
+
+## d) 
+
+En este punto se pretende analizar la diferencia al usar dos predictores de saltos distintos: local y predictor por torneos (que está compuesto por un predictor local y uno global). En primer lugar se debe analizar el código e intentar deducir qué tipo de predictor (local o global) funcionará mejor en cada tipo de salto y cuánto podría mejorar usar el de torneo. Correr el código con el predator local por defecto y obtener el miss rate calculado como: 
+
+	condIncorrect / (condPredicted + condIncorrect) 
+
+Luego elegir el predictor por torneos (similar al utilizado en el procesador alpha 21264) y obtener nuevamente el miss rate. En ambos casos utilizar las características de la caché que obtuvo la mejor performance en el punto c). Analizar si los resultados se corresponden con lo esperado y justificar. e) Ejecutar la simulación utilizando el procesador out-of-order con l
+
+### Resultados
+
+#### [Predictor de salto local](./resultados/ej2/32kb-2assoc-local.txt)
+
+* MissRate = 2031.0 / (336530.0 + 2031.0) = 0.00598
+
+#### [Predictor de salto por torneo](./resultados/ej2/32kb-2assoc-torneo.txt)
+
+* MissRate = 735.0 / (334559.0 + 735.0) = 0.00219
+
+### Predictores de salto
+
+* **Predictor Local**: Este predictor utiliza el historial de saltos de una instrucción específica para predecir el resultado de futuros saltos. Es efectivo en bucles y patrones de saltos repetitivos.
+
+* **Predictor por Torneos**: Este predictor combina un predictor local y un predictor global. El predictor global utiliza el historial de saltos de todo el programa, mientras que el predictor local utiliza el historial de una instrucción específica. Un selector de torneos decide cuál predictor usar en función de cuál ha sido más preciso en el pasado.
+
+### Analisis
+
+En el codigo podemos observar varios bucles que son predecibles, por ejemplo:
+
+* Bucle de Inicialización (initialize_loop): Este bucle es altamente predecible ya que itera un número fijo de veces (N*N).
+
+* Bucle de Iteración (outer_loop, row_loop, column_loop): Estos bucles también son predecibles ya que iteran un número fijo de veces (N y n_iter).
+
+El predictor por torneos es mejor que el local porque combina las ventajas de los predictores locales y globales, adaptándose dinámicamente a diferentes patrones de saltos. Mientras que el predictor local se basa en los ultimos saltos hechos por una instrucción, como en este codigo tenemos multiples tipos de instrucciones de saltos generando asi multiples ramas, dificultando la precisión de la predicción. Tambien afecta a la baja precisión de predicción tener saltos condicionales con dependencia de datos ya que se deberan calcular previamente, si estas se modifican frecuentemente, esto llevara a multiples fallos en la predicción.
+
+## e)
+
+Ejecutar la simulación utilizando el procesador out-of-order con las características de la caché que obtuvo la mejor performance en el punto c) y un predictor de saltos por torneos. Comparar los resultados obtenidos con el punto d).
+
+### Graficos
+
+!Aclaración: La dimensión "y" de los siguientes graficos son la cantidad de ciclos.
+
+| Cantidad de ciclos ociosos | Cantidad de ciclos |
+|-----------------|----------------|
+| ![Gráficos de resultados 5](./graficos/grafico_idleCycles_out-of-order.png) | ![Gráficos de resultados 6](./graficos/grafico_numCycles_out-of-order.png) |
+
+
+!Aclaración: La dimensión "y" de los siguientes graficos son la cantidad de accesos a caché.
+
+| Cantidad de hits en la caché | Cantidad de hits de lectura en la caché |
+|-----------------|----------------|
+| ![Gráficos de resultados 5](./graficos/grafico_overallHits_out-of-order.png) | ![Gráficos de resultados 6](./graficos/grafico_readReq.hits_out-of-order.png) |
+
+
 
 ## 3. Ejercicio 3

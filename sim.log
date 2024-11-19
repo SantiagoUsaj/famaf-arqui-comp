@@ -3,8 +3,8 @@ gem5 is copyrighted software; use the --copyright option for details.
 
 gem5 version 23.0.0.1
 gem5 compiled Sep  6 2023 14:34:38
-gem5 started Nov 18 2024 20:09:57
-gem5 executing on 1efebe4bbd75, pid 1
+gem5 started Nov 19 2024 22:13:18
+gem5 executing on 360df70bcf1c, pid 1
 command line: /opt/gem5/build/ARM/gem5.opt -d ./se_results/ /local/scripts/se.py /local/scripts/cpu_config.toml out_of_order /local/benchmarks/bubbleSort.img
 
 warn: The `get_runtime_isa` function is deprecated. Please migrate away from using this function.

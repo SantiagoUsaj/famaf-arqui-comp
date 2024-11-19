@@ -925,7 +925,7 @@
                             "name": "workload",
                             "path": "system.cpu_cluster.cpus.workload",
                             "cmd": [
-                                "/local/benchmarks/simFisica.img"
+                                "/local/benchmarks/bubbleSort.img"
                             ],
                             "cwd": "/local",
                             "drivers": [],
@@ -934,7 +934,7 @@
                             "errout": "cerr",
                             "euid": 100,
                             "eventq_index": 0,
-                            "executable": "/local/benchmarks/simFisica.img",
+                            "executable": "/local/benchmarks/bubbleSort.img",
                             "gid": 0,
                             "input": "cin",
                             "kvmInSE": false,

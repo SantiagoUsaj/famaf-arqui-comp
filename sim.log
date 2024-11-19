@@ -4,6 +4,7 @@ gem5 is copyrighted software; use the --copyright option for details.
 gem5 version 23.0.0.1
 gem5 compiled Sep  6 2023 14:34:38
 <<<<<<< HEAD
+<<<<<<< HEAD
 gem5 started Nov 19 2024 22:04:16
 gem5 executing on 773d6ba427f6, pid 1
 command line: /opt/gem5/build/ARM/gem5.opt -d ./se_results/ /local/scripts/se.py /local/scripts/cpu_config.toml out_of_order /local/benchmarks/daxpy.img
@@ -12,9 +13,14 @@ gem5 started Nov 18 2024 15:55:03
 gem5 executing on 65f06af9b89e, pid 1
 command line: /opt/gem5/build/ARM/gem5.opt -d ./se_results/ /local/scripts/se.py /local/scripts/cpu_config.toml out_of_order /local/benchmarks/simFisica.img
 >>>>>>> ej2
+=======
+gem5 started Nov 19 2024 22:13:18
+gem5 executing on 360df70bcf1c, pid 1
+command line: /opt/gem5/build/ARM/gem5.opt -d ./se_results/ /local/scripts/se.py /local/scripts/cpu_config.toml out_of_order /local/benchmarks/bubbleSort.img
+>>>>>>> origin/ej3
 
 warn: The `get_runtime_isa` function is deprecated. Please migrate away from using this function.
-info: 1. command and arguments: ['/local/benchmarks/simFisica.img']
+info: 1. command and arguments: ['/local/benchmarks/bubbleSort.img']
 Global frequency set at 1000000000000 ticks per second
 warn: No dot file generated. Please install pydot to generate the dot file and pdf.
 src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (1024 Mbytes)
@@ -24,11 +30,15 @@ system.remote_gdb: Listening for connections on port 7000
 src/sim/simulate.cc:194: info: Entering event queue @ 0.  Starting simulation...
 src/sim/mem_state.cc:443: info: Increasing stack size by one page.
 src/sim/syscall_emul.hh:1014: warn: readlink() called on '/proc/self/exe' may yield unexpected results in various settings.
-      Returning '/local/benchmarks/simFisica.img'
+      Returning '/local/benchmarks/bubbleSort.img'
 src/arch/arm/insts/pseudo.cc:172: warn: 	instruction 'bti' unimplemented
 src/sim/syscall_emul.cc:74: warn: ignoring syscall mprotect(...)
+<<<<<<< HEAD
 <<<<<<< HEAD
 exiting with last active thread context (0) @ 28743500
 =======
 exiting with last active thread context (0) @ 503425000
 >>>>>>> ej2
+=======
+exiting with last active thread context (0) @ 3270929500
+>>>>>>> origin/ej3

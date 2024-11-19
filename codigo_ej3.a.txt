@@ -3,22 +3,12 @@ N:       .dword 1000
 Array:   .space 8000  // 1000 elementos de 8 bytes (double)
 
 .text
-.global main
-.type main, %function
+.global _start
 
-main:
-.LFB6:
-    .cfi_startproc
-    stp x29, x30, [sp, -16]!
-    .cfi_def_cfa_offset 16
-    .cfi_offset 29, -16
-    .cfi_offset 30, -8
-    mov x29, sp
-
-   // Inicializar el arreglo
+_start:
+    // Inicializar el arreglo
     ldr     x0, =Array
-    ldr     x6, =N
-    ldr     x6, [x6]
+    ldr     x6, N
     mov     x1, 1234
     mov     x5, 0
 
@@ -52,28 +42,27 @@ bubble_sort:
 
 outer_loop:
     cmp x1, x6              // Compare i with N-1
-    cset x7, lt             // Set x7 to 1 if i < N-1, otherwise 0
-    cbz x7, end_sort        // If x7 is 0, end sorting
+    bge end_sort            // If i >= N-1, end sorting
 
     mov x2, #0              // j = 0
 
 inner_loop:
     cmp x2, x6              // Compare j with N-1
-    cset x7, lt             // Set x7 to 1 if j < N-1, otherwise 0
-    cbz x7, next_outer      // If x7 is 0, go to next outer loop
+    bge next_outer          // If j >= N-1, go to next outer loop
 
     lsl x3, x2, #3          // j * 8
     add x4, x0, x3          // Address of Array[j]
-    ldr x8, [x4]            // Load Array[j] into x8
-    ldr x9, [x4, #8]        // Load Array[j+1] into x9
+    ldr x7, [x4]            // Load Array[j] into x7
+    ldr x8, [x4, #8]        // Load Array[j+1] into x8
 
-    cmp x8, x9              // Compare Array[j] with Array[j+1]
-    csel x10, x8, x9, le    // Select the smaller value
-    csel x11, x9, x8, le    // Select the larger value
+    cmp x7, x8              // Compare Array[j] with Array[j+1]
+    ble skip_swap           // If Array[j] <= Array[j+1], skip swap
 
-    str x10, [x4]           // Store the smaller value in Array[j]
-    str x11, [x4, #8]       // Store the larger value in Array[j+1]
+    // Swap Array[j] and Array[j+1]
+    str x8, [x4]            // Store Array[j+1] into Array[j]
+    str x7, [x4, #8]        // Store Array[j] into Array[j+1]
 
+skip_swap:
     add x2, x2, 1           // Increment j
     b inner_loop            // Repeat inner loop
 
@@ -82,16 +71,7 @@ next_outer:
     b outer_loop            // Repeat outer loop
 
 end_sort:
-    mov x0, 0
-    mov x1, 0
-    bl m5_dump_stats
-    mov x0, #0
-    ldp x29, x30, [sp], 16
-    .cfi_restore 30
-    .cfi_restore 29
-    .cfi_def_cfa_offset 0
-    ret
-    .cfi_endproc
-.LFE6:
-    .size main, .-main
-	
+    // Fin del programa
+    mov     x0, #0                  // Código de salida 0
+    mov     x8, #93                 // syscall: exit
+    svc     #0

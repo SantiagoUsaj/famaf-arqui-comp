@@ -757,3 +757,24 @@ En el código optimizado, ciertos valores (como `N`) se cargan o calculan una so
 
 - **Reducción en accesos a memoria y uso de registros**, lo que mejora el rendimiento general.
 
+## impacto en metricas especifics:
+
+| Métrica                           | Efecto Directo                                                        |
+|-----------------------------------|------------------------------------------------------------------------|
+| branchPred.lookups               | Menor número de ramas explícitas reduce el total de predicciones.      |
+| branchPred.condIncorrect         | Menor cantidad de fallos en predicción debido al uso de condiciones directas. |
+| branchPred.BTBLookups y BTBHits  | Reducción en el uso del BTB por menos ramas y bifurcaciones.           |
+| dcache.overallAccesses::total    | Menor número de accesos redundantes a memoria.                         |
+| system.cpu_cluster.cpus.numCycles | Reducción por bucles más eficientes.                                   |
+| system.cpu_cluster.cpus.cpi      | Mejora al reducir el costo por instrucción ejecutada.                  |
+
+## Conclusión
+
+El código optimizado aprovecha mejor las capacidades de la arquitectura ARM mediante el uso de instrucciones condicionales avanzadas (`CSET`, `CSEL`, `CBZ`), lo que reduce la cantidad de ramas explícitas y mejora la eficiencia de los bucles. Esto se traduce en:
+
+- **Menor uso del BTB** y **mayor precisión en las predicciones de ramas**.
+- **Menor consumo de ciclos de CPU** y **mejor CPI**.
+- **Menor cantidad de accesos redundantes a memoria**.
+
+Estas mejoras son el resultado de un diseño más eficiente del flujo de control y una reducción de instrucciones innecesarias
+

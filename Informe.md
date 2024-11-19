@@ -335,7 +335,7 @@ Reescribir el código utilizando técnicas estáticas de mejora, como loop unrol
 
 * **Loop unrolling**: Repetimos múltiples iteraciones del bucle dentro de un único ciclo para reducir las instrucciones de control de bucle.
 
-	Cada iteración del bucle procesa 2 elementos en lugar de 1. Reduce las instrucciones de control del bucle `cmp` y `b`, disminuyendo la sobrecarga.
+	Reduce las instrucciones de control del bucle `cmp` y `b`, disminuyendo la sobrecarga. En lugar de procesar una sola iteración por ciclo, el bucle procesa 8 elementos de X, Y, y Z en cada pasada.
 
 * **Pre-fetching manual**: Aseguramos que los datos futuros sean cargados en la caché antes de usarlos.
 
@@ -343,7 +343,11 @@ Reescribir el código utilizando técnicas estáticas de mejora, como loop unrol
 
 * **Reorganización de cálculos**: Agrupamos operaciones para explotar mejor los registros del procesador.
 
-* **Reducción de dependencias**: Usamos múltiples registros para permitir una mayor paralelización.
+    Los cálculos para índices (x7) se realizan en bloques antes de las operaciones de carga.
+
+* **Reducción de dependencias**: Utilizar registros independientes para evitar dependencias de datos entre iteraciones, lo que permite mayor paralelismo en la ejecución.
+
+    Cada registro (d0 a d15) contiene datos independientes de una iteración. No se reutilizan registros en el mismo ciclo del bucle.
 
 * **Acceso eficiente a memoria**: El acceso a memoria para X, Y y Z utiliza desplazamientos efectivos (`lsl #` y #8 para el unrolling) para minimizar cálculos.
 
@@ -708,6 +712,91 @@ Se puede observar que obtenemos una cantidad similar de hits a la memoria, pero 
 Esto se debe a la capacidad que tiene el procesador out-of-order de ejecutar las instrucciones en un orden diferente al que fue escrito, evitando así secuencias de instrucciones con dependencias de valores (hazards) dejando la menor cantidad de de ciclos de espera.
 
 ## 3. Ejercicio 3
+
+## c) 
+### stats codigo Base
+
+| Métrica                                                   | Código Base | Código optimizado | Cambio (%)                        |
+|-----------------------------------------------------------|-------------|--------------------------|------------------------------------|
+| simInsts                                                 | 479.0       | 479.0                    | 0.00%                             |
+| system.cpu_cluster.cpus.numCycles                        | 14501.0     | 14132.0                  | -2.54%                            |
+| system.cpu_cluster.cpus.cpi                              | 30.27       | 29.50                    | -2.54%                            |
+| system.cpu_cluster.cpus.branchPred.lookups              | 342.0       | 358.0                    | 4.68%                             |
+| system.cpu_cluster.cpus.branchPred.condPredicted        | 213.0       | 221.0                    | 3.76%                             |
+| system.cpu_cluster.cpus.branchPred.condIncorrect        | 62.0        | 59.0                     | -4.84%                            |
+| system.cpu_cluster.cpus.branchPred.BTBLookups           | 203.0       | 167.0                    | -17.73%                           |
+| system.cpu_cluster.cpus.branchPred.BTBUpdates           | 50.0        | 53.0                     | 6.00%                             |
+| system.cpu_cluster.cpus.branchPred.BTBHits              | 33.0        | 20.0                     | -39.39%                           |
+| system.cpu_cluster.cpus.commitStats0.committedInstType::IntAlu | 372.0  | 372.0                    | 0.00%                             |
+| system.cpu_cluster.cpus.commitStats0.committedInstType::MemRead | 94.0   | 94.0                     | 0.00%                             |
+| system.cpu_cluster.cpus.commitStats0.committedInstType::MemWrite | 96.0  | 96.0                     | 0.00%                             |
+| system.cpu_cluster.cpus.dcache.overallHits::total       | 182.0       | 189.0                    | 3.85%                             |
+| system.cpu_cluster.cpus.dcache.overallMisses::total     | 16.0        | 17.0                     | 6.25%                             |
+| system.cpu_cluster.cpus.dcache.overallAccesses::total   | 198.0       | 206.0                    | 4.04%                             |
+| system.cpu_cluster.cpus.dcache.replacements             | 3.0         | 3.0                      | 0.00%                             |
+| system.cpu_cluster.cpus.dcache.ReadReq.hits::total      | 96.0        | 103.0                    | 7.29%                             |
+| system.cpu_cluster.cpus.dcache.ReadReq.accesses::total  | 112.0       | 120.0                    | 7.14%                             |
+| system.cpu_cluster.cpus.dcache.WriteReq.hits::total     | 86.0        | 86.0                     | 0.00%                             |
+| system.cpu_cluster.cpus.dcache.WriteReq.accesses::total | 86.0        | 86.0                     | 0.00%                             |
+| system.cpu_cluster.cpus.icache.overallHits::total       | 275.0       | 248.0                    | -9.82%                            |
+| system.cpu_cluster.cpus.icache.overallMisses::total     | 45.0        | 46.0                     | 2.22%                             |
+| system.cpu_cluster.cpus.icache.overallAccesses::total   | 320.0       | 294.0                    | -8.13%                            |
+| system.cpu_cluster.cpus.icache.replacements             | 16.0        | 26.0                     | 62.50%                            |
+| system.cpu_cluster.l2.overallMisses::total              | 59.0        | 61.0                     | 3.39%                             |
+| system.cpu_cluster.l2.overallAccesses::total            | 61.0        | 63.0                     | 3.28%                             |
+| system.cpu_cluster.l2.replacements                      | 0.0         | 0.0                      | 0.00%                             |
+| system.cpu_cluster.cpus.idleCycles                      | 13197.0     | 12839.0                  | -2.71%                            |
+
+
+### Mejoras introducidas:
+# Optimización con Instrucciones Condicionales (CSET, CSEL, CBZ)
+
+## Uso de Instrucciones Condicionales
+
+En el código optimizado, se emplean instrucciones como `CSET` y `CSEL`, que permiten manejar condiciones de manera más eficiente al reducir la necesidad de ramas explícitas (`b` o `b.lt`). 
+
+Por ejemplo, en lugar de utilizar varias instrucciones para comparar valores y realizar intercambios, se usa `CSEL` para seleccionar directamente los valores mayor o menor, optimizando la operación de intercambio en el ordenamiento burbuja.
+
+### Impacto
+
+- **Menor número de predicciones de ramas (`branchPred.lookups`)** debido a la reducción de ramas explícitas.
+- **Mejora en la precisión de las predicciones de ramas (`branchPred.condIncorrect`)**, ya que el uso de `CSET` y `CBZ` reduce la cantidad de bifurcaciones ambiguas.
+
+---
+
+## Reducción de Instrucciones y Ramas
+
+En el código base, el manejo de ramas y comparaciones introduce más instrucciones de control de flujo, aumentando la probabilidad de fallos en predicciones de ramas (más `branchPred.condIncorrect`). 
+
+En el código optimizado, se reduce el uso de ramas mediante condiciones directas (`CBZ`) y selecciones condicionales (`CSEL`), eliminando ramas innecesarias.
+
+### Impacto
+
+- **Menor uso del Branch Target Buffer (BTB)**, reflejado en métricas como:
+  - Reducción de `branchPred.BTBLookups`.
+  - Cambios en `branchPred.BTBHits` y `branchPred.BTBUpdates` debido a menos accesos y actualizaciones al BTB.
+
+---
+
+## Simplificación de los Bucles Internos
+
+El uso de `CSET` y `CBZ` disminuye la complejidad del bucle interno en el ordenamiento burbuja, permitiendo que cada iteración consuma menos ciclos.
+
+### Impacto
+
+- **Reducción de ciclos totales de CPU (`system.cpu_cluster.cpus.numCycles`)**.
+- **Mejora del CPI (Ciclos por Instrucción)**, reflejando una mayor eficiencia.
+
+---
+
+## Menor Repetición de Cálculos
+
+En el código optimizado, ciertos valores (como `N`) se cargan o calculan una sola vez, mientras que en el código base algunos cálculos se realizan de forma redundante.
+
+### Impacto
+
+- **Reducción en accesos a memoria y uso de registros**, lo que mejora el rendimiento general.
+
 ## a) 
 
 * Codigo en assembler ARMv8:

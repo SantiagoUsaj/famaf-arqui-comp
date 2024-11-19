@@ -247,51 +247,81 @@ Reescribir el código utilizando técnicas estáticas de mejora, como loop unrol
 * Codigo optimizado: 
 
 ```
-// Cargar Alpha en d10
-ldr     d10, [x10]
-
-// Inicializar índice y tamaño del desenrollado
-mov     x5, 0               // Índice i
-mov     x6, 8               // Desenrollar 8 iteraciones por ciclo
+	// Preparar los registros
+    ldr     x0, N           // Tamaño del vector (N)
+    ldr     x10, =Alpha     // Dirección de Alpha
+    ldr     x2, =X          // Dirección base de X
+    ldr     x3, =Y          // Dirección base de Y
+    ldr     x4, =Z          // Dirección base de Z
+    ldr     d10, [x10]      // Cargar Alpha en d10
+    mov     x5, 0           // Inicializar índice i
+    mov     x6, 8           // Desenrollar 8 iteraciones por ciclo
 
 .L2:
     cmp     x5, x0          // Comparar i con N
     b.ge    .L1             // Si i >= N, salir del bucle
 
-    // Prefetch para minimizar conflictos
-    prfm    pldl1strm, [x2, x5, lsl #3] // Prefetch X
-    prfm    pldl1strm, [x3, x5, lsl #3] // Prefetch Y
-    prfm    pldl1strm, [x4, x5, lsl #3] // Prefetch Z
+    // Leer 8 valores consecutivos de X
+    mov     x7, x5          // Base temporal
+    lsl     x7, x7, #3      // x7 = x5 * 8
+    ldr     d0, [x2, x7]         // Cargar X[i]
+    add     x7, x7, #8
+    ldr     d1, [x2, x7]         // Cargar X[i+1]
+    add     x7, x7, #8
+    ldr     d2, [x2, x7]         // Cargar X[i+2]
+    add     x7, x7, #8
+    ldr     d3, [x2, x7]         // Cargar X[i+3]
+    add     x7, x7, #8
+    ldr     d4, [x2, x7]         // Cargar X[i+4]
+    add     x7, x7, #8
+    ldr     d5, [x2, x7]         // Cargar X[i+5]
+    add     x7, x7, #8
+    ldr     d6, [x2, x7]         // Cargar X[i+6]
+    add     x7, x7, #8
+    ldr     d7, [x2, x7]         // Cargar X[i+7]
 
-    // Procesar la primera iteración del bucle
-    ldr     d0, [x2, x5, lsl #3]
-    ldr     d1, [x3, x5, lsl #3]
-    fmul    d2, d10, d0
-    fadd    d3, d2, d1
-    str     d3, [x4, x5, lsl #3]
+    // Leer 8 valores consecutivos de Y
+    mov     x7, x5
+    lsl     x7, x7, #3      // x7 = x5 * 8
+    ldr     d8, [x3, x7]         // Cargar Y[i]
+    add     x7, x7, #8
+    ldr     d9, [x3, x7]         // Cargar Y[i+1]
+    add     x7, x7, #8
+    ldr     d10, [x3, x7]        // Cargar Y[i+2]
+    add     x7, x7, #8
+    ldr     d11, [x3, x7]        // Cargar Y[i+3]
+    add     x7, x7, #8
+    ldr     d12, [x3, x7]        // Cargar Y[i+4]
+    add     x7, x7, #8
+    ldr     d13, [x3, x7]        // Cargar Y[i+5]
+    add     x7, x7, #8
+    ldr     d14, [x3, x7]        // Cargar Y[i+6]
+    add     x7, x7, #8
+    ldr     d15, [x3, x7]        // Cargar Y[i+7]
 
-    // Procesar la segunda iteración
-    add     x7, x5, 1       // Calcular índice i + 1
-    ldr     d4, [x2, x7, lsl #3]
-    ldr     d5, [x3, x7, lsl #3]
-    fmul    d6, d10, d4
-    fadd    d7, d6, d5
-    str     d7, [x4, x7, lsl #3]
+    // Operaciones Z[i] = Alpha * X[i] + Y[i] para 8 elementos
+    mov     x7, x5
+    lsl     x7, x7, #3
+    fmul    d16, d0, d10
+    fadd    d17, d16, d8
+    str     d17, [x4, x7]
 
-    // Procesar la tercera iteración
-    add     x8, x5, 2       // Calcular índice i + 2
-    ldr     d8, [x2, x8, lsl #3]
-    ldr     d9, [x3, x8, lsl #3]
-    fmul    d10, d10, d8
-    fadd    d11, d10, d9
-    str     d11, [x4, x8, lsl #3]
+    add     x7, x7, #8
+    fmul    d16, d1, d10
+    fadd    d17, d16, d9
+    str     d17, [x4, x7]
+
+    add     x7, x7, #8
+    fmul    d16, d2, d10
+    fadd    d17, d16, d10
+    str     d17, [x4, x7]
 
     // Incrementar índice
-    add     x5, x5, x6       // i += 8
-
+    add     x5, x5, x6      // i += 8
     b       .L2             // Repetir el bucle
 
 .L1:
+
 ```
 
 ### Resultados obtenidos
@@ -321,7 +351,7 @@ mov     x6, 8               // Desenrollar 8 iteraciones por ciclo
 
 !Aclaración: La dimensión "y" de los siguientes graficos son la cantidad de ciclos.
 
-| Cantidad de ciclos ociosos | Cantidad de ciclos por vías de caché |
+| Cantidad de ciclos ociosos | Cantidad de ciclos |
 |-----------------|----------------|
 | ![Gráficos de resultados 5](./graficos/grafico_idleCycles_opt.png) | ![Gráficos de resultados 6](./graficos/grafico_numCycles_opt.png) |
 
@@ -332,7 +362,9 @@ mov     x6, 8               // Desenrollar 8 iteraciones por ciclo
 |-----------------|----------------|
 | ![Gráficos de resultados 5](./graficos/grafico_overallHits_opt.png) | ![Gráficos de resultados 6](./graficos/grafico_readReq.hits_opt.png) |
 
-A la hora de ver la cantidad de ciclos ociosos o de ciclos ejecutados se obtuvo un rendimiento parecido, pero la cantidad de hits a caché no logramos obtener el mismo rendimiento.
+Pudimos optimizar el código de forma que la cantidad de ciclos es casi la misma para la caché de una o dos vías y se hacen muchos menos ciclos que sin optimizar.
+
+En caso de hits a caché, pudimos aumentar la cantidad de hits en los dos casos. Principalmente en el caso de la caché de mapeo directo que sin optimizar el código se hacían alrededor de unos 800, mientras que ahora se generan unos 6900 hits.
 
 
 ## f)
@@ -355,6 +387,10 @@ Ejecutar la simulación utilizando el procesador out-of-order con las caracterí
 | Cantidad de hits en la caché | Cantidad de hits de lectura en la caché |
 |-----------------|----------------|
 | ![Gráficos de resultados 5](./graficos/grafico_overallHits_out-of-order.png) | ![Gráficos de resultados 6](./graficos/grafico_readReq.hits_out-of-order.png) |
+
+Se puede observar que el procesador out-of-order hace menos ciclos y sobre todo menos cantidad de ciclos ociosos gracias a la capacidad que tiene de reorganizar las instrucciones, evitando asi cualquier tipo de dependecia de datos o instrucciones.
+
+El procesador in-order accede a la memoria de manera secuencial, lo que permite un mejor rendimiento. Por ejemplo, en un bucle, los datos almacenados contiguamente en memoria pueden ser procesados eficientemente, reutilizando las líneas de caché con alta frecuencia. En contraste, el procesador out-of-order ejecuta las instrucciones de manera no secuencial, lo que puede reducir la eficiencia de la reutilización de la caché.
 
 ## 2. Ejercicio 2
 
@@ -672,3 +708,153 @@ Se puede observar que obtenemos una cantidad similar de hits a la memoria, pero 
 Esto se debe a la capacidad que tiene el procesador out-of-order de ejecutar las instrucciones en un orden diferente al que fue escrito, evitando así secuencias de instrucciones con dependencias de valores (hazards) dejando la menor cantidad de de ciclos de espera.
 
 ## 3. Ejercicio 3
+## a) 
+
+* Codigo en assembler ARMv8:
+  
+```
+.data
+N:       .dword 1000
+Array:   .space 8000  // 1000 elementos de 8 bytes (double)
+.text
+.global _start
+_start:
+    // Inicializar el arreglo
+    ldr     x0, =Array
+    ldr     x6, N
+    mov     x1, 1234
+    mov     x5, 0
+    // Parámetros LCG
+    movz    x2, 0x19, lsl 16
+    movk    x2, 0x660D, lsl 0
+    movz    x3, 0x3C6E, lsl 16
+    movk    x3, 0xF35F, lsl 0
+    movz    x4, 0xFFFF, lsl 16
+    movk    x4, 0xFFFF, lsl 0
+random_array:
+    // Calculate the next pseudorandom value
+    mul x1, x1, x2          // x1 = x1 * multiplier
+    add x1, x1, x3          // x1 = x1 + increment
+    and x1, x1, x4          // x1 = x1 % modulus
+    str x1, [x0, x5, lsl #3] // Store the updated seed back to memory
+    add x5, x5, 1           // Increment array counter
+    cmp x5, x6              // Verify if process ended
+    b.lt random_array
+    // Ordenamiento por burbuja
+    ldr x0, =Array          // Load array base address to x0
+    ldr x6, =N              // Load the number of elements into x6
+    ldr x6, [x6]
+    sub x6, x6, 1           // N - 1
+bubble_sort:
+    mov x1, #0              // i = 0
+outer_loop:
+    cmp x1, x6              // Compare i with N-1
+    bge end_sort            // If i >= N-1, end sorting
+    mov x2, #0              // j = 0
+inner_loop:
+    cmp x2, x6              // Compare j with N-1
+    bge next_outer          // If j >= N-1, go to next outer loop
+    lsl x3, x2, #3          // j * 8
+    add x4, x0, x3          // Address of Array[j]
+    ldr x7, [x4]            // Load Array[j] into x7
+    ldr x8, [x4, #8]        // Load Array[j+1] into x8
+    cmp x7, x8              // Compare Array[j] with Array[j+1]
+    ble skip_swap           // If Array[j] <= Array[j+1], skip swap
+    // Swap Array[j] and Array[j+1]
+    str x8, [x4]            // Store Array[j+1] into Array[j]
+    str x7, [x4, #8]        // Store Array[j] into Array[j+1]
+skip_swap:
+    add x2, x2, 1           // Increment j
+    b inner_loop            // Repeat inner loop
+next_outer:
+    add x1, x1, 1           // Increment i
+    b outer_loop            // Repeat outer loop
+end_sort:
+    // Fin del programa
+    mov     x0, #0                  // Código de salida 0
+    mov     x8, #93                 // syscall: exit
+    svc     #0
+```
+## b)
+* Codigo en assembler ARMv8 utilizando instrucciones condicionales:
+```
+.data
+N:       .dword 1000
+Array:   .space 8000  // 1000 elementos de 8 bytes (double)
+
+.text
+.global _start
+
+_start:
+    // Inicializar el arreglo
+    ldr     x0, =Array
+    ldr     x6, =N
+    ldr     x6, [x6]
+    mov     x1, 1234
+    mov     x5, 0
+
+    // Parámetros LCG
+    movz    x2, 0x19, lsl 16
+    movk    x2, 0x660D, lsl 0
+    movz    x3, 0x3C6E, lsl 16
+    movk    x3, 0xF35F, lsl 0
+    movz    x4, 0xFFFF, lsl 16
+    movk    x4, 0xFFFF, lsl 0
+
+random_array:
+    // Calculate the next pseudorandom value
+    mul x1, x1, x2          // x1 = x1 * multiplier
+    add x1, x1, x3          // x1 = x1 + increment
+    and x1, x1, x4          // x1 = x1 % modulus
+
+    str x1, [x0, x5, lsl #3] // Store the updated seed back to memory
+    add x5, x5, 1           // Increment array counter
+    cmp x5, x6              // Verify if process ended
+    b.lt random_array
+
+    // Ordenamiento por burbuja
+    ldr x0, =Array          // Load array base address to x0
+    ldr x6, =N              // Load the number of elements into x6
+    ldr x6, [x6]
+    sub x6, x6, 1           // N - 1
+
+bubble_sort:
+    mov x1, #0              // i = 0
+
+outer_loop:
+    cmp x1, x6              // Compare i with N-1
+    cset x7, lt             // Set x7 to 1 if i < N-1, otherwise 0
+    cbz x7, end_sort        // If x7 is 0, end sorting
+
+    mov x2, #0              // j = 0
+
+inner_loop:
+    cmp x2, x6              // Compare j with N-1
+    cset x7, lt             // Set x7 to 1 if j < N-1, otherwise 0
+    cbz x7, next_outer      // If x7 is 0, go to next outer loop
+
+    lsl x3, x2, #3          // j * 8
+    add x4, x0, x3          // Address of Array[j]
+    ldr x8, [x4]            // Load Array[j] into x8
+    ldr x9, [x4, #8]        // Load Array[j+1] into x9
+
+    cmp x8, x9              // Compare Array[j] with Array[j+1]
+    csel x10, x8, x9, le    // Select the smaller value
+    csel x11, x9, x8, le    // Select the larger value
+
+    str x10, [x4]           // Store the smaller value in Array[j]
+    str x11, [x4, #8]       // Store the larger value in Array[j+1]
+
+    add x2, x2, 1           // Increment j
+    b inner_loop            // Repeat inner loop
+
+next_outer:
+    add x1, x1, 1           // Increment i
+    b outer_loop            // Repeat outer loop
+
+end_sort:
+    // Fin del programa
+    mov     x0, #0                  // Código de salida 0
+    mov     x8, #93                 // syscall: exit
+    svc     #0
+```

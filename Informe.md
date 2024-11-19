@@ -713,6 +713,158 @@ Esto se debe a la capacidad que tiene el procesador out-of-order de ejecutar las
 
 ## 3. Ejercicio 3
 
+## a) 
+
+* Codigo en assembler ARMv8:
+  
+```
+.data
+N:       .dword 1000
+Array:   .space 8000  // 1000 elementos de 8 bytes (double)
+.text
+.global _start
+_start:
+    // Inicializar el arreglo
+    ldr     x0, =Array
+    ldr     x6, N
+    mov     x1, 1234
+    mov     x5, 0
+    // Parámetros LCG
+    movz    x2, 0x19, lsl 16
+    movk    x2, 0x660D, lsl 0
+    movz    x3, 0x3C6E, lsl 16
+    movk    x3, 0xF35F, lsl 0
+    movz    x4, 0xFFFF, lsl 16
+    movk    x4, 0xFFFF, lsl 0
+random_array:
+    // Calculate the next pseudorandom value
+    mul x1, x1, x2          // x1 = x1 * multiplier
+    add x1, x1, x3          // x1 = x1 + increment
+    and x1, x1, x4          // x1 = x1 % modulus
+    str x1, [x0, x5, lsl #3] // Store the updated seed back to memory
+    add x5, x5, 1           // Increment array counter
+    cmp x5, x6              // Verify if process ended
+    b.lt random_array
+    // Ordenamiento por burbuja
+    ldr x0, =Array          // Load array base address to x0
+    ldr x6, =N              // Load the number of elements into x6
+    ldr x6, [x6]
+    sub x6, x6, 1           // N - 1
+bubble_sort:
+    mov x1, #0              // i = 0
+outer_loop:
+    cmp x1, x6              // Compare i with N-1
+    bge end_sort            // If i >= N-1, end sorting
+    mov x2, #0              // j = 0
+inner_loop:
+    cmp x2, x6              // Compare j with N-1
+    bge next_outer          // If j >= N-1, go to next outer loop
+    lsl x3, x2, #3          // j * 8
+    add x4, x0, x3          // Address of Array[j]
+    ldr x7, [x4]            // Load Array[j] into x7
+    ldr x8, [x4, #8]        // Load Array[j+1] into x8
+    cmp x7, x8              // Compare Array[j] with Array[j+1]
+    ble skip_swap           // If Array[j] <= Array[j+1], skip swap
+    // Swap Array[j] and Array[j+1]
+    str x8, [x4]            // Store Array[j+1] into Array[j]
+    str x7, [x4, #8]        // Store Array[j] into Array[j+1]
+skip_swap:
+    add x2, x2, 1           // Increment j
+    b inner_loop            // Repeat inner loop
+next_outer:
+    add x1, x1, 1           // Increment i
+    b outer_loop            // Repeat outer loop
+end_sort:
+    // Fin del programa
+    mov     x0, #0                  // Código de salida 0
+    mov     x8, #93                 // syscall: exit
+    svc     #0
+```
+## b)
+
+* Codigo en assembler ARMv8 utilizando instrucciones condicionales:
+```
+.data
+N:       .dword 1000
+Array:   .space 8000  // 1000 elementos de 8 bytes (double)
+
+.text
+.global _start
+
+_start:
+    // Inicializar el arreglo
+    ldr     x0, =Array
+    ldr     x6, =N
+    ldr     x6, [x6]
+    mov     x1, 1234
+    mov     x5, 0
+
+    // Parámetros LCG
+    movz    x2, 0x19, lsl 16
+    movk    x2, 0x660D, lsl 0
+    movz    x3, 0x3C6E, lsl 16
+    movk    x3, 0xF35F, lsl 0
+    movz    x4, 0xFFFF, lsl 16
+    movk    x4, 0xFFFF, lsl 0
+
+random_array:
+    // Calculate the next pseudorandom value
+    mul x1, x1, x2          // x1 = x1 * multiplier
+    add x1, x1, x3          // x1 = x1 + increment
+    and x1, x1, x4          // x1 = x1 % modulus
+
+    str x1, [x0, x5, lsl #3] // Store the updated seed back to memory
+    add x5, x5, 1           // Increment array counter
+    cmp x5, x6              // Verify if process ended
+    b.lt random_array
+
+    // Ordenamiento por burbuja
+    ldr x0, =Array          // Load array base address to x0
+    ldr x6, =N              // Load the number of elements into x6
+    ldr x6, [x6]
+    sub x6, x6, 1           // N - 1
+
+bubble_sort:
+    mov x1, #0              // i = 0
+
+outer_loop:
+    cmp x1, x6              // Compare i with N-1
+    cset x7, lt             // Set x7 to 1 if i < N-1, otherwise 0
+    cbz x7, end_sort        // If x7 is 0, end sorting
+
+    mov x2, #0              // j = 0
+
+inner_loop:
+    cmp x2, x6              // Compare j with N-1
+    cset x7, lt             // Set x7 to 1 if j < N-1, otherwise 0
+    cbz x7, next_outer      // If x7 is 0, go to next outer loop
+
+    lsl x3, x2, #3          // j * 8
+    add x4, x0, x3          // Address of Array[j]
+    ldr x8, [x4]            // Load Array[j] into x8
+    ldr x9, [x4, #8]        // Load Array[j+1] into x9
+
+    cmp x8, x9              // Compare Array[j] with Array[j+1]
+    csel x10, x8, x9, le    // Select the smaller value
+    csel x11, x9, x8, le    // Select the larger value
+
+    str x10, [x4]           // Store the smaller value in Array[j]
+    str x11, [x4, #8]       // Store the larger value in Array[j+1]
+
+    add x2, x2, 1           // Increment j
+    b inner_loop            // Repeat inner loop
+
+next_outer:
+    add x1, x1, 1           // Increment i
+    b outer_loop            // Repeat outer loop
+
+end_sort:
+    // Fin del programa
+    mov     x0, #0                  // Código de salida 0
+    mov     x8, #93                 // syscall: exit
+    svc     #0
+```
+
 ## c) 
 ### stats codigo Base
 
@@ -797,153 +949,44 @@ En el código optimizado, ciertos valores (como `N`) se cargan o calculan una so
 
 - **Reducción en accesos a memoria y uso de registros**, lo que mejora el rendimiento general.
 
-## a) 
+## impacto en metricas especifics:
 
-* Codigo en assembler ARMv8:
-  
-```
-.data
-N:       .dword 1000
-Array:   .space 8000  // 1000 elementos de 8 bytes (double)
-.text
-.global _start
-_start:
-    // Inicializar el arreglo
-    ldr     x0, =Array
-    ldr     x6, N
-    mov     x1, 1234
-    mov     x5, 0
-    // Parámetros LCG
-    movz    x2, 0x19, lsl 16
-    movk    x2, 0x660D, lsl 0
-    movz    x3, 0x3C6E, lsl 16
-    movk    x3, 0xF35F, lsl 0
-    movz    x4, 0xFFFF, lsl 16
-    movk    x4, 0xFFFF, lsl 0
-random_array:
-    // Calculate the next pseudorandom value
-    mul x1, x1, x2          // x1 = x1 * multiplier
-    add x1, x1, x3          // x1 = x1 + increment
-    and x1, x1, x4          // x1 = x1 % modulus
-    str x1, [x0, x5, lsl #3] // Store the updated seed back to memory
-    add x5, x5, 1           // Increment array counter
-    cmp x5, x6              // Verify if process ended
-    b.lt random_array
-    // Ordenamiento por burbuja
-    ldr x0, =Array          // Load array base address to x0
-    ldr x6, =N              // Load the number of elements into x6
-    ldr x6, [x6]
-    sub x6, x6, 1           // N - 1
-bubble_sort:
-    mov x1, #0              // i = 0
-outer_loop:
-    cmp x1, x6              // Compare i with N-1
-    bge end_sort            // If i >= N-1, end sorting
-    mov x2, #0              // j = 0
-inner_loop:
-    cmp x2, x6              // Compare j with N-1
-    bge next_outer          // If j >= N-1, go to next outer loop
-    lsl x3, x2, #3          // j * 8
-    add x4, x0, x3          // Address of Array[j]
-    ldr x7, [x4]            // Load Array[j] into x7
-    ldr x8, [x4, #8]        // Load Array[j+1] into x8
-    cmp x7, x8              // Compare Array[j] with Array[j+1]
-    ble skip_swap           // If Array[j] <= Array[j+1], skip swap
-    // Swap Array[j] and Array[j+1]
-    str x8, [x4]            // Store Array[j+1] into Array[j]
-    str x7, [x4, #8]        // Store Array[j] into Array[j+1]
-skip_swap:
-    add x2, x2, 1           // Increment j
-    b inner_loop            // Repeat inner loop
-next_outer:
-    add x1, x1, 1           // Increment i
-    b outer_loop            // Repeat outer loop
-end_sort:
-    // Fin del programa
-    mov     x0, #0                  // Código de salida 0
-    mov     x8, #93                 // syscall: exit
-    svc     #0
-```
-## b)
-* Codigo en assembler ARMv8 utilizando instrucciones condicionales:
-```
-.data
-N:       .dword 1000
-Array:   .space 8000  // 1000 elementos de 8 bytes (double)
+| Métrica                           | Efecto Directo                                                        |
+|-----------------------------------|------------------------------------------------------------------------|
+| branchPred.lookups               | Menor número de ramas explícitas reduce el total de predicciones.      |
+| branchPred.condIncorrect         | Menor cantidad de fallos en predicción debido al uso de condiciones directas. |
+| branchPred.BTBLookups y BTBHits  | Reducción en el uso del BTB por menos ramas y bifurcaciones.           |
+| dcache.overallAccesses::total    | Menor número de accesos redundantes a memoria.                         |
+| system.cpu_cluster.cpus.numCycles | Reducción por bucles más eficientes.                                   |
+| system.cpu_cluster.cpus.cpi      | Mejora al reducir el costo por instrucción ejecutada.                  |
 
-.text
-.global _start
+## Conclusión
 
-_start:
-    // Inicializar el arreglo
-    ldr     x0, =Array
-    ldr     x6, =N
-    ldr     x6, [x6]
-    mov     x1, 1234
-    mov     x5, 0
+El código optimizado aprovecha mejor las capacidades de la arquitectura ARM mediante el uso de instrucciones condicionales avanzadas (`CSET`, `CSEL`, `CBZ`), lo que reduce la cantidad de ramas explícitas y mejora la eficiencia de los bucles. Esto se traduce en:
 
-    // Parámetros LCG
-    movz    x2, 0x19, lsl 16
-    movk    x2, 0x660D, lsl 0
-    movz    x3, 0x3C6E, lsl 16
-    movk    x3, 0xF35F, lsl 0
-    movz    x4, 0xFFFF, lsl 16
-    movk    x4, 0xFFFF, lsl 0
+- **Menor uso del BTB** y **mayor precisión en las predicciones de ramas**.
+- **Menor consumo de ciclos de CPU** y **mejor CPI**.
+- **Menor cantidad de accesos redundantes a memoria**.
 
-random_array:
-    // Calculate the next pseudorandom value
-    mul x1, x1, x2          // x1 = x1 * multiplier
-    add x1, x1, x3          // x1 = x1 + increment
-    and x1, x1, x4          // x1 = x1 % modulus
+Estas mejoras son el resultado de un diseño más eficiente del flujo de control y una reducción de instrucciones innecesarias
 
-    str x1, [x0, x5, lsl #3] // Store the updated seed back to memory
-    add x5, x5, 1           // Increment array counter
-    cmp x5, x6              // Verify if process ended
-    b.lt random_array
+## impacto en metricas especifics:
 
-    // Ordenamiento por burbuja
-    ldr x0, =Array          // Load array base address to x0
-    ldr x6, =N              // Load the number of elements into x6
-    ldr x6, [x6]
-    sub x6, x6, 1           // N - 1
+| Métrica                           | Efecto Directo                                                        |
+|-----------------------------------|------------------------------------------------------------------------|
+| branchPred.lookups               | Menor número de ramas explícitas reduce el total de predicciones.      |
+| branchPred.condIncorrect         | Menor cantidad de fallos en predicción debido al uso de condiciones directas. |
+| branchPred.BTBLookups y BTBHits  | Reducción en el uso del BTB por menos ramas y bifurcaciones.           |
+| dcache.overallAccesses::total    | Menor número de accesos redundantes a memoria.                         |
+| system.cpu_cluster.cpus.numCycles | Reducción por bucles más eficientes.                                   |
+| system.cpu_cluster.cpus.cpi      | Mejora al reducir el costo por instrucción ejecutada.                  |
 
-bubble_sort:
-    mov x1, #0              // i = 0
+## Conclusión
 
-outer_loop:
-    cmp x1, x6              // Compare i with N-1
-    cset x7, lt             // Set x7 to 1 if i < N-1, otherwise 0
-    cbz x7, end_sort        // If x7 is 0, end sorting
+El código optimizado aprovecha mejor las capacidades de la arquitectura ARM mediante el uso de instrucciones condicionales avanzadas (`CSET`, `CSEL`, `CBZ`), lo que reduce la cantidad de ramas explícitas y mejora la eficiencia de los bucles. Esto se traduce en:
 
-    mov x2, #0              // j = 0
+- **Menor uso del BTB** y **mayor precisión en las predicciones de ramas**.
+- **Menor consumo de ciclos de CPU** y **mejor CPI**.
+- **Menor cantidad de accesos redundantes a memoria**.
 
-inner_loop:
-    cmp x2, x6              // Compare j with N-1
-    cset x7, lt             // Set x7 to 1 if j < N-1, otherwise 0
-    cbz x7, next_outer      // If x7 is 0, go to next outer loop
-
-    lsl x3, x2, #3          // j * 8
-    add x4, x0, x3          // Address of Array[j]
-    ldr x8, [x4]            // Load Array[j] into x8
-    ldr x9, [x4, #8]        // Load Array[j+1] into x9
-
-    cmp x8, x9              // Compare Array[j] with Array[j+1]
-    csel x10, x8, x9, le    // Select the smaller value
-    csel x11, x9, x8, le    // Select the larger value
-
-    str x10, [x4]           // Store the smaller value in Array[j]
-    str x11, [x4, #8]       // Store the larger value in Array[j+1]
-
-    add x2, x2, 1           // Increment j
-    b inner_loop            // Repeat inner loop
-
-next_outer:
-    add x1, x1, 1           // Increment i
-    b outer_loop            // Repeat outer loop
-
-end_sort:
-    // Fin del programa
-    mov     x0, #0                  // Código de salida 0
-    mov     x8, #93                 // syscall: exit
-    svc     #0
-```
+Estas mejoras son el resultado de un diseño más eficiente del flujo de control y una reducción de instrucciones innecesarias

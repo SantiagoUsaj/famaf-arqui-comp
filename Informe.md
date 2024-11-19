@@ -866,7 +866,7 @@ end_sort:
 ```
 
 ## c) 
-### stats codigo Base
+### Tabla comparativa: Código Base vs Código optimizado
 
 | Métrica                                                   | Código Base | Código optimizado | Cambio (%)                        |
 |-----------------------------------------------------------|-------------|--------------------------|------------------------------------|
@@ -990,3 +990,65 @@ El código optimizado aprovecha mejor las capacidades de la arquitectura ARM med
 - **Menor cantidad de accesos redundantes a memoria**.
 
 Estas mejoras son el resultado de un diseño más eficiente del flujo de control y una reducción de instrucciones innecesarias
+
+## D)
+### Tabla comparativa: Código Base vs Código optimizado
+
+| Métrica                           | Código Base | Código Optimizado | Cambio (%) |
+|-----------------------------------|-------------|-------------------|------------|
+| simInsts                          | 478.0       | 478.0             | 0.0%       |
+| system.cpu_cluster.cpus.numCycles | 9858.0      | 11351.0           | +15.1%     |
+| system.cpu_cluster.cpus.cpi       | 20.62       | 23.75             | +15.2%     |
+| branchPred.lookups                | 295.0       | 248.0             | -15.9%     |
+| branchPred.condPredicted          | 189.0       | 159.0             | -15.9%     |
+| branchPred.condIncorrect          | 73.0        | 65.0              | -11.0%     |
+| branchPred.BTBLookups             | 168.0       | 104.0             | -38.1%     |
+| branchPred.BTBHits                | 50.0        | 20.0              | -60.0%     |
+| branchPred.BTBUpdates             | 60.0        | 60.0              | 0.0%       |
+| dcache.overallHits::total         | 192.0       | 182.0             | -5.2%      |
+| dcache.overallMisses::total       | 20.0        | 22.0              | +10.0%     |
+| dcache.overallAccesses::total     | 212.0       | 204.0             | -3.8%      |
+| icache.overallHits::total         | 356.0       | 295.0             | -17.1%     |
+| icache.overallMisses::total       | 56.0        | 53.0              | -5.4%      |
+| icache.overallAccesses::total     | 412.0       | 348.0             | -15.5%     |
+| idleCycles                        | 7464.0      | 8986.0            | +20.4%     |
+
+# Análisis de los Cambios
+
+## Aumento en los Ciclos Totales y CPI
+
+El código optimizado hace un mayor uso de condicionales (`CSET`, `CSEL`, `CBZ`), lo que introduce más dependencias en la ejecución. Aunque estas instrucciones eliminan ramas explícitas, estas dependencias pueden retrasar la ejecución en una arquitectura *out-of-order*. Esto se refleja en:
+
+- **Mayor número de ciclos totales (`system.cpu_cluster.cpus.numCycles`)**.
+- **Incremento en los ciclos por instrucción (CPI)**, reflejando una penalización por las dependencias.
+
+---
+
+## Reducción de Predicciones de Ramas y Uso del BTB
+
+La eliminación de ramas explícitas contribuye a:
+
+- **Reducción significativa en búsquedas de predicciones (`branchPred.lookups`)** y en los aciertos del BTB (`branchPred.BTBHits`).
+- **Mejora en la precisión de las predicciones (`branchPred.condIncorrect`)**, debido a menos bifurcaciones ambiguas.
+
+---
+
+## Impacto en las Cachés
+
+### Datos (D-Cache)
+- **Menos accesos totales** a la caché de datos, lo que refleja un código más compacto.
+- **Ligeros aumentos en los fallos de caché**, posiblemente indicativos de un patrón de acceso más disperso o menos predecible.
+
+### Instrucciones (I-Cache)
+- **Reducción en los accesos totales** a la caché de instrucciones, gracias al menor espacio requerido por el código optimizado.
+- **Ligeras mejoras en los fallos de caché**, lo que puede deberse a una mejor reutilización del espacio en caché.
+
+---
+
+## Ciclos Inactivos
+
+El incremento significativo en **ciclos inactivos (`idleCycles`)** se debe a latencias introducidas por las dependencias entre instrucciones condicionales. Esto refleja un impacto negativo en la efiiencia general del procesador.
+
+## Conclusion:
+
+Aunque el codigo optimizado mejora el flujo de control al reducir ramas explícitas y el uso del BTB, esto introduce nuevas dependencias en la ejecución que resultan en mayores latencias y ciclos totales en una arquitectura out-of-order. El código base, aunque más simple, aprovecha mejor la capacidad de ejecución de esta arquitectura.

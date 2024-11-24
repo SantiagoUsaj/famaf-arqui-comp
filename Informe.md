@@ -191,6 +191,8 @@ Los **numCycles** representan el número total de ciclos de reloj utilizados por
 
 Podemos observar que al agregar vías a la caché mejora significativamente su rendimiento, en el caso de 2 vías es el que mejor rendimiento obtuvimos. Pero una vez que se complejiza y aumentamos de más la cantidad de vías, el rendimiento es aún peor que el que teníamos en un principio con una única vía.
 
+XXX Porque?
+
 ### Cantidad de ciclos ociosos
 
 Representa el tiempo durante el cual el procesador está inactivo porque está esperando que se completen ciertas operaciones, como el acceso a la memoria principal o la finalización de una instrucción dependiente. 
@@ -206,6 +208,8 @@ Son todos los accesos exitosos a la caché, tanto los accesos para escritura com
 ![Gráficos de resultados 3](./graficos/grafico_overallHits.png)
 
 Se observa que mientras aumente la cantidad de vías, la cantidad de hits aumenta a la par hasta llegar a las 4 vías donde si se agregan más vías, estas siguen haciendo la misma cantidad de hits. Esto puede decir que la caché llegó a su límite de eficiencia.
+
+XXX Falta explicar esta curva
 
 ### Cantidad de hits de lectura en la caché
 
@@ -443,6 +447,8 @@ Ejecutar la simulación utilizando el procesador out-of-order con las caracterí
 
 Se puede observar que obtenemos una cantidad similar de hits a la memoria, pero al ver los ciclos ociosos, el procesador out-of-order es ampliamente mejor que el in-order ya que apenas genera ciclos ociosos.
 
+XXX El ejercicio pide comprar los hits del predictor de salto
+
 Esto se debe a la capacidad que tiene el procesador out-of-order de ejecutar las instrucciones en un orden diferente al que fue escrito, evitando así secuencias de instrucciones con dependencias de valores (hazards) dejando la menor cantidad de de ciclos de espera.
 
 ## 3. Ejercicio 3
@@ -594,6 +600,8 @@ Estas mejoras son el resultado de un diseño más eficiente del flujo de control
 | icache.overallMisses::total       | 56.0        | 53.0              | -5.4%      |
 | icache.overallAccesses::total     | 412.0       | 348.0             | -15.5%     |
 | idleCycles                        | 7464.0      | 8986.0            | +20.4%     |
+
+XXX Estos resultados tienen varias cosas raras.... los CPI son muy altos. Los numCycles del optimizado OOO es peor que el no optimizado.
 
 # Análisis de los Cambios
 

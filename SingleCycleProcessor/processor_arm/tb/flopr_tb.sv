@@ -43,7 +43,7 @@ module flopr_tb();
 	// Each element is a pair of 64-bit values
 	// The first 64 bits are the input data, and the second 64 bits are the expected output
 	
-	flopr #(64) flop(clk, reset, d, q);
+	flopr #(64) dut(clk, reset, d, q);
 	
 	always
 		begin
@@ -74,7 +74,7 @@ module flopr_tb();
 				if (testvectors[vectornum] === 'hx)
 					begin
 						$display("%d tests completed with %d errors",vectornum, errors);
-						$finish;
+						$stop;
 					end
 			end
 endmodule

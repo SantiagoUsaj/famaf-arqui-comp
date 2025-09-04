@@ -1,7 +1,7 @@
 # compile verilog/system verilog design source files
 sv xil_defaultlib  \
-"../../../../src/imem.sv" \
-"../../../../tb/imem_tb.sv" \
+"../../../../src/regfile.sv" \
+"../../../../tb/regfile_tb.sv" \
 
 # compile glbl module
 verilog xil_defaultlib "glbl.v"

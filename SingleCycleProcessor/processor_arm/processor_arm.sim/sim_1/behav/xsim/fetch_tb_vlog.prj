@@ -1,7 +1,10 @@
 # compile verilog/system verilog design source files
 sv xil_defaultlib  \
-"../../../../src/maindec.sv" \
-"../../../../tb/maindec_tb.sv" \
+"../../../../src/adder.sv" \
+"../../../../src/fetch.sv" \
+"../../../../src/flopr.sv" \
+"../../../../src/mux2.sv" \
+"../../../../tb/fetch_tb.sv" \
 
 # compile glbl module
 verilog xil_defaultlib "glbl.v"

@@ -30,6 +30,8 @@ module imem
     logic [N-1:0] ROM [0:63] = '{default: 32'h0};
 
 	initial begin
+        // Codigo original
+        /*
 		ROM [0:46] ='{  32'hf8000001,
                         32'hf8008002,
                         32'hf8000203,
@@ -76,6 +78,17 @@ module imem
                         32'h8b1e03de,
                         32'h8b1003de,
                         32'hf81f83d9,
+                        32'hb400001f};
+        */
+        
+        // TP2 - 2-A
+        ROM [0:7] ='{   32'h8b1f03e2,
+                        32'hcb1e0003,
+                        32'hb40000a3,
+                        32'hf8000040,
+                        32'h8b000020,
+                        32'h8b080042,
+                        32'hb4ffff7f,
                         32'hb400001f};
 	end
 

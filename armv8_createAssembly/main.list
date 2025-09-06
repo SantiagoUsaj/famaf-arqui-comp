@@ -18,19 +18,16 @@ Disassembly of section .text:
 
 0000000000000020 <end1>:
   20:	8b000002 	add	x2, x0, x0
-  24:	8b000003 	add	x3, x0, x0
-  28:	8b000004 	add	x4, x0, x0
+  24:	8b000004 	add	x4, x0, x0
 
-000000000000002c <loop2>:
-  2c:	b40000c9 	cbz	x9, 44 <end2>
-  30:	f8400043 	ldur	x3, [x2]
-  34:	8b030084 	add	x4, x4, x3
-  38:	8b080042 	add	x2, x2, x8
-  3c:	cb010129 	sub	x9, x9, x1
-  40:	b4ffff60 	cbz	x0, 2c <loop2>
+0000000000000028 <loop2>:
+  28:	b4000091 	cbz	x17, 38 <end2>
+  2c:	8b100084 	add	x4, x4, x16
+  30:	cb010231 	sub	x17, x17, x1
+  34:	b4ffffa0 	cbz	x0, 28 <loop2>
 
-0000000000000044 <end2>:
-  44:	f8000044 	stur	x4, [x2]
+0000000000000038 <end2>:
+  38:	f8000044 	stur	x4, [x2]
 
-0000000000000048 <infloop>:
-  48:	b4000000 	cbz	x0, 48 <infloop>
+000000000000003c <infloop>:
+  3c:	b4000000 	cbz	x0, 3c <infloop>

@@ -4,16 +4,33 @@ main.elf:     file format elf64-littleaarch64
 
 Disassembly of section .text:
 
-0000000000000000 <loop-0x4>:
-   0:	8b1f03e2 	add	x2, xzr, xzr
+0000000000000000 <loop1-0x8>:
+   0:	8b000002 	add	x2, x0, x0
+   4:	8b000003 	add	x3, x0, x0
 
-0000000000000004 <loop>:
-   4:	cb1e0003 	sub	x3, x0, x30
-   8:	b40000a3 	cbz	x3, 1c <end>
-   c:	f8000040 	stur	x0, [x2]
-  10:	8b000020 	add	x0, x1, x0
-  14:	8b080042 	add	x2, x2, x8
-  18:	b4ffff7f 	cbz	xzr, 4 <loop>
+0000000000000008 <loop1>:
+   8:	b40000de 	cbz	x30, 20 <end1>
+   c:	f8000043 	stur	x3, [x2]
+  10:	8b010063 	add	x3, x3, x1
+  14:	cb0103de 	sub	x30, x30, x1
+  18:	8b080042 	add	x2, x2, x8
+  1c:	b4ffff60 	cbz	x0, 8 <loop1>
 
-000000000000001c <end>:
-  1c:	b400001f 	cbz	xzr, 1c <end>
+0000000000000020 <end1>:
+  20:	8b000002 	add	x2, x0, x0
+  24:	8b000003 	add	x3, x0, x0
+  28:	8b000004 	add	x4, x0, x0
+
+000000000000002c <loop2>:
+  2c:	b40000c9 	cbz	x9, 44 <end2>
+  30:	f8400043 	ldur	x3, [x2]
+  34:	8b030084 	add	x4, x4, x3
+  38:	8b080042 	add	x2, x2, x8
+  3c:	cb010129 	sub	x9, x9, x1
+  40:	b4ffff60 	cbz	x0, 2c <loop2>
+
+0000000000000044 <end2>:
+  44:	f8000044 	stur	x4, [x2]
+
+0000000000000048 <infloop>:
+  48:	b4000000 	cbz	x0, 48 <infloop>

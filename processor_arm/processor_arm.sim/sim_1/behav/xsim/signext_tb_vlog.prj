@@ -1,7 +1,7 @@
 # compile verilog/system verilog design source files
 sv xil_defaultlib  \
-"../../../../src/flopr.sv" \
-"../../../../tb/flopr_tb.sv" \
+"../../../../src/signext.sv" \
+"../../../../tb/signext_tb.sv" \
 
 # compile glbl module
 verilog xil_defaultlib "glbl.v"

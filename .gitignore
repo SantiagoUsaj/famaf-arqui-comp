@@ -86,3 +86,9 @@
 !*.elf
 !*.bmm
 !*.xmp
+
+#########
+#Assembly files
+#########
+!armv8_createAssembly/*
+

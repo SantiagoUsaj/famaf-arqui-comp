@@ -42,6 +42,10 @@ module alu
                 result = a - b;    // SUB
             4'b0111: 
                 result = b;        // PASS
+            4'b1000:              
+                result = a << b[5:0];  //LSL
+            4'b1001:
+                result= a >> b[5:0];  //LSR
             default: 
                 result = '1;
         endcase

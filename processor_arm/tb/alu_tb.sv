@@ -226,6 +226,78 @@ module alu_tb();
         assert(result == resultEspereado);
         assert(zero == zeroEspereado);
 
+        // LSL 
+        // LSL 0
+        a = 64'hFFFF;
+        b = 64'd0;
+        ALUControl = 4'b1000;
+        resultEspereado = 64'hFFFF;
+        zeroEspereado = (resultEspereado == 0);
+        #10;
+        assert(result == resultEspereado) else $fatal("LSL Fallido: Esperado %h, Obtenido %h", resultEspereado, result);
+        assert(zero == zeroEspereado) else $fatal("LSL Fallido: Esperado zero %b, Obtenido zero %b", zeroEspereado, zero);
+        
+        // LSL 1
+        a = 64'hFFFF;
+        b = 64'd1;
+        ALUControl = 4'b1000;
+        resultEspereado = 64'h1FFFE;
+        zeroEspereado = (resultEspereado == 0);
+        #10;
+        assert(result == resultEspereado) else $fatal("LSL Fallido: Esperado %h, Obtenido %h", resultEspereado, result);
+        assert(zero == zeroEspereado) else $fatal("LSL Fallido: Esperado zero %b, Obtenido zero %b", zeroEspereado, zero);
+
+        // LSL 16
+        a = 64'hFFFF;
+        b = 64'd16;
+        ALUControl = 4'b1000;
+        resultEspereado = 64'hFFFF0000;
+        zeroEspereado = (resultEspereado == 0);
+        #10;
+        assert(result == resultEspereado) else $fatal("LSL Fallido: Esperado %h, Obtenido %h", resultEspereado, result);
+        assert(zero == zeroEspereado) else $fatal("LSL Fallido: Esperado zero %b, Obtenido zero %b", zeroEspereado, zero);
+
+        // LSL 63
+        a = 64'hFFFE;
+        b = 64'd63;
+        ALUControl = 4'b1000;
+        resultEspereado = 64'h0;
+        zeroEspereado = 1;
+        #10;
+        assert(result == resultEspereado) else $fatal("LSL Fallido: Esperado %h, Obtenido %h", resultEspereado, result);
+        assert(zero == zeroEspereado) else $fatal("LSL Fallido: Esperado zero %b, Obtenido zero %b", zeroEspereado, zero);
+
+        // LSR (Logical Shift Right)
+        a = 64'hFFFF;
+        b = 64'd1;
+        ALUControl = 4'b1001;
+        resultEspereado = 64'h7FFF;
+        zeroEspereado = 0;
+        #10;
+        assert(result == resultEspereado) else $fatal("LSR Fallido: Esperado %h, Obtenido %h", resultEspereado, result);
+        assert(zero == zeroEspereado) else $fatal("LSR Fallido: Esperado zero %b, Obtenido zero %b", zeroEspereado, zero);
+
+        // LSR 16
+        a = 64'hFFFF0000;
+        b = 64'd16;
+        ALUControl = 4'b1001;
+        resultEspereado = 64'h0000FFFF;
+        zeroEspereado = 0;
+        #10;
+        assert(result == resultEspereado) else $fatal("LSR Fallido: Esperado %h, Obtenido %h", resultEspereado, result);
+        assert(zero == zeroEspereado) else $fatal("LSR Fallido: Esperado zero %b, Obtenido zero %b", zeroEspereado, zero);
+
+        // LSR 63
+        a = 64'h8000000000000000;
+        b = 64'd63;
+        ALUControl = 4'b1001;
+        resultEspereado = 64'h1;
+        zeroEspereado = 0;
+        #10;
+        assert(result == resultEspereado) else $fatal("LSR Fallido: Esperado %h, Obtenido %h", resultEspereado, result);
+        assert(zero == zeroEspereado) else $fatal("LSR Fallido: Esperado zero %b, Obtenido zero %b", zeroEspereado, zero);
+
+        $display("Todos los tests pasaron exitosamente.");          
         $stop;
     end
 

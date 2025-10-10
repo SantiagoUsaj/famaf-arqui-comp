@@ -68,8 +68,8 @@ module regfile(
         };
 
 
-    assign rd1 = registers[ra1];
-    assign rd2 = registers[ra2];
+    assign rd1 = (wa3 === ra1) ? wd3 : registers[ra1];
+	assign rd2 = (wa3 === ra2) ? wd3 : registers[ra2];
 
 	always_ff @(posedge clk) begin
 		if (we3 == 1'b1 && wa3 != 5'd31) begin

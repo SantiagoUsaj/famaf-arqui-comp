@@ -100,3 +100,5 @@ ADD XZR, XZR, XZR // NOP
 ADD XZR, XZR, XZR // NOP
 STUR X25, [X30, #-8] // Almacena el valor de X25 en la dirección de memoria apuntada por X30 con un desplazamiento de -8
 finloop: CBZ XZR, finloop // Bucle infinito
+
+Se modifico processor_arm.sv, imem.sv y regfile para implementar el funcionamiento del codigo con los NOPS

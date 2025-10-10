@@ -23,15 +23,15 @@
 module imem
     #(parameter N = 32) 
     (
-        input logic [5:0] addr,
+        input logic [6:0] addr, // Agregamos un bit mas para direccionar 128 instrucciones
         output logic [N-1:0] q
     );
 
-    logic [N-1:0] ROM [0:63] = '{default: 32'h0};
+    logic [N-1:0] ROM [0:127] = '{default: 32'h0}; // Se agrega espacio para 128 instrucciones
 
 	initial begin
         // Codigo original   
-        /*     
+        /*
 		ROM [0:46] ='{  32'hf8000001,
                         32'hf8008002,
                         32'hf8000203,
@@ -79,10 +79,9 @@ module imem
                         32'h8b1003de,
                         32'hf81f83d9,
                         32'hb400001f};
-                    */    
+        */
 
-        // Codigo modificado para los hazards
-        
+        // Codigo modificado para los hazards        
         ROM [0:87] ='{  32'hf8000001,
                         32'hf8008002,
                         32'hf8010003,
@@ -172,7 +171,6 @@ module imem
                         32'hf81f83d9,
                         32'hb400001f};
         
-
 	end
 
 	always_comb begin

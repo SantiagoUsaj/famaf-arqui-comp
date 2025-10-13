@@ -81,7 +81,8 @@ module imem
                         32'hb400001f};
         */
 
-        // Codigo modificado para los hazards        
+        // Codigo modificado para los hazards
+              
         ROM [0:87] ='{  32'hf8000001,
                         32'hf8008002,
                         32'hf8010003,
@@ -171,6 +172,21 @@ module imem
                         32'hf81f83d9,
                         32'hb400001f};
         
+
+        // Codigo con LSL y LSR
+        /*
+        ROM [0:9] ='{   32'hf8000001,
+                        32'hf8008002,
+                        32'hf8010003,
+                        32'hd3620884,
+                        32'hd34104c6,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'hf8018004,
+                        32'hf8020006,
+                        32'hb400001f};
+        */
+
 	end
 
 	always_comb begin

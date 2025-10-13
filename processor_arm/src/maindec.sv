@@ -71,6 +71,17 @@ module maindec (
                             Branch = 0;
                             ALUOp = 'b10;
                         end
+            11'b110_1001_101?: //LSL and LSR CASE
+                        begin
+                            Reg2Loc = 0;
+                            ALUSrc = 1;
+                            MemtoReg = 0;
+                            RegWrite = 1;
+                            MemRead = 0;
+                            MemWrite = 0;
+                            Branch = 0;
+                            ALUOp = 'b10;
+                        end
             default 
                         begin
                             Reg2Loc = 0;

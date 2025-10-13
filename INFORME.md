@@ -9,6 +9,7 @@ Integrante 3: Usaj Santiago
 
 Codigo con NOPS:
 
+```verilog
     .text
     .org 0x0000
 
@@ -100,5 +101,30 @@ ADD XZR, XZR, XZR // NOP
 ADD XZR, XZR, XZR // NOP
 STUR X25, [X30, #-8] // Almacena el valor de X25 en la dirección de memoria apuntada por X30 con un desplazamiento de -8
 finloop: CBZ XZR, finloop // Bucle infinito
+```
 
 Se modifico processor_arm.sv, imem.sv y regfile para implementar el funcionamiento del codigo con los NOPS
+
+### Ej 1
+
+Ej1 - Se modifico alu.sv, aludec.sv, signext.sv y maindec.sv para agregar los opcode de LSL y LSR
+
+Pudimos ver que el ensamblador acomoda mal las operaciones LSL y LSR.
+El ensamblador del lsl te pone el shamt en el rm, y en el lsr te deja el shamt negado.
+
+Hasta decidir que hacer con el ensamblador decidimos escribir las intrucciones del LSL y LSR manualmenete siguiendo la greencard
+
+Un compañero descubrio lo mismo:
+
+```
+Buenas, con mi grupo estabamos implementando el LSL y el LSR del ejercicio 1 en vivado. Teniamos una duda ya que sucede que al traducir LSL X1, X1, #1 el traductor de assembly que utilizamos desde el practico 2 nos devuelve el hexadecimal: 0xd37ff821.
+No nos estaba andando bien el inmediato, por lo cual lo descompusimos en binario, vimos que:
+el shamt es igual a 111110 y
+el Rm es igual a 11111
+Probamos un par de instrucciones mas y vimos que siempre se cumplia lo mismo, el shamt no era el inmediato directo si no el complemento bit a bit y el Rn el complemento a dos del inmediato.
+
+Adaptamos nuestra implementacion en system verilog para eso y funciono, luego probamos para el LSR con la instruccion LSR X2, X2, #1 y nos dio el hexadecimal 0xd341fc42 y nuevamente la implementacion dejo de funcionar. Descompusimos de nuevo y ahora vemos que:
+el shamt es igual a 111111
+y el Rm es igual a 00001
+Probamos nuevamente unos casos mas y siempre resultaba lo mismo, el shamt queda fijo en todos 1, y el Rn es igual al numero directo que queriamos como inmediato (ni complemento, ni complemento a 2).
+```

@@ -1,0 +1,405 @@
+.text
+    .org 0x0000
+
+ // Intento un poco mas automatico
+
+// X0 inicializado en 0x8000 
+// X30 va a ser el que tenga el valor de los LEDs
+// Vamos a hacer stur x30, [X0, #0]
+// No vamos a tocar los primeros registos 16 para usarlos como numeros (0-15)
+// X29 va a ser el "parametrizado" para el timer
+
+// De x2 a x27 empiezan en 0 para manejar el flujo de ejecucion 
+ADD X2, XZR, XZR
+ADD X3, XZR, XZR
+ADD X4, XZR, XZR
+ADD X5, XZR, XZR
+ADD X6, XZR, XZR
+ADD X7, XZR, XZR
+ADD X8, XZR, XZR
+ADD X9, XZR, XZR
+ADD X10, XZR, XZR
+ADD X11, XZR, XZR
+ADD X12, XZR, XZR
+ADD X13, XZR, XZR
+ADD X14, XZR, XZR
+ADD X15, XZR, XZR
+ADD X16, XZR, XZR
+ADD X17, XZR, XZR
+ADD X18, XZR, XZR
+ADD X19, XZR, XZR
+ADD X20, XZR, XZR
+ADD X21, XZR, XZR
+ADD X22, XZR, XZR
+ADD X23, XZR, XZR
+ADD X24, XZR, XZR
+ADD X25, XZR, XZR
+ADD X26, XZR, XZR
+ADD X27, XZR, XZR
+
+
+ADD X30, XZR, X1
+LSL X30, X30, #1
+ADD X30, X30, X1
+LSL X30, X30, #7
+STUR X30, [X0, #0] // 0b0000_0001_1000_0000
+
+CBZ XZR, timer
+
+l2: ADD X29, XZR, XZR // Reset timer contador
+ADD X2, XZR, X1       // X2 != 0 
+ADD X30, XZR, X1
+LSL X30, X30, #3
+ADD X30, X30, X1
+LSL X30, X30, #6
+STUR X30, [X0, #0] // 0b0000_0010_0100_0000
+
+CBZ XZR, timer
+
+l3: ADD X29, XZR, XZR // Reset timer contador
+ADD X3, XZR, X1
+ADD X30, XZR, X1
+LSL X30, X30, #5
+ADD X30, X30, X1
+LSL X30, X30, #5
+STUR X30, [X0, #0] // 0b0000_0100_0010_0000
+
+CBZ XZR, timer
+
+l4: ADD X29, XZR, XZR // Reset timer contador
+ADD X4, XZR, X1
+ADD X30, XZR, X1
+LSL X30, X30, #7
+ADD X30, X30, X1
+LSL X30, X30, #4
+STUR X30, [X0, #0] // 0b0000_1000_0001_0000
+
+CBZ XZR, timer
+
+l5: ADD X29, XZR, XZR // Reset timer contador
+ADD X5, XZR, X1
+ADD X30, XZR, X1
+LSL X30, X30, #9
+ADD X30, X30, X1
+LSL X30, X30, #3
+STUR X30, [X0, #0] // 0b0001_0000_0000_1000
+
+CBZ XZR, timer
+
+l6: ADD X29, XZR, XZR // Reset timer contador
+ADD X6, XZR, X1
+ADD X30, XZR, X1
+LSL X30, X30, #11
+ADD X30, X30, X1
+LSL X30, X30, #2
+STUR X30, [X0, #0] // 0b0010_0000_0000_0100 
+
+CBZ XZR, timer
+
+l7: ADD X29, XZR, XZR // Reset timer contador
+ADD X7, XZR, X1
+ADD X30, XZR, X1
+LSL X30, X30, #13
+ADD X30, X30, X1
+LSL X30, X30, #1
+STUR X30, [X0, #0] // 0b0100_0000_0000_0010
+
+CBZ XZR, timer
+
+l8: ADD X29, XZR, XZR // Reset timer contador
+ADD X8, XZR, X1
+ADD X30, XZR, X1
+LSL X30, X30, #15
+ADD X30, X30, X1
+STUR X30, [X0, #0] // 0b1000_0000_0000_0001
+
+CBZ XZR, timer
+
+l9: ADD X29, XZR, XZR // Reset timer contador
+ADD X9, XZR, X1
+LSR X30, X30, #2
+ADD X30, X30, X1
+LSL X30, X30, #1
+STUR X30, [X0, #0] // 0b0100_0000_0000_0010
+
+CBZ XZR, timer
+
+l10: ADD X29, XZR, XZR // Reset timer contador
+ADD X10, XZR, X1
+LSR X30, X30, #3
+ADD X30, X30, X1
+LSL X30, X30, #2
+STUR X30, [X0, #0] // 0b0010_0000_0000_0100
+
+CBZ XZR, timer
+
+l11: ADD X29, XZR, XZR // Reset timer contador
+ADD X11, XZR, X1
+LSR X30, X30, #4
+ADD X30, X30, X1
+LSL X30, X30, #3
+STUR X30, [X0, #0] // 0b0001_0000_0000_1000
+
+CBZ XZR, timer
+
+l12: ADD X29, XZR, XZR // Reset timer contador
+ADD X12, XZR, X1
+LSR X30, X30, #5
+ADD X30, X30, X1
+LSL X30, X30, #4
+STUR X30, [X0, #0] // 0b0000_1000_0001_0000
+
+CBZ XZR, timer
+
+l13: ADD X29, XZR, XZR // Reset timer contador
+ADD X13, XZR, X1
+LSR X30, X30, #6
+ADD X30, X30, X1
+LSL X30, X30, #5
+STUR X30, [X0, #0] // 0b0000_0100_0010_0000
+
+CBZ XZR, timer
+
+l14: ADD X29, XZR, XZR // Reset timer contador
+ADD X14, XZR, X1
+LSR X30, X30, #7
+ADD X30, X30, X1
+LSL X30, X30, #6
+STUR X30, [X0, #0] // 0b0000_0010_0100_0000
+
+CBZ XZR, timer
+
+l15: ADD X29, XZR, XZR // Reset timer contador
+ADD X15, XZR, X1
+LSR X30, X30, #8
+ADD X30, X30, X1
+LSL X30, X30, #7
+STUR X30, [X0, #0] // 0b0000_0001_1000_0000
+
+CBZ XZR, timer
+
+l16: ADD X29, XZR, XZR // Reset timer contador
+ADD X16, XZR, X1
+LSR X30, XZR, XZR
+STUR X30, [X0, #0] // 0b0000_0000_0000_0000
+
+CBZ XZR, timer
+
+l17: ADD X29, XZR, XZR // Reset timer contador
+ADD X17, XZR, X1
+ADD X30, XZR, X1
+LSL X30, X30, #2
+ADD X30, X30, X1
+LSL X30, X30, #1
+ADD X30, X30, X1
+LSL X30, X30, #6
+STUR X30, [X0, #0] // 0b0100_0010_1100_0000 (a)
+
+ADD X16, XZR, XZR // Se vuelve a usar 16 (todo apagado)
+CBZ XZR, timer
+
+l18: ADD X29, XZR, XZR // Reset timer contador
+ADD X18, XZR, X1
+ADD X30, XZR, X1
+LSL X30, X30, #1
+ADD X30, X30, X1
+LSL X30, X30, #2
+ADD X30, X30, X1
+LSL X30, X30, #6
+STUR X30, [X0, #0] // 0b0000_0011_0100_0000 (n)
+
+ADD X16, XZR, XZR
+CBZ XZR, timer
+
+l19: ADD X29, XZR, XZR // Reset timer contador
+ADD X19, XZR, X1
+ADD X17, XZR, X1
+ADD X30, XZR, X1
+LSL X30, X30, #2
+ADD X30, X30, X1
+LSL X30, X30, #1
+ADD X30, X30, X1
+LSL X30, X30, #6
+STUR X30, [X0, #0] // 0b0100_0010_1100_0000 (a)
+
+ADD X16, XZR, XZR
+CBZ XZR, timer
+
+l20: ADD X29, XZR, XZR // Reset timer contador
+ADD X20, XZR, X1
+ADD X30, XZR, X1
+LSL X30, X30, #2
+ADD X30, X30, X1
+LSL X30, X30, #2
+ADD X30, X30, X1
+LSL X30, X30, #5
+STUR X30, [X0, #0] // 0b0000_0010_1010_0000 (s)
+
+ADD X16, XZR, XZR
+CBZ XZR, timer
+
+l21: ADD X29, XZR, XZR // Reset timer contador
+ADD X21, XZR, X1
+ADD X30, XZR, X1
+LSL X30, X30, #2
+ADD X30, X30, X1
+LSL X30, X30, #2
+ADD X30, XZR, X1
+LSL X30, X30, #2
+ADD X30, X30, X1
+LSL X30, X30, #5
+STUR X30, [X0, #0] // 0b0000_1010_1010_0000 (h)
+
+ADD X16, XZR, XZR
+CBZ XZR, timer
+
+l22: ADD X29, XZR, XZR // Reset timer contador
+ADD X22, XZR, X1
+ADD X30, XZR, X1
+LSL X30, X30, #8
+STUR X30, [X0, #0] // 0b0000_0001_0000_0000 (e)
+
+ADD X16, XZR, XZR
+CBZ XZR, timer
+
+l23: ADD X29, XZR, XZR // Reset timer contador
+ADD X23, XZR, X1
+ADD X30, XZR, X1
+LSL X30, X30, #1
+ADD X30, X30, X1
+LSL X30, X30, #1
+ADD X30, X30, X1
+LSL X30, X30, #1
+ADD X30, X30, X1
+LSL X30, X30, #1
+ADD X30, X30, X1
+LSL X30, X30, #1
+ADD X30, X30, X1
+LSL X30, X30, #1
+ADD X30, X30, X1
+LSL X30, X30, #1
+ADD X30, X30, X1
+LSL X30, X30, #1
+ADD X30, X30, X1
+LSL X30, X30, #1
+ADD X30, X30, X1
+LSL X30, X30, #1
+ADD X30, X30, X1
+LSL X30, X30, #1
+ADD X30, X30, X1
+LSL X30, X30, #1
+ADD X30, X30, X1
+LSL X30, X30, #1
+ADD X30, X30, X1
+LSL X30, X30, #1
+ADD X30, X30, X1
+LSL X30, X30, #1
+ADD X30, X30, X1
+STUR X30, [X0, #0] // 0b1111_1111_1111_1111 (todos encendidos)
+
+CBZ XZR, timer
+
+l24: ADD X29, XZR, XZR // Reset timer contador
+ADD X24, XZR, X1
+ADD X30, XZR, X1
+LSL X30, X30, #2
+ADD X30, X30, X1
+LSL X30, X30, #2
+ADD X30, X30, X1
+LSL X30, X30, #2
+ADD X30, X30, X1
+LSL X30, X30, #2
+ADD X30, X30, X1
+LSL X30, X30, #2
+ADD X30, X30, X1
+LSL X30, X30, #2
+ADD X30, X30, X1
+LSL X30, X30, #2
+ADD X30, X30, X1
+STUR X30, [X0, #0] // 0b0101_0101_0101_0101 (alternados par)
+
+ADD X16, XZR, XZR
+CBZ XZR, timer
+
+l25: ADD X29, XZR, XZR // Reset timer contador
+ADD X25, XZR, X1
+ADD X30, XZR, X1
+LSL X30, X30, #2
+ADD X30, X30, X1
+LSL X30, X30, #2
+ADD X30, X30, X1
+LSL X30, X30, #2
+ADD X30, X30, X1
+LSL X30, X30, #2
+ADD X30, X30, X1
+LSL X30, X30, #2
+ADD X30, X30, X1
+LSL X30, X30, #2
+ADD X30, X30, X1
+LSL X30, X30, #2
+ADD X30, X30, X1
+LSL X30, X30, #1
+STUR X30, [X0, #0] // 0b1010_1010_1010_1010 (alternados impar)
+
+ADD X16, XZR, XZR
+CBZ XZR, timer
+
+l26: ADD X29, XZR, XZR // Reset timer contador
+ADD X26, XZR, X1
+ADD X15, XZR, XZR
+
+CBZ XZR, timer
+
+l27: ADD X29, XZR, XZR // Reset timer contador
+ADD X27, XZR, X1
+ADD X2, XZR, XZR
+ADD X3, XZR, XZR
+ADD X4, XZR, XZR
+ADD X5, XZR, XZR
+ADD X6, XZR, XZR
+ADD X7, XZR, XZR
+ADD X8, XZR, XZR
+ADD X9, XZR, XZR
+ADD X10, XZR, XZR
+ADD X11, XZR, XZR
+ADD X12, XZR, XZR
+ADD X13, XZR, XZR
+ADD X14, XZR, XZR
+ADD X15, XZR, XZR
+ADD X16, XZR, XZR  // Termina con la animacion del principio (de l2 a l16)
+
+CBZ XZR, timer
+
+
+timer: ADD X29, X29, X1
+ADD XZR, XZR, XZR
+LSR X28, X29, #20 // Ajustar el valor del timer de ser necesario (esta en 2^20)
+CBZ X28, timer
+
+CBZ X2, l2  // de l2 a l15 una animacion que empieza del centro, choca las paredes y vuelve al centro
+CBZ X3, l3
+CBZ X4, l4
+CBZ X5, l5
+CBZ X6, l6
+CBZ X7, l7  
+CBZ X8, l8
+CBZ X9, l9
+CBZ X10, l10
+CBZ X11, l11
+CBZ X12, l12
+CBZ X13, l13
+CBZ X14, l14
+CBZ X15, l15
+CBZ X16, l16 // Apaga todo
+CBZ X17, l17 // De l17 a l22 escribe en morse 
+CBZ X18, l18
+CBZ X19, l19
+CBZ X20, l20
+CBZ X21, l21
+CBZ X22, l22
+CBZ X23, l23 // Enciende todo
+CBZ X24, l24 // Alternados par
+CBZ X25, l25 // Alternados impar
+CBZ X26, l26 // Enciende las dos del medio para arrancar la animacion inicial 
+CBZ X27, l27 // Repite la animacion inicial
+CBZ XZR, timer // Bucle infinito

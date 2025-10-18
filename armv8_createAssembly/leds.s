@@ -1,13 +1,11 @@
 .text
     .org 0x0000
 
- // Intento un poco mas automatico
-
 // X0 inicializado en 0x8000 
 // X30 va a ser el que tenga el valor de los LEDs
 // Vamos a hacer stur x30, [X0, #0]
-// No vamos a tocar los primeros registos 16 para usarlos como numeros (0-15)
-// X29 va a ser el "parametrizado" para el timer
+// X1 va a ser el valor 1 constante
+// X28 y X29 se usan para el para el timer
 
 // De x2 a x27 empiezan en 0 para manejar el flujo de ejecucion 
 ADD X2, XZR, XZR
@@ -37,6 +35,7 @@ ADD X25, XZR, XZR
 ADD X26, XZR, XZR
 ADD X27, XZR, XZR
 
+ADD X29, XZR, XZR // Inicializa el contador
 
 ADD X30, XZR, X1
 LSL X30, X30, #1
@@ -346,7 +345,11 @@ CBZ XZR, timer
 
 l26: ADD X29, XZR, XZR // Reset timer contador
 ADD X26, XZR, X1
-ADD X15, XZR, XZR
+ADD X30, XZR, X1
+LSL X30, X30, #1
+ADD X30, X30, X1
+LSL X30, X30, #7
+STUR X30, [X0, #0] // 0b0000_0001_1000_0000
 
 CBZ XZR, timer
 
@@ -372,7 +375,6 @@ CBZ XZR, timer
 
 
 timer: ADD X29, X29, X1
-ADD XZR, XZR, XZR
 LSR X28, X29, #20 // Ajustar el valor del timer de ser necesario (esta en 2^20)
 CBZ X28, timer
 

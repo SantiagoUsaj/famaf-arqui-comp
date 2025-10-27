@@ -103,16 +103,27 @@ STUR X25, [X30, #-8] // Almacena el valor de X25 en la dirección de memoria apu
 finloop: CBZ XZR, finloop // Bucle infinito
 ```
 
-Se modifico processor_arm.sv, imem.sv y regfile para implementar el funcionamiento del codigo con los NOPS
+Se modifico:
+
+- processor_arm.sv : Se agrego 1 bit para la instancia de imem.
+- imem.sv : Se le agrego un bit al input addr para poder direccionar 128 instrucciones.
+- regfile : Se implemento el forwading.
 
 ### Ej 1
 
-Ej1 - Se modifico alu.sv, aludec.sv, signext.sv y maindec.sv para agregar los opcode de LSL y LSR
+#### Parte 1 - LSL y LSR
+
+Se modifico alu.sv, aludec.sv, signext.sv y maindec.sv para agregar las operaciones LSL y LSR.
+
+- alu.sv :
+- aludec.sv :
+- signext.sv :
+- maindec.sv :
 
 Pudimos ver que el ensamblador acomoda mal las operaciones LSL y LSR.
 El ensamblador del lsl te pone el shamt en el rm, y en el lsr te deja el shamt negado.
 
-Hasta decidir que hacer con el ensamblador decidimos escribir las intrucciones del LSL y LSR manualmenete siguiendo la greencard
+Hasta decidir que hacer con el ensamblador decidimos escribir las intrucciones del LSL y LSR manualmente siguiendo la greencard
 
 Un compañero descubrio lo mismo:
 
@@ -128,3 +139,7 @@ el shamt es igual a 111111
 y el Rm es igual a 00001
 Probamos nuevamente unos casos mas y siempre resultaba lo mismo, el shamt queda fijo en todos 1, y el Rn es igual al numero directo que queriamos como inmediato (ni complemento, ni complemento a 2).
 ```
+
+#### Parte 2 - LEDS
+
+Escribimos un programa en assembler para gestionar recurse de E/S.

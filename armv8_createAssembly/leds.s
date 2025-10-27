@@ -5,7 +5,7 @@
 // X30 va a ser el que tenga el valor de los LEDs
 // Vamos a hacer stur x30, [X0, #0]
 // X1 va a ser el valor 1 constante
-// X28 y X29 se usan para el para el timer
+// X28 y X29 se usan para el timer
 
 // De x2 a x27 empiezan en 0 para manejar el flujo de ejecucion 
 ADD X2, XZR, XZR

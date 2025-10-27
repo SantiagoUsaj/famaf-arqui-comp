@@ -120,6 +120,25 @@ Se modifico alu.sv, aludec.sv, signext.sv y maindec.sv para agregar las operacio
 - signext.sv :
 - maindec.sv :
 
+Codigo utilizado para probar:
+
+```verilog
+.text
+    .org 0x0000
+
+STUR X1, [X0, #0] // Almacena el valor de X1 en la dirección de memoria apuntada por X0 con un desplazamiento de 0
+STUR X2, [X0, #8] // Almacena el valor de X2 en la dirección de memoria apuntada por X0 con un desplazamiento de 8
+STUR X3, [X0, #16] // Almacena el valor de X3 en la dirección de memoria apuntada por X0 con un desplazamiento de 16
+LSL X4, X4, #2 // Desplaza el valor de X4 a la izquierda 2 bits (equivalente a multiplicar por 4)
+LSR X6, X6, #1 // Desplaza el valor de X6 a la derecha 1 bit (equivalente a dividir por 2)
+ADD XZR, XZR, XZR // NOP
+ADD XZR, XZR, XZR // NOP
+STUR X4, [X0, #24] // Almacena el valor de X4 en la dirección de memoria apuntada por X0 con un desplazamiento de 24
+STUR X6, [X0, #32] // Almacena el valor de X6 en la dirección de memoria apuntada por X0 con un desplazamiento de 32
+finloop: CBZ XZR, finloop // Bucle infinito
+
+```
+
 Pudimos ver que el ensamblador acomoda mal las operaciones LSL y LSR.
 El ensamblador del lsl te pone el shamt en el rm, y en el lsr te deja el shamt negado.
 

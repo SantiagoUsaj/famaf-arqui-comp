@@ -11,6 +11,7 @@
 // X7: máscara para el límite izquierdo (0x8000)
 // X8: máscara para el límite derecho (0x0001)
 // X9: variable auxiliar
+// X10: variable auxiliar
 
 ADD X6, XZR, X1         // Constante 1
 ADD X0, XZR, XZR
@@ -65,13 +66,13 @@ ADD X4, XZR, X6
 ADD XZR, XZR, XZR // NOP
 ADD XZR, XZR, XZR // NOP
 LSL X4, X4, #2         // X4 = 0x0004
-// X7 = 0x8000 (máscara límite izquierdo)
-ADD X7, XZR, X6
+// X7 = 0x10000 (máscara límite izquierdo)
+ADD X7, XZR, X16
 ADD XZR, XZR, XZR // NOP
 ADD XZR, XZR, XZR // NOP
-LSL X7, X7, #15
-// X8 = 1 (máscara límite derecho)
-ADD X8, XZR, X6
+LSL X7, X7, #11
+// X8 = 0 (máscara límite derecho)
+ADD X8, XZR, XZR
 
 main_loop:
     STUR X2, [X0, #0]   // Escribir LED encendido
@@ -104,19 +105,19 @@ mover:
     ADD XZR, XZR, XZR // NOP
     ADD XZR, XZR, XZR // NOP
     ADD XZR, XZR, XZR // NOP
-    // Derecha: LSL
-    LSL X2, X2, #1
+    // Derecha: LSR
+    LSR X2, X2, #1
     ADD XZR, XZR, XZR // NOP
     ADD XZR, XZR, XZR // NOP
     // Si pasa el límite izquierdo, reinicia
-    AND X9, X2, X7
+    AND X10, X2, X8
     ADD XZR, XZR, XZR // NOP
     ADD XZR, XZR, XZR // NOP
-    CBZ X9, no_limite_izq
+    CBZ X10, no_limite_izq
     ADD XZR, XZR, XZR // NOP
     ADD XZR, XZR, XZR // NOP
     ADD XZR, XZR, XZR // NOP
-    ADD X2, XZR, X8     // Reinicia al bit derecho
+    ADD X2, XZR, X7     // Reinicia al bit derecho
     CBZ XZR, delay
     ADD XZR, XZR, XZR // NOP
     ADD XZR, XZR, XZR // NOP
@@ -127,19 +128,19 @@ no_limite_izq:
     ADD XZR, XZR, XZR // NOP
     ADD XZR, XZR, XZR // NOP
 mueve_izq:
-    // Izquierda: LSR
-    LSR X2, X2, #1
+    // Izquierda: LSL
+    LSL X2, X2, #1
     ADD XZR, XZR, XZR // NOP
     ADD XZR, XZR, XZR // NOP
     // Si pasa el límite derecho, reinicia
-    AND X9, X2, X8
+    AND X10, X2, X7
     ADD XZR, XZR, XZR // NOP
     ADD XZR, XZR, XZR // NOP
-    CBZ X9, no_limite_der
+    CBZ X10, no_limite_der
     ADD XZR, XZR, XZR // NOP
     ADD XZR, XZR, XZR // NOP
     ADD XZR, XZR, XZR // NOP
-    ADD X2, XZR, X7     // Reinicia al bit izquierdo
+    ADD X2, XZR, X8     // Reinicia al bit izquierdo
     CBZ XZR, delay
     ADD XZR, XZR, XZR // NOP
     ADD XZR, XZR, XZR // NOP
@@ -167,3 +168,4 @@ delay_loop:
     ADD XZR, XZR, XZR // NOP
     ADD XZR, XZR, XZR // NOP
     ADD XZR, XZR, XZR // NOP
+    

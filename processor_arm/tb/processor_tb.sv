@@ -25,7 +25,7 @@ module processor_tb();
     begin
       i_mclk = 0; i_reset = 1; dump = 0;
       #20 i_reset = 0;
-      #5000 dump = 1; 
+      #30000 dump = 1; 
 	   #20 $stop;
 	end 
 endmodule

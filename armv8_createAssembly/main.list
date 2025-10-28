@@ -52,11 +52,11 @@ Disassembly of section .text:
   b0:	8b1f03ff 	add	xzr, xzr, xzr
   b4:	8b1f03ff 	add	xzr, xzr, xzr
   b8:	d37ef484 	lsl	x4, x4, #2
-  bc:	8b0603e7 	add	x7, xzr, x6
+  bc:	8b1003e7 	add	x7, xzr, x16
   c0:	8b1f03ff 	add	xzr, xzr, xzr
   c4:	8b1f03ff 	add	xzr, xzr, xzr
-  c8:	d371c0e7 	lsl	x7, x7, #15
-  cc:	8b0603e8 	add	x8, xzr, x6
+  c8:	d375d0e7 	lsl	x7, x7, #11
+  cc:	8b1f03e8 	add	x8, xzr, xzr
 
 00000000000000d0 <main_loop>:
   d0:	f8000002 	stur	x2, [x0]
@@ -86,17 +86,17 @@ Disassembly of section .text:
  120:	8b1f03ff 	add	xzr, xzr, xzr
  124:	8b1f03ff 	add	xzr, xzr, xzr
  128:	8b1f03ff 	add	xzr, xzr, xzr
- 12c:	d37ff842 	lsl	x2, x2, #1
+ 12c:	d341fc42 	lsr	x2, x2, #1
  130:	8b1f03ff 	add	xzr, xzr, xzr
  134:	8b1f03ff 	add	xzr, xzr, xzr
- 138:	8a070049 	and	x9, x2, x7
+ 138:	8a08004a 	and	x10, x2, x8
  13c:	8b1f03ff 	add	xzr, xzr, xzr
  140:	8b1f03ff 	add	xzr, xzr, xzr
- 144:	b4000129 	cbz	x9, 168 <no_limite_izq>
+ 144:	b400012a 	cbz	x10, 168 <no_limite_izq>
  148:	8b1f03ff 	add	xzr, xzr, xzr
  14c:	8b1f03ff 	add	xzr, xzr, xzr
  150:	8b1f03ff 	add	xzr, xzr, xzr
- 154:	8b0803e2 	add	x2, xzr, x8
+ 154:	8b0703e2 	add	x2, xzr, x7
  158:	b400037f 	cbz	xzr, 1c4 <delay>
  15c:	8b1f03ff 	add	xzr, xzr, xzr
  160:	8b1f03ff 	add	xzr, xzr, xzr
@@ -109,17 +109,17 @@ Disassembly of section .text:
  174:	8b1f03ff 	add	xzr, xzr, xzr
 
 0000000000000178 <mueve_izq>:
- 178:	d341fc42 	lsr	x2, x2, #1
+ 178:	d37ff842 	lsl	x2, x2, #1
  17c:	8b1f03ff 	add	xzr, xzr, xzr
  180:	8b1f03ff 	add	xzr, xzr, xzr
- 184:	8a080049 	and	x9, x2, x8
+ 184:	8a07004a 	and	x10, x2, x7
  188:	8b1f03ff 	add	xzr, xzr, xzr
  18c:	8b1f03ff 	add	xzr, xzr, xzr
- 190:	b4000129 	cbz	x9, 1b4 <no_limite_der>
+ 190:	b400012a 	cbz	x10, 1b4 <no_limite_der>
  194:	8b1f03ff 	add	xzr, xzr, xzr
  198:	8b1f03ff 	add	xzr, xzr, xzr
  19c:	8b1f03ff 	add	xzr, xzr, xzr
- 1a0:	8b0703e2 	add	x2, xzr, x7
+ 1a0:	8b0803e2 	add	x2, xzr, x8
  1a4:	b400011f 	cbz	xzr, 1c4 <delay>
  1a8:	8b1f03ff 	add	xzr, xzr, xzr
  1ac:	8b1f03ff 	add	xzr, xzr, xzr

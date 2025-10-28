@@ -57,8 +57,8 @@ ADD X1, X1, X6          // X1 = 0x8007
 ADD XZR, XZR, XZR // NOP
 ADD XZR, XZR, XZR // NOP
 ADD X1, X1, X6          // X1 = 0x8008
-// X2 = 1 (LED más a la derecha)
-ADD X2, XZR, X6
+// X2 = 16 (4to LED)
+ADD X2, XZR, X16
 // X3 = 0 (dirección inicial izquierda)
 ADD X3, XZR, XZR
 // X4 = retardo
@@ -213,7 +213,7 @@ ROM [0:126] ='{
 32'h8b1f03ff,
 32'h8b1f03ff,
 32'h8b060021,
-32'h8b0603e2,
+32'h8b1003e2,
 32'h8b1f03e3,
 32'h8b0603e4,
 32'h8b1f03ff,

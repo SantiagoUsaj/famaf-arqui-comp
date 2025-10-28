@@ -46,17 +46,17 @@ Disassembly of section .text:
   98:	8b1f03ff 	add	xzr, xzr, xzr
   9c:	8b1f03ff 	add	xzr, xzr, xzr
   a0:	8b060021 	add	x1, x1, x6
-  a4:	8b0603e2 	add	x2, xzr, x6
+  a4:	8b1003e2 	add	x2, xzr, x16
   a8:	8b1f03e3 	add	x3, xzr, xzr
   ac:	8b0603e4 	add	x4, xzr, x6
   b0:	8b1f03ff 	add	xzr, xzr, xzr
   b4:	8b1f03ff 	add	xzr, xzr, xzr
   b8:	d37ef484 	lsl	x4, x4, #2
-  bc:	8b1003e7 	add	x7, xzr, x16
+  bc:	8b0603e7 	add	x7, xzr, x6
   c0:	8b1f03ff 	add	xzr, xzr, xzr
   c4:	8b1f03ff 	add	xzr, xzr, xzr
-  c8:	d375d0e7 	lsl	x7, x7, #11
-  cc:	8b1f03e8 	add	x8, xzr, xzr
+  c8:	d371c0e7 	lsl	x7, x7, #15
+  cc:	8b0603e8 	add	x8, xzr, x6
 
 00000000000000d0 <main_loop>:
   d0:	f8000002 	stur	x2, [x0]

@@ -2,10 +2,11 @@
 
 ## Lab 1: Implementación del procesador LEGv8 con pipeline de 5 etapas
 
-Nombre y apellido
-Integrante 1: Angeli Mateo
-Integrante 2: Murphy Ronnie
-Integrante 3: Usaj Santiago
+### Integrantes:
+
+- Angeli Mateo
+- Murphy Ronnie
+- Usaj Santiago
 
 Codigo con NOPS:
 
@@ -105,20 +106,20 @@ finloop: CBZ XZR, finloop // Bucle infinito
 
 Se modifico:
 
-- processor_arm.sv : Se agrego 1 bit para la instancia de imem.
-- imem.sv : Se le agrego un bit al input addr para poder direccionar 128 instrucciones.
-- regfile : Se implemento el forwading.
+- `processor_arm.sv`: Se agrego 1 bit para la instancia de imem.
+- `imem.sv`: Se le agrego un bit al input addr para poder direccionar 128 instrucciones.
+- `regfile`: Se implemento el forwading.
 
-### Ej 1
+## Ej 1
 
-#### Parte 1 - LSL y LSR
+### Parte 1 - LSL y LSR
 
 Se modifico alu.sv, aludec.sv, signext.sv y maindec.sv para agregar las operaciones LSL y LSR.
 
-- alu.sv :
-- aludec.sv :
-- signext.sv :
-- maindec.sv :
+- `alu.sv`: Agregamos las operaciones de shift
+- `aludec.sv`: Agregamos las señales de control para las operaciones LSL y LSR segun el aluop y sus respectivos opcodes.
+- `signext.sv`: Agregamos para identificar las instrucciones LSL y LSR y se extiende el shamt a 64 bits para poder operar con el.
+- `maindec.sv`: Agregamos la identificacion de las instrucciones LSL y LSR segun sus respectivos opcodes y se asignan las señales de control correspondientes.
 
 Codigo utilizado para probar:
 
@@ -159,6 +160,8 @@ y el Rm es igual a 00001
 Probamos nuevamente unos casos mas y siempre resultaba lo mismo, el shamt queda fijo en todos 1, y el Rn es igual al numero directo que queriamos como inmediato (ni complemento, ni complemento a 2).
 ```
 
-#### Parte 2 - LEDS
+#### Parte 2 - LEDS y SWITCHES
 
 Escribimos un programa en assembler para gestionar recurse de E/S.
+
+Se realizo una animacion donde los leds se van prendiendo de a uno de derecha a izquierda (Led 0 al 15) y al apretar el Switch 0, se cambia el sentido de la animacion, yendo de izquierda a derecha (led 15 al 0). La animacion se ejecuta en un loop infinito, aunque estamos teniendo problemas en los bordes. Los leds de los bordes permanecen por menos tiempo encendidos.

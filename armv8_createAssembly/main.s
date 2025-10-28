@@ -57,8 +57,8 @@ ADD X1, X1, X6          // X1 = 0x8007
 ADD XZR, XZR, XZR // NOP
 ADD XZR, XZR, XZR // NOP
 ADD X1, X1, X6          // X1 = 0x8008
-// X2 = 1 (LED más a la derecha)
-ADD X2, XZR, X6
+// X2 = 16 (4to LED)
+ADD X2, XZR, X16
 // X3 = 0 (dirección inicial izquierda)
 ADD X3, XZR, XZR
 // X4 = retardo
@@ -66,13 +66,13 @@ ADD X4, XZR, X6
 ADD XZR, XZR, XZR // NOP
 ADD XZR, XZR, XZR // NOP
 LSL X4, X4, #2         // X4 = 0x0004
-// X7 = 0x10000 (máscara límite izquierdo)
-ADD X7, XZR, X16
+// X7 = 0x8000 (máscara límite izquierdo)
+ADD X7, XZR, X6
 ADD XZR, XZR, XZR // NOP
 ADD XZR, XZR, XZR // NOP
-LSL X7, X7, #11
-// X8 = 0 (máscara límite derecho)
-ADD X8, XZR, XZR
+LSL X7, X7, #15
+// X8 = 1 (máscara límite derecho)
+ADD X8, XZR, X6
 
 main_loop:
     STUR X2, [X0, #0]   // Escribir LED encendido

@@ -9,8 +9,8 @@ module processor_tb();
   logic i_mclk, i_reset;
 	logic 			dump;
 
-  assign i_sw = 16'h0000; // Input switches not used in this testbench
-  
+  assign i_sw = 16'h0000; // Simulated Switches
+
   // instantiate device under test
   processor_arm  dut (.i_sw(i_sw), .i_mclk(i_mclk), .i_reset(i_reset), .o_led(o_led), .D0_seg(D0_seg), .D1_seg(D1_seg), .D0_a(D0_a), .D1_a(D1_a), .dump(dump));
     

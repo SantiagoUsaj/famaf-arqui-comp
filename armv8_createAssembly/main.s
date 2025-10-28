@@ -60,11 +60,11 @@ ADD X1, X1, X6          // X1 = 0x8008
 ADD X2, XZR, X6
 // X3 = 0 (dirección inicial izquierda)
 ADD X3, XZR, XZR
-// X4 = retardo (ejemplo: 0x2000)
+// X4 = retardo
 ADD X4, XZR, X6
 ADD XZR, XZR, XZR // NOP
 ADD XZR, XZR, XZR // NOP
-LSL X4, X4, #13         // X4 = 0x2000
+LSL X4, X4, #2         // X4 = 0x0004
 // X7 = 0x8000 (máscara límite izquierdo)
 ADD X7, XZR, X6
 ADD XZR, XZR, XZR // NOP
@@ -106,6 +106,8 @@ mover:
     ADD XZR, XZR, XZR // NOP
     // Derecha: LSL
     LSL X2, X2, #1
+    ADD XZR, XZR, XZR // NOP
+    ADD XZR, XZR, XZR // NOP
     // Si pasa el límite izquierdo, reinicia
     AND X9, X2, X7
     ADD XZR, XZR, XZR // NOP

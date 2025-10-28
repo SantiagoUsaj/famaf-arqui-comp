@@ -60,11 +60,11 @@ ADD X1, X1, X6          // X1 = 0x8008
 ADD X2, XZR, X6
 // X3 = 0 (dirección inicial izquierda)
 ADD X3, XZR, XZR
-// X4 = retardo (ejemplo: 0x2000)
+// X4 = retardo
 ADD X4, XZR, X6
 ADD XZR, XZR, XZR // NOP
 ADD XZR, XZR, XZR // NOP
-LSL X4, X4, #13         // X4 = 0x2000
+LSL X4, X4, #2         // X4 = 0x0004
 // X7 = 0x8000 (máscara límite izquierdo)
 ADD X7, XZR, X6
 ADD XZR, XZR, XZR // NOP
@@ -104,8 +104,8 @@ mover:
     ADD XZR, XZR, XZR // NOP
     ADD XZR, XZR, XZR // NOP
     ADD XZR, XZR, XZR // NOP
-    // Derecha: LSL
-    LSL X2, X2, #1
+    // Derecha: LSR
+    LSR X2, X2, #1
     ADD XZR, XZR, XZR // NOP
     ADD XZR, XZR, XZR // NOP
     // Si pasa el límite izquierdo, reinicia
@@ -127,8 +127,8 @@ no_limite_izq:
     ADD XZR, XZR, XZR // NOP
     ADD XZR, XZR, XZR // NOP
 mueve_izq:
-    // Izquierda: LSR
-    LSR X2, X2, #1
+    // Izquierda: LSL
+    LSL X2, X2, #1
     ADD XZR, XZR, XZR // NOP
     ADD XZR, XZR, XZR // NOP
     // Si pasa el límite derecho, reinicia
@@ -218,7 +218,7 @@ ROM [0:126] ='{
 32'h8b0603e4,
 32'h8b1f03ff,
 32'h8b1f03ff,
-32'hd37f3484,
+32'hd37f0884,
 32'h8b0603e7,
 32'h8b1f03ff,
 32'h8b1f03ff,
@@ -243,11 +243,11 @@ ROM [0:126] ='{
 32'h8b1f03e3,
 32'h8b1f03ff,
 32'h8b1f03ff,
-32'hb40002a3,
+32'hb40002e3,
 32'h8b1f03ff,
 32'h8b1f03ff,
 32'h8b1f03ff,
-32'hd37f0442,
+32'hd35f0442,
 32'h8b1f03ff,
 32'h8b1f03ff,
 32'h8a070049,
@@ -266,7 +266,7 @@ ROM [0:126] ='{
 32'h8b1f03ff,
 32'h8b1f03ff,
 32'h8b1f03ff,
-32'hd35f0442,
+32'hd37f0442,
 32'h8b1f03ff,
 32'h8b1f03ff,
 32'h8a080049,
@@ -291,19 +291,13 @@ ROM [0:126] ='{
 32'hcb060129,
 32'h8b1f03ff,
 32'h8b1f03ff,
-32'hb4fff7e9,
+32'hb4fff7a9,
 32'h8b1f03ff,
 32'h8b1f03ff,
 32'h8b1f03ff,
 32'hb4ffff3f,
 32'h8b1f03ff,
 32'h8b1f03ff,
-32'h8b1f03ff}; */
-
-
-
-
-
-
-
+32'h8b1f03ff};
+*/
 

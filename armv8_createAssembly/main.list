@@ -4,55 +4,116 @@ main.elf:     file format elf64-littleaarch64
 
 Disassembly of section .text:
 
-0000000000000000 <loop-0x5c>:
-   0:	8b0103e4 	add	x4, xzr, x1
-   4:	8b1f03e0 	add	x0, xzr, xzr
-   8:	8b1f03e1 	add	x1, xzr, xzr
-   c:	8b1f03e2 	add	x2, xzr, xzr
-  10:	8b1f03e3 	add	x3, xzr, xzr
-  14:	8b040000 	add	x0, x0, x4
-  18:	8b1f03ff 	add	xzr, xzr, xzr
-  1c:	8b1f03ff 	add	xzr, xzr, xzr
-  20:	d371c000 	lsl	x0, x0, #15
-  24:	8b040021 	add	x1, x1, x4
-  28:	8b1f03ff 	add	xzr, xzr, xzr
+0000000000000000 <loop-0x11c>:
+   0:	8b0103ea 	add	x10, xzr, x1
+   4:	8b0203eb 	add	x11, xzr, x2
+   8:	8b0103e4 	add	x4, xzr, x1
+   c:	8b1f03e0 	add	x0, xzr, xzr
+  10:	8b1f03e1 	add	x1, xzr, xzr
+  14:	8b1f03e2 	add	x2, xzr, xzr
+  18:	8b1f03e3 	add	x3, xzr, xzr
+  1c:	8b1f03e5 	add	x5, xzr, xzr
+  20:	8b1f03ea 	add	x10, xzr, xzr
+  24:	8b1f03eb 	add	x11, xzr, xzr
+  28:	8b040000 	add	x0, x0, x4
   2c:	8b1f03ff 	add	xzr, xzr, xzr
-  30:	d371c021 	lsl	x1, x1, #15
-  34:	8b1f03ff 	add	xzr, xzr, xzr
-  38:	8b1f03ff 	add	xzr, xzr, xzr
-  3c:	8b080021 	add	x1, x1, x8
-  40:	8b0403e3 	add	x3, xzr, x4
-  44:	8b1f03ff 	add	xzr, xzr, xzr
+  30:	8b1f03ff 	add	xzr, xzr, xzr
+  34:	d371c000 	lsl	x0, x0, #15
+  38:	8b040021 	add	x1, x1, x4
+  3c:	8b1f03ff 	add	xzr, xzr, xzr
+  40:	8b1f03ff 	add	xzr, xzr, xzr
+  44:	d371c021 	lsl	x1, x1, #15
   48:	8b1f03ff 	add	xzr, xzr, xzr
-  4c:	d370bc63 	lsl	x3, x3, #16
-  50:	8b1f03ff 	add	xzr, xzr, xzr
-  54:	8b1f03ff 	add	xzr, xzr, xzr
-  58:	cb040063 	sub	x3, x3, x4
-
-000000000000005c <loop>:
-  5c:	f8400022 	ldur	x2, [x1]
-  60:	8b1f03ff 	add	xzr, xzr, xzr
+  4c:	8b1f03ff 	add	xzr, xzr, xzr
+  50:	8b080021 	add	x1, x1, x8
+  54:	8b0403e3 	add	x3, xzr, x4
+  58:	8b1f03ff 	add	xzr, xzr, xzr
+  5c:	8b1f03ff 	add	xzr, xzr, xzr
+  60:	d370bc63 	lsl	x3, x3, #16
   64:	8b1f03ff 	add	xzr, xzr, xzr
-  68:	8a040042 	and	x2, x2, x4
-  6c:	8b1f03ff 	add	xzr, xzr, xzr
-  70:	8b1f03ff 	add	xzr, xzr, xzr
-  74:	b4000162 	cbz	x2, a0 <leds_off>
+  68:	8b1f03ff 	add	xzr, xzr, xzr
+  6c:	cb040063 	sub	x3, x3, x4
+  70:	8b0403e5 	add	x5, xzr, x4
+  74:	8b1f03ff 	add	xzr, xzr, xzr
   78:	8b1f03ff 	add	xzr, xzr, xzr
-  7c:	8b1f03ff 	add	xzr, xzr, xzr
+  7c:	d37ef4a5 	lsl	x5, x5, #2
   80:	8b1f03ff 	add	xzr, xzr, xzr
-  84:	f8000003 	stur	x3, [x0]
-  88:	8b1f03ff 	add	xzr, xzr, xzr
+  84:	8b1f03ff 	add	xzr, xzr, xzr
+  88:	8b0400a5 	add	x5, x5, x4
   8c:	8b1f03ff 	add	xzr, xzr, xzr
-  90:	b4fffe7f 	cbz	xzr, 5c <loop>
-  94:	8b1f03ff 	add	xzr, xzr, xzr
+  90:	8b1f03ff 	add	xzr, xzr, xzr
+  94:	d37ef4a5 	lsl	x5, x5, #2
   98:	8b1f03ff 	add	xzr, xzr, xzr
   9c:	8b1f03ff 	add	xzr, xzr, xzr
-
-00000000000000a0 <leds_off>:
-  a0:	f800001f 	stur	xzr, [x0]
+  a0:	8b0400a5 	add	x5, x5, x4
   a4:	8b1f03ff 	add	xzr, xzr, xzr
   a8:	8b1f03ff 	add	xzr, xzr, xzr
-  ac:	b4fffd9f 	cbz	xzr, 5c <loop>
+  ac:	d37ef4a5 	lsl	x5, x5, #2
   b0:	8b1f03ff 	add	xzr, xzr, xzr
   b4:	8b1f03ff 	add	xzr, xzr, xzr
-  b8:	8b1f03ff 	add	xzr, xzr, xzr
+  b8:	8b0400a5 	add	x5, x5, x4
+  bc:	8b1f03ff 	add	xzr, xzr, xzr
+  c0:	8b1f03ff 	add	xzr, xzr, xzr
+  c4:	d37ef4a5 	lsl	x5, x5, #2
+  c8:	8b1f03ff 	add	xzr, xzr, xzr
+  cc:	8b1f03ff 	add	xzr, xzr, xzr
+  d0:	8b0400a5 	add	x5, x5, x4
+  d4:	8b1f03ff 	add	xzr, xzr, xzr
+  d8:	8b1f03ff 	add	xzr, xzr, xzr
+  dc:	d37ef4a5 	lsl	x5, x5, #2
+  e0:	8b1f03ff 	add	xzr, xzr, xzr
+  e4:	8b1f03ff 	add	xzr, xzr, xzr
+  e8:	8b0400a5 	add	x5, x5, x4
+  ec:	8b1f03ff 	add	xzr, xzr, xzr
+  f0:	8b1f03ff 	add	xzr, xzr, xzr
+  f4:	d37ef4a5 	lsl	x5, x5, #2
+  f8:	8b1f03ff 	add	xzr, xzr, xzr
+  fc:	8b1f03ff 	add	xzr, xzr, xzr
+ 100:	8b0400a5 	add	x5, x5, x4
+ 104:	8b1f03ff 	add	xzr, xzr, xzr
+ 108:	8b1f03ff 	add	xzr, xzr, xzr
+ 10c:	d37ef4a5 	lsl	x5, x5, #2
+ 110:	8b1f03ff 	add	xzr, xzr, xzr
+ 114:	8b1f03ff 	add	xzr, xzr, xzr
+ 118:	8b0400a5 	add	x5, x5, x4
+
+000000000000011c <loop>:
+ 11c:	f8400022 	ldur	x2, [x1]
+ 120:	8b1f03ff 	add	xzr, xzr, xzr
+ 124:	8b1f03ff 	add	xzr, xzr, xzr
+ 128:	8a0a0054 	and	x20, x2, x10
+ 12c:	8b1f03ff 	add	xzr, xzr, xzr
+ 130:	8b1f03ff 	add	xzr, xzr, xzr
+ 134:	b4000114 	cbz	x20, 154 <check_sw1>
+ 138:	8b1f03ff 	add	xzr, xzr, xzr
+ 13c:	8b1f03ff 	add	xzr, xzr, xzr
+ 140:	8b1f03ff 	add	xzr, xzr, xzr
+ 144:	f8000003 	stur	x3, [x0]
+ 148:	8b1f03ff 	add	xzr, xzr, xzr
+ 14c:	8b1f03ff 	add	xzr, xzr, xzr
+ 150:	b4fffe7f 	cbz	xzr, 11c <loop>
+
+0000000000000154 <check_sw1>:
+ 154:	8a0b0055 	and	x21, x2, x11
+ 158:	8b1f03ff 	add	xzr, xzr, xzr
+ 15c:	8b1f03ff 	add	xzr, xzr, xzr
+ 160:	b4000175 	cbz	x21, 18c <leds_off>
+ 164:	8b1f03ff 	add	xzr, xzr, xzr
+ 168:	8b1f03ff 	add	xzr, xzr, xzr
+ 16c:	8b1f03ff 	add	xzr, xzr, xzr
+ 170:	f8000005 	stur	x5, [x0]
+ 174:	8b1f03ff 	add	xzr, xzr, xzr
+ 178:	8b1f03ff 	add	xzr, xzr, xzr
+ 17c:	b4fffd1f 	cbz	xzr, 11c <loop>
+ 180:	8b1f03ff 	add	xzr, xzr, xzr
+ 184:	8b1f03ff 	add	xzr, xzr, xzr
+ 188:	8b1f03ff 	add	xzr, xzr, xzr
+
+000000000000018c <leds_off>:
+ 18c:	f800001f 	stur	xzr, [x0]
+ 190:	8b1f03ff 	add	xzr, xzr, xzr
+ 194:	8b1f03ff 	add	xzr, xzr, xzr
+ 198:	b4fffc3f 	cbz	xzr, 11c <loop>
+ 19c:	8b1f03ff 	add	xzr, xzr, xzr
+ 1a0:	8b1f03ff 	add	xzr, xzr, xzr
+ 1a4:	8b1f03ff 	add	xzr, xzr, xzr

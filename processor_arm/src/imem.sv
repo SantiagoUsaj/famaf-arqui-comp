@@ -188,7 +188,7 @@ module imem
         */
 
         // Codigo Juego con LEDS y Switches        
-        
+        /*
         ROM [0:126] ='{
                         32'h8b0103e6,
                         32'h8b1f03e0,
@@ -318,7 +318,56 @@ module imem
                         32'h8b1f03ff,
                         32'h8b1f03ff
                     };
-
+            */
+            // Idea basica con leds y switches
+            ROM [0:46] ='{
+                            32'h8b0103e4,
+                            32'h8b1f03e0,
+                            32'h8b1f03e1,
+                            32'h8b1f03e2,
+                            32'h8b1f03e3,
+                            32'h8b040000,
+                            32'h8b1f03ff,
+                            32'h8b1f03ff,
+                            32'hd37f3c00,
+                            32'h8b040021,
+                            32'h8b1f03ff,
+                            32'h8b1f03ff,
+                            32'hd37f3c21,
+                            32'h8b1f03ff,
+                            32'h8b1f03ff,
+                            32'h8b080021,
+                            32'h8b0403e3,
+                            32'h8b1f03ff,
+                            32'h8b1f03ff,
+                            32'hd37f4063,
+                            32'h8b1f03ff,
+                            32'h8b1f03ff,
+                            32'hcb040063,
+                            32'hf8400022,
+                            32'h8b1f03ff,
+                            32'h8b1f03ff,
+                            32'h8a040042,
+                            32'h8b1f03ff,
+                            32'h8b1f03ff,
+                            32'hb4000162,
+                            32'h8b1f03ff,
+                            32'h8b1f03ff,
+                            32'h8b1f03ff,
+                            32'hf8000003,
+                            32'h8b1f03ff,
+                            32'h8b1f03ff,
+                            32'hb4fffe7f,
+                            32'h8b1f03ff,
+                            32'h8b1f03ff,
+                            32'h8b1f03ff,
+                            32'hf800001f,
+                            32'h8b1f03ff,
+                            32'h8b1f03ff,
+                            32'hb4fffd9f,
+                            32'h8b1f03ff,
+                            32'h8b1f03ff,
+                            32'h8b1f03ff};
          
 	end
 

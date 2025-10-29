@@ -25,6 +25,13 @@ module processor_tb();
     begin
       i_mclk = 0; i_reset = 1; dump = 0;
       #20 i_reset = 0;
+      i_sw = 16'h0000;
+      #5000 i_sw = 16'h0001;
+      #5000 i_sw = 16'h0000;    
+      #5000 i_sw = 16'h0001;
+      #5000 i_sw = 16'h0000;   
+      #5000 i_sw = 16'h0001;
+      #5000 i_sw = 16'h0000;     
       #30000 dump = 1; 
 	   #20 $stop;
 	end 

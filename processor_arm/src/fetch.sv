@@ -26,6 +26,7 @@ module fetch
         input logic PCSrc_F,
         input logic clk,
         input logic reset,
+        input logic enable, // Agregado para flip flop con enable
         input logic [N-1:0] PCBranch_F,
         output logic [N-1:0] imem_addr_F
     );
@@ -34,7 +35,7 @@ module fetch
 	logic [N-1:0] mux2_out; 			  
 				  
 	mux2 #(64) MUX(.d0(add_out),.d1(PCBranch_F),.s(PCSrc_F),.y(mux2_out));
-	flopr #(64) PC(.clk(clk),.reset(reset),.d(mux2_out),.q(imem_addr_F));
+	flopr_e #(64) PC(.clk(clk),.reset(reset),.enable(enable),.d(mux2_out),.q(imem_addr_F));
 	adder #(64) Add(.a(imem_addr_F),.b(64'h4),.y(add_out));
 
 endmodule

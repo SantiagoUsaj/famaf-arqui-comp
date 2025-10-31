@@ -23,16 +23,24 @@ module datapath #(parameter N = 64)
 	logic [270:0] qID_EX;
 	logic [202:0] qEX_MEM;
 	logic [134:0] qMEM_WB;
+	logic stall;
+	
+	// Señales de control modificadas (NOP si hay stall)
+	logic AluSrc_ID_mux, Branch_ID_mux, memRead_ID_mux, memWrite_ID_mux, regWrite_ID_mux, memtoReg_ID_mux;
+	logic [3:0] AluControl_ID_mux;
+
 	
 	fetch 	#(64) 	FETCH 	(.PCSrc_F(PCSrc),
 										.clk(clk),
 										.reset(reset),
+										.enable(~stall),
 										.PCBranch_F(qEX_MEM[197:134]),
 										.imem_addr_F(IM_addr));								
 					
 	
-	flopr 	#(96)		IF_ID 	(.clk(clk),
-										.reset(reset), 
+	flopr_e 	#(96)		IF_ID 	(.clk(clk),
+										.reset(reset),
+										.enable(~stall),
 										.d({IM_addr, IM_readData}),
 										.q(qIF_ID));
 										
@@ -46,13 +54,22 @@ module datapath #(parameter N = 64)
 										.readData1_D(readData1_D),
 										.readData2_D(readData2_D),
 										.wa3_D(qMEM_WB[4:0]));				
-																									
+
+
+	// Mux para forzar a 0 si hay stall
+	assign AluSrc_ID_mux     = stall ? 1'b0 : AluSrc;
+	assign AluControl_ID_mux = stall ? 4'b0000 : AluControl;
+	assign Branch_ID_mux     = stall ? 1'b0 : Branch;
+	assign memRead_ID_mux    = stall ? 1'b0 : memRead;
+	assign memWrite_ID_mux   = stall ? 1'b0 : memWrite;
+	assign regWrite_ID_mux   = stall ? 1'b0 : regWrite;
+	assign memtoReg_ID_mux   = stall ? 1'b0 : memtoReg;																		
 									
-	flopr 	#(271)	ID_EX 	(.clk(clk),
-										.reset(reset), 
-										.d({AluSrc, AluControl, Branch, memRead, memWrite, regWrite, memtoReg,	
-											qIF_ID[95:32], signImm_D, readData1_D, readData2_D, qIF_ID[4:0]}),
-										.q(qID_EX));	
+	flopr 	#(271)	ID_EX 	(	.clk(clk),
+								.reset(reset), 
+								.d({AluSrc_ID_mux, AluControl_ID_mux, Branch_ID_mux, memRead_ID_mux, memWrite_ID_mux, regWrite_ID_mux, memtoReg_ID_mux,	
+									qIF_ID[95:32], signImm_D, readData1_D, readData2_D, qIF_ID[4:0]}),
+								.q(qID_EX));	
 	
 										
 	execute 	#(64) 	EXECUTE 	(.AluSrc(qID_EX[270]),
@@ -65,7 +82,14 @@ module datapath #(parameter N = 64)
 										.aluResult_E(aluResult_E), 
 										.writeData_E(writeData_E), 
 										.zero_E(zero_E));											
-											
+
+
+	hazard_unit		HDU		(	.ID_rs1(qIF_ID[9:5]),
+								.ID_rs2(reg2loc ? qIF_ID[4:0] : qIF_ID[14:10]),
+								.EX_rd(qID_EX[4:0]),
+								.EX_memRead(qID_EX[264]),
+								.stall(stall));		
+
 									
 	flopr 	#(203)	EX_MEM 	(.clk(clk),
 										.reset(reset), 

@@ -162,3 +162,11 @@ Probamos nuevamente unos casos mas y siempre resultaba lo mismo, el shamt queda 
 #### Parte 2 - LEDS
 
 Escribimos un programa en assembler para gestionar recurse de E/S.
+
+### Ej 2
+
+- Creamos el HDU y el flip flop con enable.
+- En datapath cambiamos el flopr por flopr_e y agregamos el enable en la etapa de IF_ID.
+- En fetch cambiamos el flopr por flopr_e y agregamos el input para el enable. Con esto se logra detener el PC.
+- Instanciamos el HDU en datapath, realizando las conexiones correspondientes, tomando los registros de decode y execute para luego poder generar el output stall. Este output stall se usa en el flopr_e y en fetch.
+- Agregamos un mux para forzar todas las señales de control a 0 si hay stall.

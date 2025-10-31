@@ -170,3 +170,4 @@ Escribimos un programa en assembler para gestionar recurse de E/S.
 - En fetch cambiamos el flopr por flopr_e y agregamos el input para el enable. Con esto se logra detener el PC.
 - Instanciamos el HDU en datapath, realizando las conexiones correspondientes, tomando los registros de decode y execute para luego poder generar el output stall. Este output stall se usa en el flopr_e y en fetch.
 - Agregamos un mux para forzar todas las señales de control a 0 si hay stall.
+- Tambien modificamos en processor_arm el flopr de IF_ID_TOP por un flopr_e y le mandamos la señal stall que sale del datapath.

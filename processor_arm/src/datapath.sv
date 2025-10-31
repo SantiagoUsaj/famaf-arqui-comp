@@ -1,19 +1,21 @@
 // DATAPATH
 
 module datapath #(parameter N = 64)
-					(input logic reset, clk,
-					input logic reg2loc,									
-					input logic AluSrc,
-					input logic [3:0] AluControl,
-					input logic	Branch,
-					input logic memRead,
-					input logic memWrite,
-					input logic regWrite,	
-					input logic memtoReg,									
-					input logic [31:0] IM_readData,
-					input logic [N-1:0] DM_readData,
-					output logic [N-1:0] IM_addr, DM_addr, DM_writeData,
-					output logic DM_writeEnable, DM_readEnable );					
+					(	input logic reset, clk,
+						input logic reg2loc,									
+						input logic AluSrc,
+						input logic [3:0] AluControl,
+						input logic	Branch,
+						input logic memRead,
+						input logic memWrite,
+						input logic regWrite,	
+						input logic memtoReg,									
+						input logic [31:0] IM_readData,
+						input logic [N-1:0] DM_readData,
+						output logic [N-1:0] IM_addr, DM_addr, DM_writeData,
+						output logic DM_writeEnable, DM_readEnable,
+						output logic stall 
+					);					
 					
 	logic PCSrc;
 	logic [N-1:0] PCBranch_E, aluResult_E, writeData_E, writeData3; 

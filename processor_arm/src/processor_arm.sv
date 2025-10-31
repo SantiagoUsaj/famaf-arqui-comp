@@ -16,6 +16,7 @@ module processor_arm #(parameter N = 64)
 	logic [N-1:0] dp_readData;
 	logic [10:0] instr;
 	logic [28:0] cnt29 = 29'd0;
+	logic stall_dp;
 	
 	controller 		c 			(.instr(instr), 
 									.AluControl(AluControl), 
@@ -28,7 +29,7 @@ module processor_arm #(parameter N = 64)
 									.memWrite(memWrite));
 														
 					
-	datapath #(64) dp 		(.reset(i_reset), 
+	datapath #(64) dp 		(		.reset(i_reset), 
 									.clk(mclk), 
 									.reg2loc(reg2loc), 
 									.AluSrc(AluSrc), 
@@ -44,7 +45,9 @@ module processor_arm #(parameter N = 64)
 									.DM_addr(DM_addr), 
 									.DM_writeData(DM_writeData), 
 									.DM_writeEnable(DM_writeEnable), 
-									.DM_readEnable(DM_readEnable));				
+									.DM_readEnable(DM_readEnable),
+									.stall(stall_dp) // La salida del stall
+							);				
 					
 					
 	imem 				instrMem (.addr(IM_address[8:2]), // se cambio de 7:2 a 8:2
@@ -60,8 +63,9 @@ module processor_arm #(parameter N = 64)
 									.dump(dump)); 							
 		 
 							
-	flopr #(11)		IF_ID_TOP(.clk(mclk),
-									.reset(i_reset), 
+	flopr_e #(11)		IF_ID_TOP(.clk(mclk),
+									.reset(i_reset),
+									.enable(~stall_dp),
 									.d(q[31:21]), 
 									.q(instr));
 									

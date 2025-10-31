@@ -11,3 +11,17 @@ ADD X1, X2, X3 // Suma los valores de X2 y X3, y almacena el resultado en X1
 ADD X2, X9, X10 // Suma los valores de X9 y X10, y almacena el resultado en X2
 
 finloop: CBZ XZR, finloop // Bucle infinito
+
+
+/*
+ROM [0:8] ='{32'hf8000001,
+32'hf8008002,
+32'h8b050083,
+32'h8b0800a4,
+32'hf8400006,
+32'h8b0800c7,
+32'h8b030041,
+32'h8b0a0122,
+32'hb400001f};
+
+ */

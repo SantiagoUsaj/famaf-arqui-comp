@@ -188,6 +188,7 @@ module imem
         */ 
 
         // Codigo base probar deteccion hazards   
+        /*
         ROM [0:8] ='{   32'hf8000001,
                         32'hf8008002,
                         32'h8b050083,
@@ -196,9 +197,31 @@ module imem
                         32'h8b0800c7,
                         32'h8b030041,
                         32'h8b0a0122,
-                        32'hb400001f};        
+                        32'hb400001f};   
+        */
+        // Codigo mas completo para detectar hazards
+        
+        ROM [0:15] ='{
+                        32'hf8000001,
+                        32'hf8008002,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'hf8400001,
+                        32'h8b030022,
+                        32'hcb0100a4,
+                        32'h8b030041,
+                        32'h8b050024,
+                        32'hf8400001,
+                        32'h8b040062,
+                        32'h8b060025,
+                        32'hf8400001,
+                        32'hb4000021,
+                        32'hb400001f
+                    };     
 
-	end
+    end      
+       
 
 	always_comb begin
 		q = ROM[addr];

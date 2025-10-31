@@ -171,3 +171,7 @@ Escribimos un programa en assembler para gestionar recurse de E/S.
 - Instanciamos el HDU en datapath, realizando las conexiones correspondientes, tomando los registros de decode y execute para luego poder generar el output stall. Este output stall se usa en el flopr_e y en fetch.
 - Agregamos un mux para forzar todas las señales de control a 0 si hay stall.
 - Tambien modificamos en processor_arm el flopr de IF_ID_TOP por un flopr_e y le mandamos la señal stall que sale del datapath.
+
+Hicimos una primera prueba para ver si funciona el HDU con el codigo en hazard_detection.s y observamos que se activa el stall. (test1.png)
+
+Luego agregamos mas casos de hazard con el codigo en full_hazard_detection.s (test2.png). Podemos observar que solo tenemos 2 stalls, que es lo esperado. En este punto todavia no se implemento el forwarding.

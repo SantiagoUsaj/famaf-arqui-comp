@@ -22,7 +22,7 @@ module datapath #(parameter N = 64)
 	logic [N-1:0] signImm_D, readData1_D, readData2_D;
 	logic zero_E;
 	logic [95:0] qIF_ID;
-	logic [270:0] qID_EX;
+	logic [280:0] qID_EX;
 	logic [202:0] qEX_MEM;
 	logic [134:0] qMEM_WB;
 
@@ -72,16 +72,16 @@ module datapath #(parameter N = 64)
 	assign regWrite_ID_mux   = stall ? 1'b0 : regWrite;
 	assign memtoReg_ID_mux   = stall ? 1'b0 : memtoReg;																		
 									
-	flopr 	#(271)	ID_EX 	(	.clk(clk),
+	flopr 	#(281)	ID_EX 	(	.clk(clk),
 								.reset(reset), 
-								.d({AluSrc_ID_mux, AluControl_ID_mux, Branch_ID_mux, memRead_ID_mux, memWrite_ID_mux, regWrite_ID_mux, memtoReg_ID_mux,	
+								.d({qIF_ID[20:16],qIF_ID[9:5],AluSrc_ID_mux, AluControl_ID_mux, Branch_ID_mux, memRead_ID_mux, memWrite_ID_mux, regWrite_ID_mux, memtoReg_ID_mux,	
 									qIF_ID[95:32], signImm_D, readData1_D, readData2_D, qIF_ID[4:0]}),
 								.q(qID_EX));
 	
 
 	forwarding_unit FU (
-							.ID_EX_rs1(qID_EX[9:5]), // rs1 de la instrucción en EX
-							.ID_EX_rs2(qID_EX[73:69]),   // rs2 de la instrucción en EX
+							.ID_EX_rs1(qID_EX[275:271]), // rs1 de la instrucción en EX
+							.ID_EX_rs2(qID_EX[280:276]),   // rs2 de la instrucción en EX
 							.EX_MEM_rd(qEX_MEM[4:0]),  // rd de la instrucción en MEM
 							.EX_MEM_regWrite(qEX_MEM[199]), // regWrite de la instrucción en MEM
 							.MEM_WB_rd(qMEM_WB[4:0]),  // rd de la instrucción en WB
@@ -100,7 +100,7 @@ module datapath #(parameter N = 64)
 							.readData2_E(qID_EX[68:5]),
 							.forwardA(forwardA),
 							.forwardB(forwardB),
-							.aluResult_MEM(qEX_MEM[68:5]),
+							.aluResult_MEM(qEX_MEM[132:69]),
 							.writeData_WB(writeData3),
 							.PCBranch_E(PCBranch_E),
 							.aluResult_E(aluResult_E),

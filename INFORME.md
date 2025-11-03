@@ -180,3 +180,4 @@ Luego agregamos mas casos de hazard con el codigo en full_hazard_detection.s (te
 - Instanciamos la FU en datapath.sv con sus respectivas conexiones.
 - Modificamos execute.sv para agregar los multiplexores para realizar el manejos de las entradas de la ALU.
 - Se renego mucho para encontrar los bits correctos para utilizar en la FU.
+- Se agregaron 10bits al flopr de ID_EX para que pase el numero de los registros usados para que los pueda utilizar la FU

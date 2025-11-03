@@ -176,6 +176,7 @@ Hicimos una primera prueba para ver si funciona el HDU con el codigo en hazard_d
 
 Luego agregamos mas casos de hazard con el codigo en full_hazard_detection.s (test2.png). Podemos observar que solo tenemos 2 stalls, que es lo esperado. En este punto todavia no se implemento el forwarding.
 
-- Creamos la FU siguiendo las condiciones vistas en el teorico (FU conditions.png)
+- Creamos la FU
 - Instanciamos la FU en datapath.sv con sus respectivas conexiones.
-- Agregamos los multiplexores para realizar el manejos de las entradas de la ALU.
+- Modificamos execute.sv para agregar los multiplexores para realizar el manejos de las entradas de la ALU.
+- Se renego mucho para encontrar los bits correctos para utilizar en la FU.

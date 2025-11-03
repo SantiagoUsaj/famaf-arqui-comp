@@ -35,7 +35,6 @@ module datapath #(parameter N = 64)
 
 	// Señales de forwarding
 	logic [1:0] forwardA, forwardB;
-	logic [N-1:0] aluSrcA, aluSrcB;
 
 	
 	fetch 	#(64) 	FETCH 	(.PCSrc_F(PCSrc),
@@ -81,51 +80,33 @@ module datapath #(parameter N = 64)
 	
 
 	forwarding_unit FU (
-							.ID_EX_rs1(qID_EX[14:10]), // rs1 de la instrucción en EX
-							.ID_EX_rs2(qID_EX[9:5]),   // rs2 de la instrucción en EX
+							.ID_EX_rs1(qID_EX[9:5]), // rs1 de la instrucción en EX
+							.ID_EX_rs2(qID_EX[73:69]),   // rs2 de la instrucción en EX
 							.EX_MEM_rd(qEX_MEM[4:0]),  // rd de la instrucción en MEM
-							.EX_MEM_regWrite(qEX_MEM[198]), // regWrite de la instrucción en MEM
+							.EX_MEM_regWrite(qEX_MEM[199]), // regWrite de la instrucción en MEM
 							.MEM_WB_rd(qMEM_WB[4:0]),  // rd de la instrucción en WB
 							.MEM_WB_regWrite(qMEM_WB[134]), // regWrite de la instrucción en WB
 							.forwardA(forwardA),
 							.forwardB(forwardB)
 	);				
 
-	
 
-	// Forwarding para el primer operando (A)
-	always_comb begin
-		case (forwardA)
-			2'b00: aluSrcA = qID_EX[132:69];         // readData1_E
-			2'b10: aluSrcA = qEX_MEM[132:69];        // resultado de EX/MEM
-			2'b01: aluSrcA = writeData3;          // resultado de MEM/WB
-			default: aluSrcA = qID_EX[132:69];
-		endcase
-	end
-
-	// Forwarding para el segundo operando (B)
-	always_comb begin
-		case (forwardB)
-			2'b00: aluSrcB = qID_EX[68:5];           // readData2_E
-			2'b10: aluSrcB = qEX_MEM[132:69];        // resultado de EX/MEM
-			2'b01: aluSrcB = writeData3;          // resultado de MEM/WB
-			default: aluSrcB = qID_EX[68:5];
-		endcase
-	end				
-	
-										
 	execute #(64) EXECUTE (
 							.AluSrc(qID_EX[270]),
 							.AluControl(qID_EX[269:266]),
 							.PC_E(qID_EX[260:197]),
 							.signImm_E(qID_EX[196:133]),
-							.readData1_E(aluSrcA),
-							.readData2_E(aluSrcB),
+							.readData1_E(qID_EX[132:69]),
+							.readData2_E(qID_EX[68:5]),
+							.forwardA(forwardA),
+							.forwardB(forwardB),
+							.aluResult_MEM(qEX_MEM[68:5]),
+							.writeData_WB(writeData3),
 							.PCBranch_E(PCBranch_E),
 							.aluResult_E(aluResult_E),
 							.writeData_E(writeData_E),
 							.zero_E(zero_E)
-						);											
+	);
 
 
 	hazard_unit		HDU		(	.ID_rs1(qIF_ID[9:5]),

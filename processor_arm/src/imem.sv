@@ -82,7 +82,7 @@ module imem
         */
 
         // Codigo modificado para los hazards
-              /*
+        /*      
         ROM [0:87] ='{  32'hf8000001,
                         32'hf8008002,
                         32'hf8010003,

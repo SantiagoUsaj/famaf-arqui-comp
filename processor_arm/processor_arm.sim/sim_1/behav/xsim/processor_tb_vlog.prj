@@ -12,6 +12,7 @@ sv xil_defaultlib  \
 "../../../../src/fetch.sv" \
 "../../../../src/flopr.sv" \
 "../../../../src/flopr_e.sv" \
+"../../../../src/forwarding_unit.sv" \
 "../../../../src/hazard_unit.sv" \
 "../../../../src/imem.sv" \
 "../../../../src/maindec.sv" \

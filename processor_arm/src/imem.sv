@@ -200,7 +200,7 @@ module imem
                         32'hb400001f};   
         */
         // Codigo mas completo para detectar hazards
-        
+        /*
         ROM [0:15] ='{
                         32'hf8000001,
                         32'hf8008002,
@@ -219,6 +219,20 @@ module imem
                         32'hb4000021,
                         32'hb400001f
                     };     
+                    */
+
+        // Codigo para ver el forwarding
+        ROM [0:8] ='{
+                        32'h8b020024,
+                        32'h8b030085,
+                        32'hcb0100a6,
+                        32'h8a0200c7,
+                        32'haa0300e8,
+                        32'h8b040109,
+                        32'hd37f052a,
+                        32'hd35f094b,
+                        32'hb400001f
+                    };
 
     end      
        

@@ -1,12 +1,3 @@
 
-LSL X0, X0, #15     
-
-LSL X1, X1, #15        
-
-LSL X4, X4, #13        
-
-LSL X7, X7, #15
-
-LSL X2, X2, #1
-
-LSR X2, X2, #1
+LSL X10, X9, #1     // X10 = X9 << X1 (debe hacer forwarding de X9)
+LSR X11, X10, #2    // X11 = X10 >> X2 (debe hacer forwarding de X10)

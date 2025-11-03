@@ -175,3 +175,7 @@ Escribimos un programa en assembler para gestionar recurse de E/S.
 Hicimos una primera prueba para ver si funciona el HDU con el codigo en hazard_detection.s y observamos que se activa el stall. (test1.png)
 
 Luego agregamos mas casos de hazard con el codigo en full_hazard_detection.s (test2.png). Podemos observar que solo tenemos 2 stalls, que es lo esperado. En este punto todavia no se implemento el forwarding.
+
+- Creamos la FU siguiendo las condiciones vistas en el teorico (FU conditions.png)
+- Instanciamos la FU en datapath.sv con sus respectivas conexiones.
+- Agregamos los multiplexores para realizar el manejos de las entradas de la ALU.

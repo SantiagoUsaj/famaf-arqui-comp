@@ -4,20 +4,15 @@ main.elf:     file format elf64-littleaarch64
 
 Disassembly of section .text:
 
-0000000000000000 <etiqueta-0x34>:
-   0:	f8000001 	stur	x1, [x0]
-   4:	f8008002 	stur	x2, [x0, #8]
-   8:	8b1f03ff 	add	xzr, xzr, xzr
-   c:	8b1f03ff 	add	xzr, xzr, xzr
-  10:	8b1f03ff 	add	xzr, xzr, xzr
-  14:	f8400001 	ldur	x1, [x0]
-  18:	8b030022 	add	x2, x1, x3
-  1c:	cb0100a4 	sub	x4, x5, x1
-  20:	8b030041 	add	x1, x2, x3
-  24:	8b050024 	add	x4, x1, x5
-  28:	f8400001 	ldur	x1, [x0]
-  2c:	8b040062 	add	x2, x3, x4
-  30:	8b060025 	add	x5, x1, x6
+0000000000000000 <finloop-0x20>:
+   0:	8b020024 	add	x4, x1, x2
+   4:	8b030085 	add	x5, x4, x3
+   8:	cb0100a6 	sub	x6, x5, x1
+   c:	8a0200c7 	and	x7, x6, x2
+  10:	aa0300e8 	orr	x8, x7, x3
+  14:	8b040109 	add	x9, x8, x4
+  18:	9ac1212a 	lsl	x10, x9, x1
+  1c:	9ac2254b 	lsr	x11, x10, x2
 
-0000000000000034 <etiqueta>:
-  34:	b400001f 	cbz	xzr, 34 <etiqueta>
+0000000000000020 <finloop>:
+  20:	b400001f 	cbz	xzr, 20 <finloop>

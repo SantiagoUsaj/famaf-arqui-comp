@@ -189,3 +189,5 @@ Se descubrio que al tomar no se hace flush, por ende se ejecutan las lineas deba
 Esta fallando el cbz cuando debe leer de un registro que se le hace ldur antes.
 descubri que no si se hace el stall en cbz pero no se hace el forward y luego el cbz no hace el flush
 Por algun motivo el codigo original falla.
+
+Vimos que hay una diferencia entre el teorico y el practico. En el libro dice que el forward solo se realiza si la instruccion escribe el registro, pero en este caso entonces no se haria forward para las instrucciones de CBZ y STUR. Pero en el practico tenemos ejemplos donde si le realizamos forward a estas instrucciones.

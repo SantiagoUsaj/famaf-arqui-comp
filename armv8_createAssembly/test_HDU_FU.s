@@ -25,6 +25,8 @@ ADD X12, X13, X14      // Independiente
 
 // 4. Hazards con branch (CBZ)
 LDUR X15, [X0, #8]
+ADD XZR, XZR, XZR // NOP
+ADD XZR, XZR, XZR // NOP
 CBZ X15, etiqueta      // Si HDU contempla branch, debe haber stall
 ADD XZR, XZR, XZR // NOP
 ADD XZR, XZR, XZR // NOP

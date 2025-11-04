@@ -82,7 +82,7 @@ module imem
         */
 
         // Codigo modificado para los hazards
-        /*      
+        /*    
         ROM [0:87] ='{  32'hf8000001,
                         32'hf8008002,
                         32'hf8010003,
@@ -172,7 +172,6 @@ module imem
                         32'hf81f83d9,
                         32'hb400001f};
         */
-
         // Codigo con LSL y LSR
         /*
         ROM [0:9] ='{   32'hf8000001,
@@ -200,7 +199,7 @@ module imem
                         32'hb400001f};   
         */
         // Codigo mas completo para detectar hazards
-        
+        /*
         ROM [0:15] ='{
                         32'hf8000001,
                         32'hf8008002,
@@ -219,18 +218,64 @@ module imem
                         32'hb4000021,
                         32'hb400001f
                     };     
-                
+        */      
         
-        // Codigo para ver el forwarding
+        // Codigo test_HDU_FU.s
         /*
-        ROM [0:4] ='{32'h8b020024,
-                        32'h8b010065,
-                        32'h8b050086,
-                        32'hcb0200c3,
-                        32'hb400001f};
+        ROM [0:22] ='{
+                        32'hf8000001,
+                        32'hf800800f,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'hf8400001,
+                        32'h8b030022,
+                        32'hcb0100a4,
+                        32'h8b040046,
+                        32'h8b0100c7,
+                        32'h8b0600e8,
+                        32'h8b0b0149,
+                        32'h8b0e01ac,
+                        32'hf840800f,
+                        32'hb400004f,
+                        32'h8b1101f0,
+                        32'hf8010012,
+                        32'hf8410013,
+                        32'h8b120274,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'hb400001f
+                    };
         */
-    end      
-       
+        // Codigo test_HDU_FU modificado para que salte
+       ROM [0:25] ='{32'hf8000001,
+32'hf8008000,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'hf8400001,
+32'h8b030022,
+32'hcb0100a4,
+32'h8b040046,
+32'h8b0100c7,
+32'h8b0600e8,
+32'h8b0b0149,
+32'h8b0e01ac,
+32'hf840800f,
+32'hb40000af,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'h8b1101f0,
+32'hf8010012,
+32'hf8410013,
+32'h8b120274,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'hb400001f};
+    end             
 
 	always_comb begin
 		q = ROM[addr];

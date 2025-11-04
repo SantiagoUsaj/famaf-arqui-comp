@@ -42,3 +42,31 @@ ADD XZR, XZR, XZR
 ADD XZR, XZR, XZR
 
 finloop: CBZ XZR, finloop // Bucle infinito
+
+/*
+ROM [0:22] ='{
+32'hf8000001,
+32'hf800800f,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'hf8400001,
+32'h8b030022,
+32'hcb0100a4,
+32'h8b040046,
+32'h8b0100c7,
+32'h8b0600e8,
+32'h8b0b0149,
+32'h8b0e01ac,
+32'hf840800f,
+32'hb400004f,
+32'h8b1101f0,
+32'hf8010012,
+32'hf8410013,
+32'h8b120274,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'hb400001f};
+
+ */

@@ -42,7 +42,7 @@ module hazard_unit(
      *  - No se generan stalls para otros tipos de dependencias, ya que se resuelven con forwarding.
      */
     always_comb begin
-        if (EX_memRead && ((EX_rd != 0) && ((EX_rd == ID_rs1) || (EX_rd == ID_rs2)))) begin
+        if (EX_memRead && ((EX_rd != 5'd31) && ((EX_rd == ID_rs1) || (EX_rd == ID_rs2)))) begin
             stall = 1;
         end else begin
             stall = 0;

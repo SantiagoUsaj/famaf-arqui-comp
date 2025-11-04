@@ -4,11 +4,34 @@ main.elf:     file format elf64-littleaarch64
 
 Disassembly of section .text:
 
-0000000000000000 <finloop-0x10>:
-   0:	8b020024 	add	x4, x1, x2
-   4:	8b010065 	add	x5, x3, x1
-   8:	8b050086 	add	x6, x4, x5
-   c:	cb0200c3 	sub	x3, x6, x2
+0000000000000000 <etiqueta-0x50>:
+   0:	f8000001 	stur	x1, [x0]
+   4:	f8008000 	stur	x0, [x0, #8]
+   8:	8b1f03ff 	add	xzr, xzr, xzr
+   c:	8b1f03ff 	add	xzr, xzr, xzr
+  10:	8b1f03ff 	add	xzr, xzr, xzr
+  14:	8b1f03ff 	add	xzr, xzr, xzr
+  18:	f8400001 	ldur	x1, [x0]
+  1c:	8b030022 	add	x2, x1, x3
+  20:	cb0100a4 	sub	x4, x5, x1
+  24:	8b040046 	add	x6, x2, x4
+  28:	8b0100c7 	add	x7, x6, x1
+  2c:	8b0600e8 	add	x8, x7, x6
+  30:	8b0b0149 	add	x9, x10, x11
+  34:	8b0e01ac 	add	x12, x13, x14
+  38:	f840800f 	ldur	x15, [x0, #8]
+  3c:	b40000af 	cbz	x15, 50 <etiqueta>
+  40:	8b1f03ff 	add	xzr, xzr, xzr
+  44:	8b1f03ff 	add	xzr, xzr, xzr
+  48:	8b1f03ff 	add	xzr, xzr, xzr
+  4c:	8b1101f0 	add	x16, x15, x17
 
-0000000000000010 <finloop>:
-  10:	b400001f 	cbz	xzr, 10 <finloop>
+0000000000000050 <etiqueta>:
+  50:	f8010012 	stur	x18, [x0, #16]
+  54:	f8410013 	ldur	x19, [x0, #16]
+  58:	8b120274 	add	x20, x19, x18
+  5c:	8b1f03ff 	add	xzr, xzr, xzr
+  60:	8b1f03ff 	add	xzr, xzr, xzr
+
+0000000000000064 <finloop>:
+  64:	b400001f 	cbz	xzr, 64 <finloop>

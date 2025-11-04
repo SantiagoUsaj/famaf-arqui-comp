@@ -184,4 +184,8 @@ Luego agregamos mas casos de hazard con el codigo en full_hazard_detection.s (te
 
 Se probo el codigo de forwarding_code.s para testear un caso basico y simple de forward y funciona bien.
 Luego se probo el codigo de full_hazard_detection.s donde ademas de forwarding tambien se prueba la deteccion de hazard.
+Se implemento un test mas general en test_HDU_FU.s y lo pasa sin problemas.
+Se descubrio que al tomar no se hace flush, por ende se ejecutan las lineas debajo del salto.
+Esta fallando el cbz cuando debe leer de un registro que se le hace ldur antes.
+descubri que no si se hace el stall en cbz pero no se hace el forward y luego el cbz no hace el flush
 Por algun motivo el codigo original falla.

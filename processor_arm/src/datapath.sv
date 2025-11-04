@@ -110,7 +110,7 @@ module datapath #(parameter N = 64)
 
 
 	hazard_unit		HDU		(	.ID_rs1(qIF_ID[9:5]),
-								.ID_rs2(reg2loc ? qIF_ID[4:0] : qIF_ID[14:10]),
+								.ID_rs2(reg2loc ? qIF_ID[4:0] : qIF_ID[20:16]),
 								.EX_rd(qID_EX[4:0]),
 								.EX_memRead(qID_EX[264]),
 								.stall(stall));		

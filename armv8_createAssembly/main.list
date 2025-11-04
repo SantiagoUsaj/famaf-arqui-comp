@@ -6,9 +6,9 @@ Disassembly of section .text:
 
 0000000000000000 <finloop-0x10>:
    0:	8b020024 	add	x4, x1, x2
-   4:	8b030085 	add	x5, x4, x3
-   8:	8b0100a6 	add	x6, x5, x1
-   c:	8b040109 	add	x9, x8, x4
+   4:	8b010065 	add	x5, x3, x1
+   8:	8b050086 	add	x6, x4, x5
+   c:	cb0200c3 	sub	x3, x6, x2
 
 0000000000000010 <finloop>:
   10:	b400001f 	cbz	xzr, 10 <finloop>

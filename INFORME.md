@@ -178,6 +178,10 @@ Luego agregamos mas casos de hazard con el codigo en full_hazard_detection.s (te
 
 - Creamos la FU
 - Instanciamos la FU en datapath.sv con sus respectivas conexiones.
-- Modificamos execute.sv para agregar los multiplexores para realizar el manejos de las entradas de la ALU.
-- Se renego mucho para encontrar los bits correctos para utilizar en la FU.
-- Se agregaron 10bits al flopr de ID_EX para que pase el numero de los registros usados para que los pueda utilizar la FU
+- Modificamos execute.sv para agregar los multiplexores para realizar el manejo del forward.
+- Se renego mucho para encontrar los bits correctos para utilizar en la instancia de la FU.
+- Se agregaron 10 bits al flopr de ID_EX para que pase el numero de los registros usados para que los pueda utilizar la FU.
+
+Se probo el codigo de forwarding_code.s para testear un caso basico y simple de forward y funciona bien.
+Luego se probo el codigo de full_hazard_detection.s donde ademas de forwarding tambien se prueba la deteccion de hazard.
+Por algun motivo el codigo original falla.

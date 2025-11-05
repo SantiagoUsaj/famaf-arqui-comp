@@ -8,7 +8,9 @@ module processor_tb();
   logic [3:0] D0_a, D1_a;
   logic i_mclk, i_reset;
 	logic 			dump;
-  
+
+  assign i_sw = 16'h0000; // Simulated Switches
+
   // instantiate device under test
   processor_arm  dut (.i_sw(i_sw), .i_mclk(i_mclk), .i_reset(i_reset), .o_led(o_led), .D0_seg(D0_seg), .D1_seg(D1_seg), .D0_a(D0_a), .D1_a(D1_a), .dump(dump));
     
@@ -23,7 +25,12 @@ module processor_tb();
     begin
       i_mclk = 0; i_reset = 1; dump = 0;
       #20 i_reset = 0;
-      #2000 dump = 1; 
+      i_sw = 16'h0000;
+      #7500 i_sw = 16'h0001;
+      #7500 i_sw = 16'h0002;    
+      #7500 i_sw = 16'h0001;
+      #7500 i_sw = 16'h0000;              
+      #30000 dump = 1; 
 	   #20 $stop;
 	end 
 endmodule

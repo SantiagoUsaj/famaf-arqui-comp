@@ -1,4 +1,4 @@
-    .text
+.text
     .org 0x0000
 
 // X10: máscara SW0 (0x0001)
@@ -18,8 +18,6 @@ ADD X1, XZR, XZR
 ADD X2, XZR, XZR
 ADD X3, XZR, XZR
 ADD X5, XZR, XZR
-ADD X10, XZR, XZR
-ADD X11, XZR, XZR
 
 // X0 = 0x8000
 ADD X0, X0, X4
@@ -131,3 +129,117 @@ leds_off:
     ADD XZR, XZR, XZR // NOP
     ADD XZR, XZR, XZR // NOP
     ADD XZR, XZR, XZR // NOP
+
+
+/*
+ROM [0:103] ='{
+32'h8b0103ea,
+32'h8b0203eb,
+32'h8b0103e4,
+32'h8b1f03e0,
+32'h8b1f03e1,
+32'h8b1f03e2,
+32'h8b1f03e3,
+32'h8b1f03e5,
+32'h8b040000,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'hd37f3c00,
+32'h8b040021,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'hd37f3c21,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'h8b080021,
+32'h8b0403e3,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'hd37f4063,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'hcb040063,
+32'h8b0403e5,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'hd37f08a5,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'h8b0400a5,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'hd37f08a5,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'h8b0400a5,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'hd37f08a5,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'h8b0400a5,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'hd37f08a5,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'h8b0400a5,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'hd37f08a5,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'h8b0400a5,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'hd37f08a5,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'h8b0400a5,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'hd37f08a5,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'h8b0400a5,
+32'hf8400022,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'h8a0a0054,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'hb4000114,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'hf8000003,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'hb4fffe7f,
+32'h8a0b0055,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'hb4000175,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'hf8000005,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'hb4fffd1f,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'hf800001f,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'hb4fffc3f,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'h8b1f03ff};
+
+ */
+
+
+
+

@@ -71,11 +71,11 @@ module processor_arm #(parameter N = 64)
 					
 
 	always_ff @(posedge mclk)
-		if (DM_addr == 64'h8008) 
+		if (DM_addr == 64'h8000) 
 		  o_led <= DM_writeData[15:0];
 		
 	always_comb 		
-		if (DM_addr == 64'h8000) 
+		if (DM_addr == 64'h8008) 
 		     dp_readData = {48'b0, i_sw};
 		else 
 		     dp_readData = DM_readData;			

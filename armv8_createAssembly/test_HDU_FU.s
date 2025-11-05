@@ -25,8 +25,6 @@ ADD X12, X13, X14      // Independiente
 
 // 4. Hazards con branch (CBZ)
 LDUR X15, [X0, #8]
-ADD XZR, XZR, XZR // NOP
-ADD XZR, XZR, XZR // NOP
 CBZ X15, etiqueta      // Si HDU contempla branch, debe haber stall
 ADD XZR, XZR, XZR // NOP
 ADD XZR, XZR, XZR // NOP
@@ -46,9 +44,8 @@ ADD XZR, XZR, XZR
 finloop: CBZ XZR, finloop // Bucle infinito
 
 /*
-ROM [0:22] ='{
-32'hf8000001,
-32'hf800800f,
+ROM [0:25] ='{32'hf8000001,
+32'hf8008000,
 32'h8b1f03ff,
 32'h8b1f03ff,
 32'h8b1f03ff,
@@ -62,7 +59,10 @@ ROM [0:22] ='{
 32'h8b0b0149,
 32'h8b0e01ac,
 32'hf840800f,
-32'hb400004f,
+32'hb40000af,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'h8b1f03ff,
 32'h8b1101f0,
 32'hf8010012,
 32'hf8410013,

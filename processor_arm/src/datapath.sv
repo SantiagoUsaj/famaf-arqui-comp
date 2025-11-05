@@ -35,6 +35,8 @@ module datapath #(parameter N = 64)
 
 	// Señales de forwarding
 	logic [1:0] forwardA, forwardB;
+	logic [4:0] FU_rs2;
+	logic [4:0] rs2_R, rs2_D, rs2_CB;
 
 	
 	fetch 	#(64) 	FETCH 	(.PCSrc_F(PCSrc),
@@ -78,10 +80,16 @@ module datapath #(parameter N = 64)
 									qIF_ID[95:32], signImm_D, readData1_D, readData2_D, qIF_ID[4:0]}),
 								.q(qID_EX));
 	
+	// Cálculo de rs1 y rs2 para la unidad de forwarding
+	assign rs2_R  = qID_EX[280:276]; // Rn para tipo R
+	assign rs2_D  = qID_EX[4:0];     // Rt para tipo D (STUR/LDUR)
+	assign rs2_CB = qID_EX[4:0];     // Rt para tipo CB (CBZ)
+
+	assign FU_rs2 = qID_EX[263] ? rs2_D : (qID_EX[265] ? rs2_CB : rs2_R);
 
 	forwarding_unit FU (
 							.ID_EX_rs1(qID_EX[275:271]), // rs1 de la instrucción en EX
-							.ID_EX_rs2(qID_EX[280:276]),   // rs2 de la instrucción en EX
+							.ID_EX_rs2(FU_rs2),   // rs2 de la instrucción en EX
 							.EX_MEM_rd(qEX_MEM[4:0]),  // rd de la instrucción en MEM
 							.EX_MEM_regWrite(qEX_MEM[199]), // regWrite de la instrucción en MEM
 							.MEM_WB_rd(qMEM_WB[4:0]),  // rd de la instrucción en WB

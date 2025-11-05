@@ -191,3 +191,5 @@ descubri que no si se hace el stall en cbz pero no se hace el forward y luego el
 Por algun motivo el codigo original falla.
 
 Vimos que hay una diferencia entre el teorico y el practico. En el libro dice que el forward solo se realiza si la instruccion escribe el registro, pero en este caso entonces no se haria forward para las instrucciones de CBZ y STUR. Pero en el practico tenemos ejemplos donde si le realizamos forward a estas instrucciones.
+
+Se modifico la FU para que en las entrada reciba el registro correcto segun el tipo de instruccion, ya que no es lo mismo una tipo R, tipo D o tipo CB

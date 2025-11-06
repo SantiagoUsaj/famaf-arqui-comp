@@ -143,6 +143,9 @@ expand:
     ADD XZR, XZR, XZR // NOP
 
 reiniciar:
+    // Mostrar todos los LEDs encendidos antes de reiniciar
+    STUR X3, [X0, #0]   // Mostrar LEDs encendidos    
+    // Reiniciar la animación
     ADD X3, XZR, X4
     ADD XZR, XZR, XZR // NOP
     ADD XZR, XZR, XZR // NOP

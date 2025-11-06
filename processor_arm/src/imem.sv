@@ -339,7 +339,7 @@ module imem
                             32'h8b1f03ff};
         */
         // Codigo Expansion
-       ROM [0:121] ='{
+       ROM [0:122] ='{
 32'h8b0103e4,
 32'h8b1f03e0,
 32'h8b1f03e1,
@@ -446,6 +446,7 @@ module imem
 32'h8b1f03ff,
 32'h8b1f03ff,
 32'h8b1f03ff,
+32'hf8000003,
 32'h8b0403e3,
 32'h8b1f03ff,
 32'h8b1f03ff,
@@ -458,10 +459,11 @@ module imem
 32'hd37f1c63,
 32'h8b1f03ff,
 32'h8b1f03ff,
-32'hb4fff5bf,
+32'hb4fff59f,
 32'h8b1f03ff,
 32'h8b1f03ff,
 32'h8b1f03ff};
+
 	end
 	always_comb begin
 		q = ROM[addr];

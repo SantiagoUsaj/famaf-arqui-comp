@@ -143,6 +143,9 @@ expand:
     ADD XZR, XZR, XZR // NOP
 
 reiniciar:
+    // Mostrar todos los LEDs encendidos antes de reiniciar
+    STUR X3, [X0, #0]   // Mostrar LEDs encendidos    
+    // Reiniciar la animación
     ADD X3, XZR, X4
     ADD XZR, XZR, XZR // NOP
     ADD XZR, XZR, XZR // NOP
@@ -162,7 +165,7 @@ reiniciar:
 
 
 /*
-ROM [0:121] ='{
+ROM [0:122] ='{
 32'h8b0103e4,
 32'h8b1f03e0,
 32'h8b1f03e1,
@@ -269,6 +272,7 @@ ROM [0:121] ='{
 32'h8b1f03ff,
 32'h8b1f03ff,
 32'h8b1f03ff,
+32'hf8000003,
 32'h8b0403e3,
 32'h8b1f03ff,
 32'h8b1f03ff,
@@ -281,7 +285,7 @@ ROM [0:121] ='{
 32'hd37f1c63,
 32'h8b1f03ff,
 32'h8b1f03ff,
-32'hb4fff5bf,
+32'hb4fff59f,
 32'h8b1f03ff,
 32'h8b1f03ff,
 32'h8b1f03ff};

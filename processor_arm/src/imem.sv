@@ -23,15 +23,15 @@
 module imem
     #(parameter N = 32) 
     (
-        input logic [6:0] addr, // Agregamos un bit mas para direccionar 128 instrucciones
+        input logic [7:0] addr, // Agregamos 1 bit mas para direccionar 128 instrucciones - Luego se cambio a 8 bits para direccionar 256 instrucciones por los leds y switches
         output logic [N-1:0] q
     );
 
-    logic [N-1:0] ROM [0:127] = '{default: 32'h0}; // Se agrega espacio para 128 instrucciones
+    logic [N-1:0] ROM [0:255] = '{default: 32'h0}; // Se agrega espacio para 128 instrucciones - Luego se cambio a 256 instrucciones para los leds y switches
 
 	initial begin      
 
-        // Codigo original modificado con NOPS
+        // original_code_nops.s
         /*
         ROM [0:87] ='{  32'hf8000001,
                         32'hf8008002,
@@ -123,7 +123,7 @@ module imem
                         32'hb400001f};
         */
         
-        // Codigo base para probar el funcionamiento de LSL y LSR
+        // basic_shift.s
         /*
         ROM [0:9] ='{   32'hf8000001,
                         32'hf8008002,
@@ -138,7 +138,7 @@ module imem
                     };
         */
 
-        // Codigo original modificado con NOPS , LSL y LSR
+        // original_code_nops_ls.s
         /*
         ROM [0:87] ='{  32'hf8000001,
                         32'hf8008002,
@@ -230,8 +230,8 @@ module imem
                         32'hb400001f};
             */
             
-         // Leds con sw0 y sw1
-         
+         // off_on_even.s
+         /*
          ROM [0:103] ='{
                             32'h8b0103ea,
                             32'h8b0203eb,
@@ -337,8 +337,8 @@ module imem
                             32'h8b1f03ff,
                             32'h8b1f03ff,
                             32'h8b1f03ff};
-        
-        // Codigo Expansion
+        */
+        // expansion.s
         /*
        ROM [0:114] ='{
                         32'h8b0103e4,
@@ -457,6 +457,199 @@ module imem
                         32'h8b1f03ff,
                         32'h8b1f03ff};
         */
+
+        // leds_and_switches.s
+        ROM [0:187] ='{
+                        32'h8b0103e4,
+                        32'h8b0203ec,
+                        32'h8b0403ed,
+                        32'h8b1f03e0,
+                        32'h8b1f03e1,
+                        32'h8b1f03e2,
+                        32'h8b1f03e3,
+                        32'h8b1f03e5,
+                        32'h8b1f03e6,
+                        32'h8b1f03e7,
+                        32'h8b1f03e9,
+                        32'h8b1f03ea,
+                        32'h8b1f03eb,
+                        32'hd37f3c80,
+                        32'hd37f3c81,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'h8b080021,
+                        32'hd37f4083,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'hcb040063,
+                        32'hd37f0885,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'h8b0400a5,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'hd37f08a5,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'h8b0400a5,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'hd37f08a5,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'h8b0400a5,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'hd37f08a5,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'h8b0400a5,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'hd37f08a5,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'h8b0400a5,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'hd37f08a5,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'h8b0400a5,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'hd37f08a5,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'h8b0400a5,
+                        32'hd37f088a,
+                        32'hd37f048b,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'h8b04016b,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'hd37f1d6b,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'hf8400022,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'h8a040046,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'hb4000126,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'hf8000003,
+                        32'hb4fffebf,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'h8a0c0046,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'hb4000126,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'hf8000005,
+                        32'hb4fffd3f,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'h8a0d0046,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'hb4000a26,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'h8b0b03e8,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'hf8000008,
+                        32'h8b0a03e9,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'hcb040129,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'hb4000109,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'hb4ffff3f,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'hf8400022,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'h8a040046,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'hb4000106,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'hb4fff85f,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'hd37f0507,
+                        32'hd35f0509,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'haa070108,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'haa090108,
+                        32'hd37f4086,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'hcb0400c6,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'hcb060107,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'hb4000107,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'hb4fff9df,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'hf8000008,
+                        32'h8b0a03e9,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'hcb040129,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'hb4000109,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'hb4ffff3f,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'h8b0b03e8,
+                        32'hb4fff75f,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'hf800001f,
+                        32'hb4fff21f,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff
+                    };
+        
 	end
 	always_comb begin
 		q = ROM[addr];

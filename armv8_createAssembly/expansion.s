@@ -11,6 +11,7 @@
 // X7: variable auxiliar
 // X8: variable auxiliar
 // X10: contador de retardo
+// X11: máscara de LEDs encendidos auxiliar
 
 ADD X4, XZR, X1
 ADD X0, XZR, XZR
@@ -20,6 +21,7 @@ ADD X3, XZR, XZR
 ADD X5, XZR, XZR
 ADD X6, XZR, XZR
 ADD X10, XZR, XZR
+ADD X11, XZR, XZR
 
 // X0 = 0x8000
 ADD X0, X0, X4
@@ -45,10 +47,7 @@ LSL X5, X5, #2 // 0x0002
 
 
 // Máscara inicial: dos LEDs del centro (0x0180)
-ADD X3, XZR, X4
-ADD XZR, XZR, XZR // NOP
-ADD XZR, XZR, XZR // NOP
-LSL X3, X3, #1
+LSL X3, X4, #1
 ADD XZR, XZR, XZR // NOP
 ADD XZR, XZR, XZR // NOP
 ADD X3, X3, X4
@@ -57,6 +56,7 @@ ADD XZR, XZR, XZR // NOP
 LSL X3, X3, #7
 ADD XZR, XZR, XZR // NOP
 ADD XZR, XZR, XZR // NOP
+ADD X11, X3, XZR
 
 
 loop:
@@ -91,16 +91,7 @@ check_switch:
     ADD XZR, XZR, XZR // NOP
     ADD XZR, XZR, XZR // NOP
     // Si se aprieta, reinicia la expansión
-    ADD X3, XZR, X4
-    ADD XZR, XZR, XZR // NOP
-    ADD XZR, XZR, XZR // NOP
-    LSL X3, X3, #1
-    ADD XZR, XZR, XZR // NOP
-    ADD XZR, XZR, XZR // NOP
-    ADD X3, X3, X4
-    ADD XZR, XZR, XZR // NOP
-    ADD XZR, XZR, XZR // NOP
-    LSL X3, X3, #7
+    ADD X3, XZR, X11
     ADD XZR, XZR, XZR // NOP
     ADD XZR, XZR, XZR // NOP
     CBZ XZR, loop
@@ -120,11 +111,8 @@ expand:
     ADD XZR, XZR, XZR // NOP
     ADD XZR, XZR, XZR // NOP
     ORR X3, X3, X8      // X3 = X3 | X8
-    // Si todos los LEDs están encendidos, reinicia
-    ADD X6, XZR, X4
-    ADD XZR, XZR, XZR // NOP
-    ADD XZR, XZR, XZR // NOP
-    LSL X6, X6, #16    // X6 = 0x10000
+    // Si todos los LEDs están encendidos, reinicia    
+    LSL X6, X4, #16    // X6 = 0x10000
     ADD XZR, XZR, XZR // NOP
     ADD XZR, XZR, XZR // NOP
     SUB X6, X6, X4     // X6 = 0xFFFF
@@ -144,18 +132,27 @@ expand:
 
 reiniciar:
     // Mostrar todos los LEDs encendidos antes de reiniciar
-    STUR X3, [X0, #0]   // Mostrar LEDs encendidos    
+    STUR X3, [X0, #0]   // Mostrar LEDs encendidos
+    // Retardo especial para todos los LEDs encendidos
+    ADD X10, XZR, X5
+    ADD XZR, XZR, XZR // NOP
+    ADD XZR, XZR, XZR // NOP
+wait_all_on:
+    SUB X10, X10, X4
+    ADD XZR, XZR, XZR // NOP
+    ADD XZR, XZR, XZR // NOP
+    CBZ X10, continue_reiniciar
+    ADD XZR, XZR, XZR // NOP
+    ADD XZR, XZR, XZR // NOP
+    ADD XZR, XZR, XZR // NOP
+    CBZ XZR, wait_all_on
+    ADD XZR, XZR, XZR // NOP
+    ADD XZR, XZR, XZR // NOP
+    ADD XZR, XZR, XZR // NOP
+
+continue_reiniciar:    
     // Reiniciar la animación
-    ADD X3, XZR, X4
-    ADD XZR, XZR, XZR // NOP
-    ADD XZR, XZR, XZR // NOP
-    LSL X3, X3, #1
-    ADD XZR, XZR, XZR // NOP
-    ADD XZR, XZR, XZR // NOP
-    ADD X3, X3, X4
-    ADD XZR, XZR, XZR // NOP
-    ADD XZR, XZR, XZR // NOP
-    LSL X3, X3, #7
+    ADD X3, XZR, X11
     ADD XZR, XZR, XZR // NOP
     ADD XZR, XZR, XZR // NOP
     CBZ XZR, loop
@@ -165,7 +162,7 @@ reiniciar:
 
 
 /*
-ROM [0:122] ='{
+ROM [0:114] ='{
 32'h8b0103e4,
 32'h8b1f03e0,
 32'h8b1f03e1,
@@ -174,6 +171,7 @@ ROM [0:122] ='{
 32'h8b1f03e5,
 32'h8b1f03e6,
 32'h8b1f03ea,
+32'h8b1f03eb,
 32'h8b040000,
 32'h8b1f03ff,
 32'h8b1f03ff,
@@ -189,10 +187,7 @@ ROM [0:122] ='{
 32'h8b1f03ff,
 32'h8b1f03ff,
 32'hd37f08a5,
-32'h8b0403e3,
-32'h8b1f03ff,
-32'h8b1f03ff,
-32'hd37f0463,
+32'hd37f0483,
 32'h8b1f03ff,
 32'h8b1f03ff,
 32'h8b040063,
@@ -201,6 +196,7 @@ ROM [0:122] ='{
 32'hd37f1c63,
 32'h8b1f03ff,
 32'h8b1f03ff,
+32'h8b1f006b,
 32'hf8000003,
 32'h8b0503ea,
 32'h8b1f03ff,
@@ -222,23 +218,14 @@ ROM [0:122] ='{
 32'h8a040042,
 32'h8b1f03ff,
 32'h8b1f03ff,
-32'hb4000282,
+32'hb4000162,
 32'h8b1f03ff,
 32'h8b1f03ff,
 32'h8b1f03ff,
-32'h8b0403e3,
+32'h8b0b03e3,
 32'h8b1f03ff,
 32'h8b1f03ff,
-32'hd37f0463,
-32'h8b1f03ff,
-32'h8b1f03ff,
-32'h8b040063,
-32'h8b1f03ff,
-32'h8b1f03ff,
-32'hd37f1c63,
-32'h8b1f03ff,
-32'h8b1f03ff,
-32'hb4fffb7f,
+32'hb4fffc9f,
 32'h8b1f03ff,
 32'h8b1f03ff,
 32'h8b1f03ff,
@@ -252,10 +239,7 @@ ROM [0:122] ='{
 32'h8b1f03ff,
 32'h8b1f03ff,
 32'haa080063,
-32'h8b0403e6,
-32'h8b1f03ff,
-32'h8b1f03ff,
-32'hd37f40c6,
+32'hd37f4086,
 32'h8b1f03ff,
 32'h8b1f03ff,
 32'hcb0400c6,
@@ -268,28 +252,40 @@ ROM [0:122] ='{
 32'h8b1f03ff,
 32'h8b1f03ff,
 32'h8b1f03ff,
-32'hb4fff7bf,
+32'hb4fff93f,
 32'h8b1f03ff,
 32'h8b1f03ff,
 32'h8b1f03ff,
 32'hf8000003,
-32'h8b0403e3,
+32'h8b0503ea,
 32'h8b1f03ff,
 32'h8b1f03ff,
-32'hd37f0463,
+32'hcb04014a,
 32'h8b1f03ff,
 32'h8b1f03ff,
-32'h8b040063,
+32'hb400010a,
 32'h8b1f03ff,
 32'h8b1f03ff,
-32'hd37f1c63,
+32'h8b1f03ff,
+32'hb4ffff3f,
 32'h8b1f03ff,
 32'h8b1f03ff,
-32'hb4fff59f,
+32'h8b1f03ff,
+32'h8b0b03e3,
+32'h8b1f03ff,
+32'h8b1f03ff,
+32'hb4fff67f,
 32'h8b1f03ff,
 32'h8b1f03ff,
 32'h8b1f03ff};
 */
+
+
+
+
+
+
+
 
 
 

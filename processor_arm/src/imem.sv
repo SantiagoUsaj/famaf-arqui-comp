@@ -339,7 +339,7 @@ module imem
                             32'h8b1f03ff};
         */
         // Codigo Expansion
-       ROM [0:123] ='{
+       ROM [0:121] ='{
 32'h8b0103e4,
 32'h8b1f03e0,
 32'h8b1f03e1,
@@ -429,22 +429,20 @@ module imem
 32'h8b0403e6,
 32'h8b1f03ff,
 32'h8b1f03ff,
-32'hd37f3cc6,
+32'hd37f40c6,
 32'h8b1f03ff,
 32'h8b1f03ff,
-32'h8a060067,
+32'hcb0400c6,
 32'h8b1f03ff,
 32'h8b1f03ff,
-32'h8b0403e6,
+32'hcb060067,
 32'h8b1f03ff,
 32'h8b1f03ff,
-32'h8a060068,
+32'hb4000107,
 32'h8b1f03ff,
 32'h8b1f03ff,
-32'haa0800e9,
 32'h8b1f03ff,
-32'h8b1f03ff,
-32'hb4fff769,
+32'hb4fff7bf,
 32'h8b1f03ff,
 32'h8b1f03ff,
 32'h8b1f03ff,
@@ -460,7 +458,7 @@ module imem
 32'hd37f1c63,
 32'h8b1f03ff,
 32'h8b1f03ff,
-32'hb4fff57f,
+32'hb4fff5bf,
 32'h8b1f03ff,
 32'h8b1f03ff,
 32'h8b1f03ff};

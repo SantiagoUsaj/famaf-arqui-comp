@@ -120,30 +120,29 @@ expand:
     ADD XZR, XZR, XZR // NOP
     ADD XZR, XZR, XZR // NOP
     ORR X3, X3, X8      // X3 = X3 | X8
-    // Si llegó a los bordes (0x8001), reinicia
+    // Si todos los LEDs están encendidos, reinicia
     ADD X6, XZR, X4
     ADD XZR, XZR, XZR // NOP
     ADD XZR, XZR, XZR // NOP
-    LSL X6, X6, #15   // X6 = 0x8000
+    LSL X6, X6, #16    // X6 = 0x10000
     ADD XZR, XZR, XZR // NOP
     ADD XZR, XZR, XZR // NOP
-    AND X7, X3, X6    // ¿LED izquierdo?
+    SUB X6, X6, X4     // X6 = 0xFFFF
     ADD XZR, XZR, XZR // NOP
     ADD XZR, XZR, XZR // NOP
-    ADD X6, XZR, X4   // X6 = 1
+    SUB X7, X3, X6     // X7 = X3 - 0xFFFF
     ADD XZR, XZR, XZR // NOP
     ADD XZR, XZR, XZR // NOP
-    AND X8, X3, X6    // ¿LED derecho?
-    ADD XZR, XZR, XZR // NOP
-    ADD XZR, XZR, XZR // NOP
-    ORR X9, X7, X8    // ¿Algún borde?
-    ADD XZR, XZR, XZR // NOP
-    ADD XZR, XZR, XZR // NOP
-    CBZ X9, loop      // Si no, sigue
+    CBZ X7, reiniciar  // Si X3 == 0xFFFF, reinicia
     ADD XZR, XZR, XZR // NOP
     ADD XZR, XZR, XZR // NOP
     ADD XZR, XZR, XZR // NOP
-    // Si sí, reinicia
+    CBZ XZR, loop      // Si no, sigue
+    ADD XZR, XZR, XZR // NOP
+    ADD XZR, XZR, XZR // NOP
+    ADD XZR, XZR, XZR // NOP
+
+reiniciar:
     ADD X3, XZR, X4
     ADD XZR, XZR, XZR // NOP
     ADD XZR, XZR, XZR // NOP
@@ -163,7 +162,7 @@ expand:
 
 
 /*
-ROM [0:123] ='{
+ROM [0:121] ='{
 32'h8b0103e4,
 32'h8b1f03e0,
 32'h8b1f03e1,
@@ -253,22 +252,20 @@ ROM [0:123] ='{
 32'h8b0403e6,
 32'h8b1f03ff,
 32'h8b1f03ff,
-32'hd37f3cc6,
+32'hd37f40c6,
 32'h8b1f03ff,
 32'h8b1f03ff,
-32'h8a060067,
+32'hcb0400c6,
 32'h8b1f03ff,
 32'h8b1f03ff,
-32'h8b0403e6,
+32'hcb060067,
 32'h8b1f03ff,
 32'h8b1f03ff,
-32'h8a060068,
+32'hb4000107,
 32'h8b1f03ff,
 32'h8b1f03ff,
-32'haa0800e9,
 32'h8b1f03ff,
-32'h8b1f03ff,
-32'hb4fff769,
+32'hb4fff7bf,
 32'h8b1f03ff,
 32'h8b1f03ff,
 32'h8b1f03ff,
@@ -284,11 +281,22 @@ ROM [0:123] ='{
 32'hd37f1c63,
 32'h8b1f03ff,
 32'h8b1f03ff,
-32'hb4fff57f,
+32'hb4fff5bf,
 32'h8b1f03ff,
 32'h8b1f03ff,
 32'h8b1f03ff};
 */
+
+
+
+
+
+
+
+
+
+
+
 
 
 

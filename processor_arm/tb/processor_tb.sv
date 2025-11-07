@@ -35,6 +35,7 @@ module processor_tb();
       #20000 i_sw = 16'h0001;     
       #1500 i_sw = 16'h0000;     
       
+      
       #30000 dump = 1; 
 	   #20 $stop;
 	end 

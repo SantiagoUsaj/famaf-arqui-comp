@@ -47,7 +47,7 @@ module processor_arm #(parameter N = 64)
 									.DM_readEnable(DM_readEnable));				
 					
 					
-	imem 				instrMem (.addr(IM_address[9:2]), // se cambio de 7:2 a 8:2 - Luego se cambio a 9:2 para poder realizar las instrucciones con los leds y switches
+	imem 				instrMem (.addr(IM_address[7:2]), // se cambio de 7:2 a 8:2 - Luego se cambio a 9:2 para poder realizar las instrucciones con los leds y switches
 									.q(q));
 									
 	

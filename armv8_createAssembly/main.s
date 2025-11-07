@@ -1,1 +1,1 @@
-ADD X13, XZR, X4
+STUR X8, [X0, #0]

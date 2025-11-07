@@ -1,31 +1,4 @@
 
-LSL X0, X4, #15
+LSL X0, X0, #15
 
-LSL X1, X4, #15
-
-LSL X3, X4, #16
-
-LSL X5, X4, #2
-
-LSL X5, X5, #2
-
-LSL X5, X5, #2
-
-LSL X5, X5, #2
-
-LSL X5, X5, #2
-
-LSL X5, X5, #2
-
-LSL X5, X5, #2
-
-LSL X10, X4, #2 
-
-
-LSL X11, X4, #1
-
-LSL X11, X11, #7
-
-LSL X7, X8, #1        
-LSR X9, X8, #1
-LSL X6, X4, #16
+LSL X1, X1, #15

@@ -92,7 +92,8 @@ finloop: CBZ XZR, finloop // Bucle infinito
 
 
 /*
-ROM [0:87] ='{32'hf8000001,
+ROM [0:87] ='{
+32'hf8000001,
 32'hf8008002,
 32'hf8010003,
 32'h8b050083,

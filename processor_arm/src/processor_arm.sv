@@ -50,7 +50,7 @@ module processor_arm #(parameter N = 64)
 							);				
 					
 					
-	imem 				instrMem (.addr(IM_address[8:2]), // se cambio de 7:2 a 8:2
+	imem 				instrMem (.addr(IM_address[9:2]), // se cambio de 7:2 a 8:2 - Luego se cambio a 9:2 para poder realizar las instrucciones con los leds y switches
 									.q(q));
 									
 	
@@ -75,11 +75,11 @@ module processor_arm #(parameter N = 64)
 					
 
 	always_ff @(posedge mclk)
-		if (DM_addr == 64'h8008) 
+		if (DM_addr == 64'h8000) 
 		  o_led <= DM_writeData[15:0];
 		
 	always_comb 		
-		if (DM_addr == 64'h8000) 
+		if (DM_addr == 64'h8008) 
 		     dp_readData = {48'b0, i_sw};
 		else 
 		     dp_readData = DM_readData;			

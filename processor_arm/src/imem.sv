@@ -656,35 +656,6 @@ module imem
 
         /********* Ejercicio 2 **********/
 
-        // test_HDU_FU.s sin salto
-        /*
-        ROM [0:22] ='{
-                        32'hf8000001,
-                        32'hf800800f,
-                        32'h8b1f03ff,
-                        32'h8b1f03ff,
-                        32'h8b1f03ff,
-                        32'h8b1f03ff,
-                        32'hf8400001,
-                        32'h8b030022,
-                        32'hcb0100a4,
-                        32'h8b040046,
-                        32'h8b0100c7,
-                        32'h8b0600e8,
-                        32'h8b0b0149,
-                        32'h8b0e01ac,
-                        32'hf840800f,
-                        32'hb400004f,
-                        32'h8b1101f0,
-                        32'hf8010012,
-                        32'hf8410013,
-                        32'h8b120274,
-                        32'h8b1f03ff,
-                        32'h8b1f03ff,
-                        32'hb400001f
-                    };
-        */
-
         // test_HDU_FU modificado para que salte
         /*
        ROM [0:25] ='{   32'hf8000001,
@@ -712,11 +683,11 @@ module imem
                         32'h8b120274,
                         32'h8b1f03ff,
                         32'h8b1f03ff,
-                        32'hb400001f
-                    };
-        */     
+                        32'hb400001f};
+        */
 
         // original_code.s
+        
         ROM [0:52] ='{  32'hf8000001,
                         32'hf8008002,
                         32'hf8010003,
@@ -771,6 +742,8 @@ module imem
                         32'hf81f83d9,
                         32'hb400001f
                     };
+        
+        
 	end
 	always_comb begin
 		q = ROM[addr];

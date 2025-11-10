@@ -582,7 +582,6 @@ Escribimos un programa en assembler para gestionar recurse de E/S.
 
 Se nos pide implementar un bloque de Hazar Detection y otro de Forwarding, con el fin de aplicar el forwarding-stall estudiado en la materia.
 
-<<<<<<< HEAD
 ### HDU
 
 Primero se crearon los módulos de systemVerilog para el HDU y el flip flop con enable
@@ -686,15 +685,11 @@ flopr_e #(11)		IF_ID_TOP(.clk(mclk),
 
 #### Testeos
 Hicimos una primera prueba para verificar el funcionamiento del HDU con el código en `hazard_detection.s` y observamos que se activa el stall. 
-=======
-Hicimos una primera prueba para ver si funciona el HDU con el código en `hazard_detection.s` y observamos que se activa el stall.
->>>>>>> 66074c795ba9c90e2e708862a8fe37b1541eb7fa
 ![test1](/img/test1.png)
 
 Luego agregamos mas casos de hazard con el código en `full_hazard_detection.s`. Podemos observar que solo tenemos 2 stalls, que es lo esperado. En este punto todavía no se implemento el forwarding.
 ![test2](/img/test2.png)
 
-<<<<<<< HEAD
 ### FU
 
 Primero creamos la FU
@@ -710,13 +705,6 @@ module forwarding_unit(
     output logic [1:0] forwardA,
     output logic [1:0] forwardB
 );
-=======
-- Creamos la FU
-- Instanciamos la FU en datapath.sv con sus respectivas conexiones.
-- Modificamos execute.sv para agregar los multiplexores para realizar el manejo del forward.
-- Se renego mucho para encontrar los bits correctos para utilizar en la instancia de la FU.
-- Se agregaron 10 bits al flopr de ID_EX para que pase el numero de los registros usados para que los pueda utilizar la FU.
->>>>>>> 66074c795ba9c90e2e708862a8fe37b1541eb7fa
 
     // Forwarding logic for source operand A
     always_comb begin

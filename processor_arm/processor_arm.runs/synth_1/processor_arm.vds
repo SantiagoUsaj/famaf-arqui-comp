@@ -1,0 +1,336 @@
+#-----------------------------------------------------------
+# Vivado v2024.2 (64-bit)
+# SW Build 5239630 on Fri Nov 08 22:34:34 MST 2024
+# IP Build 5239520 on Sun Nov 10 16:12:51 MST 2024
+# SharedData Build 5239561 on Fri Nov 08 14:39:27 MST 2024
+# Start of session at: Fri Nov  7 11:52:09 2025
+# Process ID         : 41362
+# Current directory  : /home/ronnie/lab1-adc2025-g16/processor_arm/processor_arm.runs/synth_1
+# Command line       : vivado -log processor_arm.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source processor_arm.tcl
+# Log file           : /home/ronnie/lab1-adc2025-g16/processor_arm/processor_arm.runs/synth_1/processor_arm.vds
+# Journal file       : /home/ronnie/lab1-adc2025-g16/processor_arm/processor_arm.runs/synth_1/vivado.jou
+# Running On         : Asspire-A515-51
+# Platform           : Ubuntu
+# Operating System   : Ubuntu 24.04.3 LTS
+# Processor Detail   : Intel(R) Core(TM) i5-8250U CPU @ 1.60GHz
+# CPU Frequency      : 1600.037 MHz
+# CPU Physical cores : 4
+# CPU Logical cores  : 8
+# Host memory        : 20841 MB
+# Swap memory        : 8589 MB
+# Total Virtual      : 29431 MB
+# Available Virtual  : 25124 MB
+#-----------------------------------------------------------
+source processor_arm.tcl -notrace
+Command: read_checkpoint -auto_incremental -incremental /home/ronnie/lab1-adc2025-g16/processor_arm/processor_arm.srcs/utils_1/imports/synth_1/processor_arm.dcp
+INFO: [Vivado 12-5825] Read reference checkpoint from /home/ronnie/lab1-adc2025-g16/processor_arm/processor_arm.srcs/utils_1/imports/synth_1/processor_arm.dcp for incremental synthesis
+INFO: [Vivado 12-7989] Please ensure there are no constraint changes
+Command: synth_design -top processor_arm -part xc7s50csga324-1
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7s50'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7s50'
+INFO: [Device 21-403] Loading part xc7s50csga324-1
+INFO: [Designutils 20-5440] No compile time benefit to using incremental synthesis; A full resynthesis will be run
+INFO: [Designutils 20-4379] Flow is switching to default flow due to incremental criteria not met. If you would like to alter this behaviour and have the flow terminate instead, please set the following parameter config_implementation {autoIncr.Synth.RejectBehavior Terminate}
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 7 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 41413
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:10 ; elapsed = 00:00:10 . Memory (MB): peak = 1816.199 ; gain = 384.848 ; free physical = 7305 ; free virtual = 23161
+---------------------------------------------------------------------------------
+INFO: [Synth 8-11241] undeclared symbol 'DM_writeEnable', assumed default net type 'wire' [/home/ronnie/lab1-adc2025-g16/processor_arm/src/processor_arm.sv:46]
+INFO: [Synth 8-11241] undeclared symbol 'DM_readEnable', assumed default net type 'wire' [/home/ronnie/lab1-adc2025-g16/processor_arm/src/processor_arm.sv:47]
+INFO: [Synth 8-6157] synthesizing module 'processor_arm' [/home/ronnie/lab1-adc2025-g16/processor_arm/src/processor_arm.sv:3]
+INFO: [Synth 8-6157] synthesizing module 'controller' [/home/ronnie/lab1-adc2025-g16/processor_arm/src/controller.sv:3]
+INFO: [Synth 8-6157] synthesizing module 'maindec' [/home/ronnie/lab1-adc2025-g16/processor_arm/src/maindec.sv:5]
+INFO: [Synth 8-6155] done synthesizing module 'maindec' (0#1) [/home/ronnie/lab1-adc2025-g16/processor_arm/src/maindec.sv:5]
+INFO: [Synth 8-6157] synthesizing module 'aludec' [/home/ronnie/lab1-adc2025-g16/processor_arm/src/aludec.sv:3]
+INFO: [Synth 8-6155] done synthesizing module 'aludec' (0#1) [/home/ronnie/lab1-adc2025-g16/processor_arm/src/aludec.sv:3]
+INFO: [Synth 8-6155] done synthesizing module 'controller' (0#1) [/home/ronnie/lab1-adc2025-g16/processor_arm/src/controller.sv:3]
+INFO: [Synth 8-6157] synthesizing module 'datapath' [/home/ronnie/lab1-adc2025-g16/processor_arm/src/datapath.sv:3]
+	Parameter N bound to: 64 - type: integer 
+INFO: [Synth 8-6157] synthesizing module 'fetch' [/home/ronnie/lab1-adc2025-g16/processor_arm/src/fetch.sv:23]
+	Parameter N bound to: 64 - type: integer 
+INFO: [Synth 8-6157] synthesizing module 'mux2' [/home/ronnie/lab1-adc2025-g16/processor_arm/src/mux2.sv:3]
+	Parameter N bound to: 64 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'mux2' (0#1) [/home/ronnie/lab1-adc2025-g16/processor_arm/src/mux2.sv:3]
+INFO: [Synth 8-6157] synthesizing module 'flopr' [/home/ronnie/lab1-adc2025-g16/processor_arm/src/flopr.sv:22]
+	Parameter N bound to: 64 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'flopr' (0#1) [/home/ronnie/lab1-adc2025-g16/processor_arm/src/flopr.sv:22]
+INFO: [Synth 8-6157] synthesizing module 'adder' [/home/ronnie/lab1-adc2025-g16/processor_arm/src/adder.sv:3]
+	Parameter N bound to: 64 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'adder' (0#1) [/home/ronnie/lab1-adc2025-g16/processor_arm/src/adder.sv:3]
+INFO: [Synth 8-6155] done synthesizing module 'fetch' (0#1) [/home/ronnie/lab1-adc2025-g16/processor_arm/src/fetch.sv:23]
+INFO: [Synth 8-6157] synthesizing module 'flopr__parameterized0' [/home/ronnie/lab1-adc2025-g16/processor_arm/src/flopr.sv:22]
+	Parameter N bound to: 96 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'flopr__parameterized0' (0#1) [/home/ronnie/lab1-adc2025-g16/processor_arm/src/flopr.sv:22]
+INFO: [Synth 8-6157] synthesizing module 'decode' [/home/ronnie/lab1-adc2025-g16/processor_arm/src/decode.sv:3]
+	Parameter N bound to: 64 - type: integer 
+INFO: [Synth 8-6157] synthesizing module 'mux2__parameterized0' [/home/ronnie/lab1-adc2025-g16/processor_arm/src/mux2.sv:3]
+	Parameter N bound to: 5 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'mux2__parameterized0' (0#1) [/home/ronnie/lab1-adc2025-g16/processor_arm/src/mux2.sv:3]
+INFO: [Synth 8-6157] synthesizing module 'regfile' [/home/ronnie/lab1-adc2025-g16/processor_arm/src/regfile.sv:23]
+INFO: [Synth 8-6155] done synthesizing module 'regfile' (0#1) [/home/ronnie/lab1-adc2025-g16/processor_arm/src/regfile.sv:23]
+INFO: [Synth 8-6157] synthesizing module 'signext' [/home/ronnie/lab1-adc2025-g16/processor_arm/src/signext.sv:23]
+INFO: [Synth 8-6155] done synthesizing module 'signext' (0#1) [/home/ronnie/lab1-adc2025-g16/processor_arm/src/signext.sv:23]
+INFO: [Synth 8-6155] done synthesizing module 'decode' (0#1) [/home/ronnie/lab1-adc2025-g16/processor_arm/src/decode.sv:3]
+INFO: [Synth 8-6157] synthesizing module 'flopr__parameterized1' [/home/ronnie/lab1-adc2025-g16/processor_arm/src/flopr.sv:22]
+	Parameter N bound to: 271 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'flopr__parameterized1' (0#1) [/home/ronnie/lab1-adc2025-g16/processor_arm/src/flopr.sv:22]
+INFO: [Synth 8-6157] synthesizing module 'execute' [/home/ronnie/lab1-adc2025-g16/processor_arm/src/execute.sv:5]
+	Parameter N bound to: 64 - type: integer 
+INFO: [Synth 8-6157] synthesizing module 'sl2' [/home/ronnie/lab1-adc2025-g16/processor_arm/src/sl2.sv:25]
+	Parameter N bound to: 64 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'sl2' (0#1) [/home/ronnie/lab1-adc2025-g16/processor_arm/src/sl2.sv:25]
+INFO: [Synth 8-6157] synthesizing module 'alu' [/home/ronnie/lab1-adc2025-g16/processor_arm/src/alu.sv:23]
+INFO: [Synth 8-6155] done synthesizing module 'alu' (0#1) [/home/ronnie/lab1-adc2025-g16/processor_arm/src/alu.sv:23]
+INFO: [Synth 8-6155] done synthesizing module 'execute' (0#1) [/home/ronnie/lab1-adc2025-g16/processor_arm/src/execute.sv:5]
+INFO: [Synth 8-6157] synthesizing module 'flopr__parameterized2' [/home/ronnie/lab1-adc2025-g16/processor_arm/src/flopr.sv:22]
+	Parameter N bound to: 203 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'flopr__parameterized2' (0#1) [/home/ronnie/lab1-adc2025-g16/processor_arm/src/flopr.sv:22]
+INFO: [Synth 8-6157] synthesizing module 'memory' [/home/ronnie/lab1-adc2025-g16/processor_arm/src/memory.sv:3]
+INFO: [Synth 8-6155] done synthesizing module 'memory' (0#1) [/home/ronnie/lab1-adc2025-g16/processor_arm/src/memory.sv:3]
+INFO: [Synth 8-6157] synthesizing module 'flopr__parameterized3' [/home/ronnie/lab1-adc2025-g16/processor_arm/src/flopr.sv:22]
+	Parameter N bound to: 135 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'flopr__parameterized3' (0#1) [/home/ronnie/lab1-adc2025-g16/processor_arm/src/flopr.sv:22]
+INFO: [Synth 8-6157] synthesizing module 'writeback' [/home/ronnie/lab1-adc2025-g16/processor_arm/src/writeback.sv:3]
+	Parameter N bound to: 64 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'writeback' (0#1) [/home/ronnie/lab1-adc2025-g16/processor_arm/src/writeback.sv:3]
+INFO: [Synth 8-6155] done synthesizing module 'datapath' (0#1) [/home/ronnie/lab1-adc2025-g16/processor_arm/src/datapath.sv:3]
+INFO: [Synth 8-6157] synthesizing module 'imem' [/home/ronnie/lab1-adc2025-g16/processor_arm/src/imem.sv:23]
+INFO: [Synth 8-6155] done synthesizing module 'imem' (0#1) [/home/ronnie/lab1-adc2025-g16/processor_arm/src/imem.sv:23]
+INFO: [Synth 8-638] synthesizing module 'dmem' [/home/ronnie/lab1-adc2025-g16/processor_arm/src/dmem.vhd:21]
+INFO: [Synth 8-256] done synthesizing module 'dmem' (0#1) [/home/ronnie/lab1-adc2025-g16/processor_arm/src/dmem.vhd:21]
+INFO: [Synth 8-6157] synthesizing module 'flopr__parameterized4' [/home/ronnie/lab1-adc2025-g16/processor_arm/src/flopr.sv:22]
+	Parameter N bound to: 11 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'flopr__parameterized4' (0#1) [/home/ronnie/lab1-adc2025-g16/processor_arm/src/flopr.sv:22]
+INFO: [Synth 8-6157] synthesizing module 'clkDiv' [/home/ronnie/lab1-adc2025-g16/processor_arm/src/clkDiv.sv:3]
+INFO: [Synth 8-6155] done synthesizing module 'clkDiv' (0#1) [/home/ronnie/lab1-adc2025-g16/processor_arm/src/clkDiv.sv:3]
+INFO: [Synth 8-6157] synthesizing module 'disp7seg_controller' [/home/ronnie/lab1-adc2025-g16/processor_arm/src/7seg_controller.sv:23]
+INFO: [Synth 8-6155] done synthesizing module 'disp7seg_controller' (0#1) [/home/ronnie/lab1-adc2025-g16/processor_arm/src/7seg_controller.sv:23]
+INFO: [Synth 8-6155] done synthesizing module 'processor_arm' (0#1) [/home/ronnie/lab1-adc2025-g16/processor_arm/src/processor_arm.sv:3]
+WARNING: [Synth 8-7129] Port dump in module dmem is either unconnected or has no load
+WARNING: [Synth 8-7129] Port a[63] in module sl2 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port a[62] in module sl2 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port a[4] in module signext is either unconnected or has no load
+WARNING: [Synth 8-7129] Port a[3] in module signext is either unconnected or has no load
+WARNING: [Synth 8-7129] Port a[2] in module signext is either unconnected or has no load
+WARNING: [Synth 8-7129] Port a[1] in module signext is either unconnected or has no load
+WARNING: [Synth 8-7129] Port a[0] in module signext is either unconnected or has no load
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:13 ; elapsed = 00:00:13 . Memory (MB): peak = 1890.137 ; gain = 458.785 ; free physical = 7210 ; free virtual = 23058
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:13 ; elapsed = 00:00:14 . Memory (MB): peak = 1907.949 ; gain = 476.598 ; free physical = 7210 ; free virtual = 23058
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:13 ; elapsed = 00:00:14 . Memory (MB): peak = 1907.949 ; gain = 476.598 ; free physical = 7210 ; free virtual = 23058
+---------------------------------------------------------------------------------
+Netlist sorting complete. Time (s): cpu = 00:00:00.06 ; elapsed = 00:00:00.06 . Memory (MB): peak = 1907.949 ; gain = 0.000 ; free physical = 7203 ; free virtual = 23054
+INFO: [Project 1-570] Preparing netlist for logic optimization
+
+Processing XDC Constraints
+Initializing timing engine
+Parsing XDC File [/home/ronnie/lab1-adc2025-g16/processor_arm/constrs/boolean.xdc]
+Finished Parsing XDC File [/home/ronnie/lab1-adc2025-g16/processor_arm/constrs/boolean.xdc]
+INFO: [Project 1-236] Implementation specific constraints were found while reading constraint file [/home/ronnie/lab1-adc2025-g16/processor_arm/constrs/boolean.xdc]. These constraints will be ignored for synthesis but will be used in implementation. Impacted constraints are listed in the file [.Xil/processor_arm_propImpl.xdc].
+Resolution: To avoid this warning, move constraints listed in [.Xil/processor_arm_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
+Completed Processing XDC Constraints
+
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2058.699 ; gain = 0.000 ; free physical = 7220 ; free virtual = 23078
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Constraint Validation Runtime : Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00.01 . Memory (MB): peak = 2058.699 ; gain = 0.000 ; free physical = 7219 ; free virtual = 23077
+INFO: [Designutils 20-5440] No compile time benefit to using incremental synthesis; A full resynthesis will be run
+INFO: [Designutils 20-4379] Flow is switching to default flow due to incremental criteria not met. If you would like to alter this behaviour and have the flow terminate instead, please set the following parameter config_implementation {autoIncr.Synth.RejectBehavior Terminate}
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:28 ; elapsed = 00:00:28 . Memory (MB): peak = 2058.699 ; gain = 627.348 ; free physical = 7241 ; free virtual = 23083
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7s50csga324-1
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:28 ; elapsed = 00:00:28 . Memory (MB): peak = 2066.703 ; gain = 635.352 ; free physical = 7241 ; free virtual = 23083
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying 'set_property' XDC Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:28 ; elapsed = 00:00:28 . Memory (MB): peak = 2066.703 ; gain = 635.352 ; free physical = 7241 ; free virtual = 23083
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:29 ; elapsed = 00:00:29 . Memory (MB): peak = 2066.703 ; gain = 635.352 ; free physical = 7240 ; free virtual = 23084
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input   64 Bit       Adders := 3     
+	   3 Input   64 Bit       Adders := 1     
+	   2 Input    5 Bit       Adders := 2     
+	   2 Input    2 Bit       Adders := 2     
++---Registers : 
+	              271 Bit    Registers := 1     
+	              203 Bit    Registers := 1     
+	              135 Bit    Registers := 1     
+	               96 Bit    Registers := 1     
+	               64 Bit    Registers := 1     
+	               16 Bit    Registers := 1     
+	               11 Bit    Registers := 1     
+	                8 Bit    Registers := 2     
+	                5 Bit    Registers := 2     
+	                4 Bit    Registers := 4     
+	                2 Bit    Registers := 2     
++---RAMs : 
+	               2K Bit	(32 X 64 bit)          RAMs := 1     
++---Muxes : 
+	   2 Input   64 Bit        Muxes := 6     
+	  65 Input   32 Bit        Muxes := 1     
+	  17 Input    8 Bit        Muxes := 2     
+	   2 Input    5 Bit        Muxes := 1     
+	   4 Input    4 Bit        Muxes := 2     
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 120 (col length:60)
+BRAMs: 150 (col length: RAMB18 60 RAMB36 30)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Cross Boundary and Area Optimization
+---------------------------------------------------------------------------------
+WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
+WARNING: [Synth 8-7129] Port dump in module dmem is either unconnected or has no load
+---------------------------------------------------------------------------------
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:34 ; elapsed = 00:00:35 . Memory (MB): peak = 2066.703 ; gain = 635.352 ; free physical = 7236 ; free virtual = 23085
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying XDC Timing Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:47 ; elapsed = 00:00:48 . Memory (MB): peak = 2079.703 ; gain = 648.352 ; free physical = 7119 ; free virtual = 22968
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:00:47 ; elapsed = 00:00:48 . Memory (MB): peak = 2079.703 ; gain = 648.352 ; free physical = 7119 ; free virtual = 22968
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:00:47 ; elapsed = 00:00:48 . Memory (MB): peak = 2098.734 ; gain = 667.383 ; free physical = 7103 ; free virtual = 22952
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:00:55 ; elapsed = 00:00:56 . Memory (MB): peak = 2250.547 ; gain = 819.195 ; free physical = 6965 ; free virtual = 22816
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:55 ; elapsed = 00:00:56 . Memory (MB): peak = 2250.547 ; gain = 819.195 ; free physical = 6964 ; free virtual = 22818
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:55 ; elapsed = 00:00:56 . Memory (MB): peak = 2250.547 ; gain = 819.195 ; free physical = 6964 ; free virtual = 22818
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Ports
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:55 ; elapsed = 00:00:56 . Memory (MB): peak = 2250.547 ; gain = 819.195 ; free physical = 6964 ; free virtual = 22818
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:55 ; elapsed = 00:00:56 . Memory (MB): peak = 2250.547 ; gain = 819.195 ; free physical = 6964 ; free virtual = 22818
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Nets
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:55 ; elapsed = 00:00:56 . Memory (MB): peak = 2250.547 ; gain = 819.195 ; free physical = 6964 ; free virtual = 22818
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+Report BlackBoxes: 
++-+--------------+----------+
+| |BlackBox name |Instances |
++-+--------------+----------+
++-+--------------+----------+
+
+Report Cell Usage: 
++------+-------+------+
+|      |Cell   |Count |
++------+-------+------+
+|1     |BUFG   |     1|
+|2     |CARRY4 |     4|
+|3     |LUT1   |     5|
+|4     |LUT2   |     8|
+|5     |LUT3   |     4|
+|6     |LUT4   |     1|
+|7     |LUT5   |     2|
+|8     |FDRE   |    38|
+|9     |FDSE   |     8|
+|10    |IBUF   |     1|
+|11    |OBUF   |    40|
++------+-------+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:55 ; elapsed = 00:00:56 . Memory (MB): peak = 2250.547 ; gain = 819.195 ; free physical = 6964 ; free virtual = 22818
+---------------------------------------------------------------------------------
+Synthesis finished with 0 errors, 0 critical warnings and 2 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:51 ; elapsed = 00:00:52 . Memory (MB): peak = 2250.547 ; gain = 668.445 ; free physical = 6964 ; free virtual = 22820
+Synthesis Optimization Complete : Time (s): cpu = 00:00:55 ; elapsed = 00:00:56 . Memory (MB): peak = 2250.555 ; gain = 819.195 ; free physical = 6964 ; free virtual = 22820
+INFO: [Project 1-571] Translating synthesized netlist
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2250.555 ; gain = 0.000 ; free physical = 6964 ; free virtual = 22820
+INFO: [Netlist 29-17] Analyzing 4 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2306.574 ; gain = 0.000 ; free physical = 7105 ; free virtual = 22954
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Synth Design complete | Checksum: adc8831c
+INFO: [Common 17-83] Releasing license: Synthesis
+77 Infos, 10 Warnings, 0 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:01:11 ; elapsed = 00:01:06 . Memory (MB): peak = 2306.574 ; gain = 875.238 ; free physical = 7105 ; free virtual = 22954
+INFO: [Common 17-2834] synth_design peak Physical Memory [PSS] (MB): overall = 1591.719; main = 1462.076; forked = 269.352
+INFO: [Common 17-2834] synth_design peak Virtual Memory [VSS] (MB): overall = 3062.727; main = 2306.578; forked = 917.988
+Write ShapeDB Complete: Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00 . Memory (MB): peak = 2330.586 ; gain = 0.000 ; free physical = 7105 ; free virtual = 22954
+INFO: [Common 17-1381] The checkpoint '/home/ronnie/lab1-adc2025-g16/processor_arm/processor_arm.runs/synth_1/processor_arm.dcp' has been generated.
+INFO: [Vivado 12-24828] Executing command : report_utilization -file processor_arm_utilization_synth.rpt -pb processor_arm_utilization_synth.pb
+INFO: [Common 17-206] Exiting Vivado at Fri Nov  7 11:53:21 2025...

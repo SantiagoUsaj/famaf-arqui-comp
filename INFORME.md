@@ -10,9 +10,6 @@
 
 ### Preliminares
 
-Antes de iniciar con los ejercicios del laboratorio se nos pide que integremos el pipeline. Para esto copiamos y reemplazamos los modulos dados por los profesores.
-Una vez realizado el reemplazo de los modulos se debia verificar su correcto funcionamiento con el codigo dado, pero se debia agregar instrucciones NOP por los problemas de hazard.
-
 Antes de comenzar con los ejercicios del laboratorio se nos pide integrar el pipeline y verificar su funcionamiento con un código en assembler al cual se le deben agregar los NOPS.
 
 Para integrar el pipeline se reemplazaron los archivos dados por los profesores.
@@ -310,7 +307,7 @@ finloop: CBZ XZR, finloop // Bucle infinito
 
 ```
 
-Como el makefile que genera las instrucciones tenía un problema para armar las instrucciones de LSL y LSR, se utilizó un script que un compañero paso por Zulip. Gracias a él se nos facilitó mucho el armar las instrucciones.
+Como el makefile que genera las instrucciones tenía un problema para armar las instrucciones de LSL y LSR, se utilizó un script que un compañero paso por Zulip (`script_shifts.py`). Gracias a él se nos facilitó mucho el armar las instrucciones.
 
 ### Parte 2 - LEDS y SWITCHES
 
@@ -326,5 +323,253 @@ Este es un ejemplo donde la primera iteración del loop es interrumpida por la s
 Luego probamos implementar distintos comportamientos segun que switch está encendido. En el archivo `off_on_even.s` creamos un programa con el cual los LEDs permanecen apagados si todos los switches estan en la posición 0. Si únicamente se activa el switch 0 se encienden todas las luces y si únicamente se activa el switch 1 se encienden solo las luces de posiciones pares.
 ![off_on_even](/img/off_on_even.png) 
 
-Finalmente `leds_and_switches.s` combina estos códigos. Nuevamente el switch 0 enciende todos los LEDs y el switch 1 solo las posiciones pares. Además, el switch 2 comienza el loop infinito de expansion, el cual puede ser interrumpido con el switch 0.
+Finalmente `leds_and_switches.s` combina estos códigos. Nuevamente el switch 0 enciende todos los LEDs y el switch 1 solo las posiciones pares. Además, el switch 2 comienza el loop infinito de expansion, el cual puede únicamente ser interrumpido con el switch 0.
 ![l_and_s](/img/leds_and_switches.png) 
+
+Este es el código en assembler:
+
+```verilog
+.text
+    .org 0x0000
+
+// X0: dirección base de LEDs (0x8000)
+// X1: dirección base de switches (0x8008)
+// X2: valor leído de switches
+// X3: máscara para todos los LEDs encendidos (0xFFFF)
+// X4: constante 1
+// X5: máscara para todos los LEDs pares (0x5555)
+// X6: variable auxiliar
+// X7: variable auxiliar
+// X8: variable auxiliar
+// X9: variable auxiliar
+// X10: retardo
+// X11: máscara de LEDs encendidos auxiliar (para expansión)
+// X12: máscara SW1 (0x0002)
+// X13: mascara SW2 (0x0004)
+
+// Inicialización
+ADD X4, XZR, X1
+ADD X12, XZR, X2
+ADD X13, XZR, X4
+ADD X0, XZR, XZR
+ADD X1, XZR, XZR
+ADD X2, XZR, XZR
+ADD X3, XZR, XZR
+ADD X5, XZR, XZR
+ADD X6, XZR, XZR
+ADD X7, XZR, XZR
+ADD X9, XZR, XZR
+ADD X10, XZR, XZR
+ADD X11, XZR, XZR
+
+// X0 = 0x8000
+LSL X0, X4, #15
+
+// X1 = 0x8008
+LSL X1, X4, #15
+ADD XZR, XZR, XZR // NOP
+ADD XZR, XZR, XZR // NOP
+ADD X1, X1, X8
+
+// X3 = 0xFFFF (todos los LEDs)
+LSL X3, X4, #16
+ADD XZR, XZR, XZR // NOP
+ADD XZR, XZR, XZR // NOP
+SUB X3, X3, X4
+
+// X5 = 0x5555 (pares)
+LSL X5, X4, #2
+ADD XZR, XZR, XZR // NOP
+ADD XZR, XZR, XZR // NOP
+ADD X5, X5, X4
+ADD XZR, XZR, XZR // NOP
+ADD XZR, XZR, XZR // NOP
+LSL X5, X5, #2
+ADD XZR, XZR, XZR // NOP
+ADD XZR, XZR, XZR // NOP
+ADD X5, X5, X4
+ADD XZR, XZR, XZR // NOP
+ADD XZR, XZR, XZR // NOP
+LSL X5, X5, #2
+ADD XZR, XZR, XZR // NOP
+ADD XZR, XZR, XZR // NOP
+ADD X5, X5, X4
+ADD XZR, XZR, XZR // NOP
+ADD XZR, XZR, XZR // NOP
+LSL X5, X5, #2
+ADD XZR, XZR, XZR // NOP
+ADD XZR, XZR, XZR // NOP
+ADD X5, X5, X4
+ADD XZR, XZR, XZR // NOP
+ADD XZR, XZR, XZR // NOP
+LSL X5, X5, #2
+ADD XZR, XZR, XZR // NOP
+ADD XZR, XZR, XZR // NOP
+ADD X5, X5, X4
+ADD XZR, XZR, XZR // NOP
+ADD XZR, XZR, XZR // NOP
+LSL X5, X5, #2
+ADD XZR, XZR, XZR // NOP
+ADD XZR, XZR, XZR // NOP
+ADD X5, X5, X4
+ADD XZR, XZR, XZR // NOP
+ADD XZR, XZR, XZR // NOP
+LSL X5, X5, #2
+ADD XZR, XZR, XZR // NOP
+ADD XZR, XZR, XZR // NOP
+ADD X5, X5, X4
+
+// X10 = retardo
+LSL X10, X4, #2 // 0x0004
+
+// X11 = máscara inicial expansión (0x0180)
+LSL X11, X4, #1
+ADD XZR, XZR, XZR // NOP
+ADD XZR, XZR, XZR // NOP
+ADD X11, X11, X4
+ADD XZR, XZR, XZR // NOP
+ADD XZR, XZR, XZR // NOP
+LSL X11, X11, #7
+ADD XZR, XZR, XZR // NOP
+ADD XZR, XZR, XZR // NOP
+
+main_loop:
+    LDUR X2, [X1, #0]
+    ADD XZR, XZR, XZR // NOP
+    ADD XZR, XZR, XZR // NOP
+    // Chequear SW0 (bit 0)
+    AND X6, X2, X4
+    ADD XZR, XZR, XZR // NOP
+    ADD XZR, XZR, XZR // NOP
+    CBZ X6, check_sw1
+    ADD XZR, XZR, XZR // NOP
+    ADD XZR, XZR, XZR // NOP
+    ADD XZR, XZR, XZR // NOP
+    STUR X3, [X0, #0] // Todos los LEDs
+    CBZ XZR, main_loop
+    ADD XZR, XZR, XZR // NOP
+    ADD XZR, XZR, XZR // NOP
+    ADD XZR, XZR, XZR // NOP
+
+check_sw1:
+    // Chequear SW1 (bit 1)
+    AND X6, X2, X12
+    ADD XZR, XZR, XZR // NOP
+    ADD XZR, XZR, XZR // NOP
+    CBZ X6, check_sw2
+    ADD XZR, XZR, XZR // NOP
+    ADD XZR, XZR, XZR // NOP
+    ADD XZR, XZR, XZR // NOP
+    STUR X5, [X0, #0] // Pares
+    CBZ XZR, main_loop
+    ADD XZR, XZR, XZR // NOP
+    ADD XZR, XZR, XZR // NOP
+    ADD XZR, XZR, XZR // NOP
+
+check_sw2:
+    // Chequear SW2 (bit 2)
+    AND X6, X2, X13
+    ADD XZR, XZR, XZR // NOP
+    ADD XZR, XZR, XZR // NOP
+    CBZ X6, leds_off
+    ADD XZR, XZR, XZR // NOP
+    ADD XZR, XZR, XZR // NOP
+    ADD XZR, XZR, XZR // NOP
+    // Animación expansión
+    ADD X8, XZR, X11 // X8 = máscara expansión actual
+    ADD XZR, XZR, XZR // NOP
+    ADD XZR, XZR, XZR // NOP
+
+exp_loop:
+        STUR X8, [X0, #0]
+        // Retardo
+        ADD X9, XZR, X10
+        ADD XZR, XZR, XZR // NOP
+        ADD XZR, XZR, XZR // NOP
+exp_wait:
+            SUB X9, X9, X4
+            ADD XZR, XZR, XZR // NOP
+            ADD XZR, XZR, XZR // NOP
+            CBZ X9, exp_check_sw
+            ADD XZR, XZR, XZR // NOP
+            ADD XZR, XZR, XZR // NOP
+            ADD XZR, XZR, XZR // NOP    
+            CBZ XZR, exp_wait
+            ADD XZR, XZR, XZR // NOP
+            ADD XZR, XZR, XZR // NOP
+            ADD XZR, XZR, XZR // NOP
+exp_check_sw:
+        LDUR X2, [X1, #0]
+        ADD XZR, XZR, XZR // NOP
+        ADD XZR, XZR, XZR // NOP
+        AND X6, X2, X4 // SW0
+        ADD XZR, XZR, XZR // NOP
+        ADD XZR, XZR, XZR // NOP
+        CBZ X6, exp_expand
+        ADD XZR, XZR, XZR // NOP
+        ADD XZR, XZR, XZR // NOP
+        ADD XZR, XZR, XZR // NOP
+        // Si se aprieta SW0, salir de animación
+        CBZ XZR, main_loop
+        ADD XZR, XZR, XZR // NOP
+        ADD XZR, XZR, XZR // NOP
+        ADD XZR, XZR, XZR // NOP
+exp_expand:
+        LSL X7, X8, #1        
+        LSR X9, X8, #1
+        ADD XZR, XZR, XZR // NOP
+        ADD XZR, XZR, XZR // NOP
+        ORR X8, X8, X7
+        ADD XZR, XZR, XZR // NOP
+        ADD XZR, XZR, XZR // NOP
+        ORR X8, X8, X9
+        // Si todos los LEDs están encendidos, mostrar y reiniciar
+        LSL X6, X4, #16
+        ADD XZR, XZR, XZR // NOP
+        ADD XZR, XZR, XZR // NOP
+        SUB X6, X6, X4 // X6 = 0xFFFF
+        ADD XZR, XZR, XZR // NOP
+        ADD XZR, XZR, XZR // NOP
+        SUB X7, X8, X6
+        ADD XZR, XZR, XZR // NOP
+        ADD XZR, XZR, XZR // NOP
+        CBZ X7, exp_all_on
+        ADD XZR, XZR, XZR // NOP
+        ADD XZR, XZR, XZR // NOP
+        ADD XZR, XZR, XZR // NOP
+        CBZ XZR, exp_loop
+        ADD XZR, XZR, XZR // NOP
+        ADD XZR, XZR, XZR // NOP
+        ADD XZR, XZR, XZR // NOP
+exp_all_on:
+        STUR X8, [X0, #0]
+        // Retardo especial
+        ADD X9, XZR, X10
+        ADD XZR, XZR, XZR // NOP
+        ADD XZR, XZR, XZR // NOP
+exp_wait_all:
+            SUB X9, X9, X4
+            ADD XZR, XZR, XZR // NOP
+            ADD XZR, XZR, XZR // NOP
+            CBZ X9, exp_restart
+            ADD XZR, XZR, XZR // NOP
+            ADD XZR, XZR, XZR // NOP
+            ADD XZR, XZR, XZR // NOP
+            CBZ XZR, exp_wait_all
+            ADD XZR, XZR, XZR // NOP
+            ADD XZR, XZR, XZR // NOP
+            ADD XZR, XZR, XZR // NOP
+exp_restart:
+        ADD X8, XZR, X11 // Reiniciar máscara
+        CBZ XZR, exp_loop
+        ADD XZR, XZR, XZR // NOP
+        ADD XZR, XZR, XZR // NOP
+        ADD XZR, XZR, XZR // NOP
+
+leds_off:
+    STUR XZR, [X0, #0]
+    CBZ XZR, main_loop
+    ADD XZR, XZR, XZR // NOP
+    ADD XZR, XZR, XZR // NOP
+    ADD XZR, XZR, XZR // NOP
+```

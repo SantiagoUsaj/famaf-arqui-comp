@@ -580,33 +580,216 @@ Escribimos un programa en assembler para gestionar recurse de E/S.
 
 ## Ej 2
 
-- Creamos el HDU y el flip flop con enable.
-- En datapath cambiamos el flopr por flopr_e y agregamos el enable en la etapa de IF_ID.
-- En fetch cambiamos el flopr por flopr_e y agregamos el input para el enable. Con esto se logra detener el PC.
-- Instanciamos el HDU en datapath, realizando las conexiones correspondientes, tomando los registros de decode y execute para luego poder generar el output stall. Este output stall se usa en el flopr_e y en fetch.
-- Agregamos un mux para forzar todas las señales de control a 0 si hay stall.
-- También modificamos en processor_arm el flopr de IF_ID_TOP por un flopr_e y le mandamos la señal stall que sale del datapath.
+Se nos pide implementar un bloque de Hazar Detection y otro de Forwarding, con el fin de aplicar el forwarding-stall estudiado en la materia.
 
-Hicimos una primera prueba para ver si funciona el HDU con el código en `hazard_detection.s` y observamos que se activa el stall.
+### HDU
+
+Primero se crearon los módulos de systemVerilog para el HDU y el flip flop con enable
+
+- `hazard_unit.sv`
+```verilog
+module hazard_unit(
+    input  logic [4:0] ID_rs1,    
+    input  logic [4:0] ID_rs2,    
+    input  logic [4:0] EX_rd,     
+    input  logic       EX_memRead,
+    output logic       stall     
+);
+
+    always_comb begin
+        if (EX_memRead && ((EX_rd != 5'd31) && ((EX_rd == ID_rs1) || (EX_rd == ID_rs2)))) begin
+            stall = 1;
+        end else begin
+            stall = 0;
+        end
+    end
+
+endmodule
+```
+
+- `flopr_e.sv`
+```verilog
+module flopr_e #(parameter N = 64)
+				(input logic clk, reset, enable,
+				input logic [N-1: 0] d,
+				output logic [N-1: 0] q);
+	
+	always_ff @(posedge clk, posedge reset)
+		if (reset)       q <= '0;
+		else if (enable) q <= d;		
+
+endmodule
+```
+Luego se cambió en `datapath.sv` el flip flop de la etapa IF_ID por nuestro nuevo flip flop con enable y al igual que en `fetch.sv`. En este último además se agregó una señal de input para el enable. Con estos cambios se logra detener el PC cuando ocurre un stall. 
+
+- `datapath.sv`
+```verilog
+flopr_e 	#(96)		IF_ID 	(.clk(clk),
+										.reset(reset),
+										.enable(~stall),
+										.d({IM_addr, IM_readData}),
+										.q(qIF_ID));
+										
+```
+
+- `fetch.sv`
+```verilog
+module fetch
+    #(parameter N = 64) 
+    (
+        input logic PCSrc_F,
+        input logic clk,
+        input logic reset,
+        input logic enable, // Agregado para flip flop con enable
+        input logic [N-1:0] PCBranch_F,
+        output logic [N-1:0] imem_addr_F
+    );
+
+    logic [N-1:0] add_out;
+	logic [N-1:0] mux2_out; 			  
+				  
+	mux2 #(64) MUX(.d0(add_out),.d1(PCBranch_F),.s(PCSrc_F),.y(mux2_out));
+	flopr_e #(64) PC(.clk(clk),.reset(reset),.enable(enable),.d(mux2_out),.q(imem_addr_F));
+	adder #(64) Add(.a(imem_addr_F),.b(64'h4),.y(add_out));
+
+endmodule
+```
+
+Seguimos instanciando el HDU en datapath para poder generar el output stall. Este output es utliza en flopr_e y en fetch
+```verilog
+hazard_unit		HDU		(	.ID_rs1(qIF_ID[9:5]),
+								.ID_rs2(reg2loc ? qIF_ID[4:0] : qIF_ID[20:16]),
+								.EX_rd(qID_EX[4:0]),
+								.EX_memRead(qID_EX[264]),
+								.stall(stall));		
+```
+Se agregó un MUX para forzar todas las señales de control a 0 si hay un stall.
+```verilog
+	assign AluSrc_ID_mux     = stall ? 1'b0 : AluSrc;
+	assign AluControl_ID_mux = stall ? 4'b0000 : AluControl;
+	assign Branch_ID_mux     = stall ? 1'b0 : Branch;
+	assign memRead_ID_mux    = stall ? 1'b0 : memRead;
+	assign memWrite_ID_mux   = stall ? 1'b0 : memWrite;
+	assign regWrite_ID_mux   = stall ? 1'b0 : regWrite;
+	assign memtoReg_ID_mux   = stall ? 1'b0 : memtoReg;		
+```
+
+Por último, para que todo siga en sincronía al detectar un stall se reemplazo en el archivo `processor_arm.sv` el flip flop IF_ID_TOP por uno con enable y se le agrego la señal stall proveniente del datapath
+```verilog
+flopr_e #(11)		IF_ID_TOP(.clk(mclk),
+									.reset(i_reset),
+									.enable(~stall_dp),
+									.d(q[31:21]), 
+									.q(instr));
+```
+
+#### Testeos
+Hicimos una primera prueba para verificar el funcionamiento del HDU con el código en `hazard_detection.s` y observamos que se activa el stall. 
 ![test1](/img/test1.png)
 
 Luego agregamos mas casos de hazard con el código en `full_hazard_detection.s`. Podemos observar que solo tenemos 2 stalls, que es lo esperado. En este punto todavía no se implemento el forwarding.
 ![test2](/img/test2.png)
 
-- Creamos la FU
-- Instanciamos la FU en datapath.sv con sus respectivas conexiones.
-- Modificamos execute.sv para agregar los multiplexores para realizar el manejo del forward.
-- Se renego mucho para encontrar los bits correctos para utilizar en la instancia de la FU.
-- Se agregaron 10 bits al flopr de ID_EX para que pase el numero de los registros usados para que los pueda utilizar la FU.
+### FU
 
-Se probo el codigo de `forwarding_code.s` para testear un caso basico y simple de forward y funciona bien.
-Luego se probo el codigo de `full_hazard_detection.s` donde ademas de forwarding tambien se prueba la deteccion de hazard.
-Se implemento un test mas general en test_HDU_FU.s y lo pasa sin problemas.
-Se descubrio que al tomar no se hace flush, por ende se ejecutan las lineas debajo del salto.
-Esta fallando el cbz cuando debe leer de un registro que se le hace ldur antes.
-descubri que no si se hace el stall en cbz pero no se hace el forward y luego el cbz no hace el flush
-Por algun motivo el codigo original falla.
+Primero creamos la FU
+- `forwarding_unit.sv`
+```verilog
+module forwarding_unit(
+    input  logic [4:0] ID_EX_rs1,
+    input  logic [4:0] ID_EX_rs2,
+    input  logic [4:0] EX_MEM_rd,
+    input  logic       EX_MEM_regWrite,
+    input  logic [4:0] MEM_WB_rd,
+    input  logic       MEM_WB_regWrite,
+    output logic [1:0] forwardA,
+    output logic [1:0] forwardB
+);
 
-Vimos que hay una diferencia entre el teorico y el practico. En el libro dice que el forward solo se realiza si la instruccion escribe el registro, pero en este caso entonces no se haria forward para las instrucciones de CBZ y STUR. Pero en el practico tenemos ejemplos donde si le realizamos forward a estas instrucciones.
+    // Forwarding logic for source operand A
+    always_comb begin
+        if (EX_MEM_regWrite && (EX_MEM_rd != 5'd31) && (EX_MEM_rd == ID_EX_rs1)) begin
+            forwardA = 2'b10; // Forward from EX/MEM
+        end else if (MEM_WB_regWrite && (MEM_WB_rd != 5'd31) &&
+                 (MEM_WB_rd == ID_EX_rs1)) begin
+            forwardA = 2'b01; // Forward from MEM/WB
+        end else begin
+            forwardA = 2'b00; // No forwarding
+        end
+    end
 
-Se modifico la FU para que en las entrada reciba el registro correcto segun el tipo de instruccion, ya que no es lo mismo una tipo R, tipo D o tipo CB
+    // Forwarding logic for source operand B
+    always_comb begin
+        if (EX_MEM_regWrite && (EX_MEM_rd != 5'd31) && (EX_MEM_rd == ID_EX_rs2)) begin
+            forwardB = 2'b10; // Forward from EX/MEM
+        end else if (MEM_WB_regWrite && (MEM_WB_rd != 5'd31) &&
+                 (MEM_WB_rd == ID_EX_rs2)) begin
+            forwardB = 2'b01; // Forward from MEM/WB
+        end else begin
+            forwardB = 2'b00; // No forwarding
+        end
+    end
+
+endmodule
+```
+
+Luego la instanciamos en `datapath.sv` 
+```verilog
+forwarding_unit FU (
+							.ID_EX_rs1(qID_EX[275:271]), // rs1 de la instrucción en EX
+							.ID_EX_rs2(FU_rs2),   // rs2 de la instrucción en EX
+							.EX_MEM_rd(qEX_MEM[4:0]),  // rd de la instrucción en MEM
+							.EX_MEM_regWrite(qEX_MEM[199]), // regWrite de la instrucción en MEM
+							.MEM_WB_rd(qMEM_WB[4:0]),  // rd de la instrucción en WB
+							.MEM_WB_regWrite(qMEM_WB[134]), // regWrite de la instrucción en WB
+							.forwardA(forwardA),
+							.forwardB(forwardB)
+	);				
+```
+Agregamos en `execute.sv` los MUX para manejar correctamente el forward
+```verilog
+always_comb begin
+		case (forwardA)
+			2'b00: srcA = readData1_E;
+			2'b10: srcA = aluResult_MEM;
+			2'b01: srcA = writeData_WB;
+			default: srcA = readData1_E;
+		endcase
+		case (forwardB)
+			2'b00: srcB = readData2_E;
+			2'b10: srcB = aluResult_MEM;
+			2'b01: srcB = writeData_WB;
+			default: srcB = readData2_E;
+		endcase
+	end
+```
+Además, se tuvieron que agregar 10 bits al flip flop ID_EX para poder pasar que registros se estan utilizando y que la FU pueda utilizarlo.
+```verilog
+flopr 	#(281)	ID_EX 	(	.clk(clk),
+								.reset(reset), 
+								.d({qIF_ID[20:16],qIF_ID[9:5],AluSrc_ID_mux, AluControl_ID_mux, Branch_ID_mux, memRead_ID_mux, memWrite_ID_mux, regWrite_ID_mux, memtoReg_ID_mux,	
+									qIF_ID[95:32], signImm_D, readData1_D, readData2_D, qIF_ID[4:0]}),
+								.q(qID_EX));
+```
+Por último, se modificó en `datapath.sv` la FU para que en las entrada reciba el registro correcto segun el tipo de instruccion, ya que no es lo mismo una tipo R, tipo D o tipo CB
+```verilog
+// Cálculo de rs1 y rs2 para la unidad de forwarding
+	assign rs2_R  = qID_EX[280:276]; // Rn para tipo R
+	assign rs2_D  = qID_EX[4:0];     // Rt para tipo D (STUR/LDUR)
+	assign rs2_CB = qID_EX[4:0];     // Rt para tipo CB (CBZ)
+```
+#### Testeos
+Se probó el código de `forwarding_code.s` para testear un caso básico y simple de forward y funciona bien.
+![testf1](/img/testf1.png)
+
+Luego se probó el código de `full_hazard_detection.s` donde además de forwarding tambien se prueba la deteccion de hazard.
+![testf2](/img/testf2.png)
+
+Se implemento un test mas general en `test_HDU_FU.s` para verificar que ambas implementaciones funcionen juntas y lo pasa sin problemas.
+![testg](/img/testg.png)
+
+### Resultados
+
+En la siguiente imagen se puede ver la síntesis del procesador final y marcados con un círculo rojo los módulos agregados para el forwarding-stall.
+![sintesis](/img/sintesis.png)
+

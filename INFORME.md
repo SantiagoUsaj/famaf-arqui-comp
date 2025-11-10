@@ -163,18 +163,21 @@ Probamos nuevamente unos casos mas y siempre resultaba lo mismo, el shamt queda 
 
 Escribimos un programa en assembler para gestionar recurse de E/S.
 
-### Ej 2
+## Ej 2
 
 - Creamos el HDU y el flip flop con enable.
 - En datapath cambiamos el flopr por flopr_e y agregamos el enable en la etapa de IF_ID.
 - En fetch cambiamos el flopr por flopr_e y agregamos el input para el enable. Con esto se logra detener el PC.
 - Instanciamos el HDU en datapath, realizando las conexiones correspondientes, tomando los registros de decode y execute para luego poder generar el output stall. Este output stall se usa en el flopr_e y en fetch.
 - Agregamos un mux para forzar todas las señales de control a 0 si hay stall.
-- Tambien modificamos en processor_arm el flopr de IF_ID_TOP por un flopr_e y le mandamos la señal stall que sale del datapath.
+- También modificamos en processor_arm el flopr de IF_ID_TOP por un flopr_e y le mandamos la señal stall que sale del datapath.
 
-Hicimos una primera prueba para ver si funciona el HDU con el codigo en hazard_detection.s y observamos que se activa el stall. (test1.png)
+Hicimos una primera prueba para ver si funciona el HDU con el código en `hazard_detection.s` y observamos que se activa el stall. 
+![test1](/img/test1.png)
 
-Luego agregamos mas casos de hazard con el codigo en full_hazard_detection.s (test2.png). Podemos observar que solo tenemos 2 stalls, que es lo esperado. En este punto todavia no se implemento el forwarding.
+Luego agregamos mas casos de hazard con el código en `full_hazard_detection.s`. Podemos observar que solo tenemos 2 stalls, que es lo esperado. En este punto todavía no se implemento el forwarding.
+![test2](/img/test2.png)
+
 
 - Creamos la FU
 - Instanciamos la FU en datapath.sv con sus respectivas conexiones.
@@ -182,8 +185,8 @@ Luego agregamos mas casos de hazard con el codigo en full_hazard_detection.s (te
 - Se renego mucho para encontrar los bits correctos para utilizar en la instancia de la FU.
 - Se agregaron 10 bits al flopr de ID_EX para que pase el numero de los registros usados para que los pueda utilizar la FU.
 
-Se probo el codigo de forwarding_code.s para testear un caso basico y simple de forward y funciona bien.
-Luego se probo el codigo de full_hazard_detection.s donde ademas de forwarding tambien se prueba la deteccion de hazard.
+Se probo el codigo de `forwarding_code.s` para testear un caso basico y simple de forward y funciona bien.
+Luego se probo el codigo de `full_hazard_detection.s` donde ademas de forwarding tambien se prueba la deteccion de hazard.
 Se implemento un test mas general en test_HDU_FU.s y lo pasa sin problemas.
 Se descubrio que al tomar no se hace flush, por ende se ejecutan las lineas debajo del salto.
 Esta fallando el cbz cuando debe leer de un registro que se le hace ldur antes.

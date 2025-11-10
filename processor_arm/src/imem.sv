@@ -23,11 +23,11 @@
 module imem
     #(parameter N = 32) 
     (
-        input logic [5:0] addr, // Agregamos 1 bit mas para direccionar 128 instrucciones - Luego se cambio a 8 bits para direccionar 256 instrucciones por los leds y switches
+        input logic [7:0] addr, // Agregamos 1 bit mas para direccionar 128 instrucciones - Luego se cambio a 8 bits para direccionar 256 instrucciones por los leds y switches
         output logic [N-1:0] q
     );
 
-    logic [N-1:0] ROM [0:63] = '{default: 32'h0}; // Se agrega espacio para 128 instrucciones - Luego se cambio a 256 instrucciones para los leds y switches
+    logic [N-1:0] ROM [0:255] = '{default: 32'h0}; // Se agrega espacio para 128 instrucciones - Luego se cambio a 256 instrucciones para los leds y switches
 
 	initial begin      
 
@@ -120,7 +120,8 @@ module imem
                         32'h8b1f03ff,
                         32'h8b1f03ff,
                         32'hf81f83d9,
-                        32'hb400001f};
+                        32'hb400001f
+                    };
         */
         
         // basic_shift.s
@@ -457,8 +458,9 @@ module imem
                         32'h8b1f03ff,
                         32'h8b1f03ff};
         */
-	/*
+	
         // leds_and_switches.s
+        
         ROM [0:187] ='{
                         32'h8b0103e4,
                         32'h8b0203ec,
@@ -648,68 +650,7 @@ module imem
                         32'h8b1f03ff,
                         32'h8b1f03ff,
                         32'h8b1f03ff
-                    };
-                    */
-
-        // solo prender leds
-        /*
-        ROM [0:21] ='{
-                        32'h8b0103e4,
-                        32'h8b1f03e0,
-                        32'h8b1f03e1,
-                        32'h8b1f03e2,
-                        32'h8b1f03e3,
-                        32'h8b040000,
-                        32'h8b1f03ff,
-                        32'h8b1f03ff,
-                        32'hd37f3c00,
-                        32'h8b0403e3,
-                        32'h8b1f03ff,
-                        32'h8b1f03ff,
-                        32'hd37f4063,
-                        32'h8b1f03ff,
-                        32'h8b1f03ff,
-                        32'hcb040063,
-                        32'h8b1f03ff,
-                        32'h8b1f03ff,
-                        32'hf8000003,
-                        32'h8b1f03ff,
-                        32'h8b1f03ff,
-                        32'hb400001f};
-                        */
-    ROM [0:30] ='{
-                    32'h8b0103e4,
-                    32'h8b1f03e0,
-                    32'h8b1f03e1,
-                    32'h8b1f03e2,
-                    32'h8b1f03e3,
-                    32'h8b040000,
-                    32'h8b1f03ff,
-                    32'h8b1f03ff,
-                    32'hd37f3c00,
-                    32'h8b040021,
-                    32'h8b1f03ff,
-                    32'h8b1f03ff,
-                    32'hd37f3c21,
-                    32'h8b1f03ff,
-                    32'h8b1f03ff,
-                    32'h8b080021,
-                    32'h8b1f03ff,
-                    32'h8b1f03ff,
-                    32'hf8400022,
-                    32'h8b1f03ff,
-                    32'h8b1f03ff,
-                    32'h8b1f03ff,
-                    32'h8b1f03ff,
-                    32'h8b1f03ff,
-                    32'hf8000008,
-                    32'h8b1f03ff,
-                    32'h8b1f03ff,
-                    32'hb4fffeff,
-                    32'h8b1f03ff,
-                    32'h8b1f03ff,
-                    32'h8b1f03ff
-                };
+                    };            
         
 	end
 	always_comb begin

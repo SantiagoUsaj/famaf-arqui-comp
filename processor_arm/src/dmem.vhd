@@ -26,24 +26,24 @@ architecture behave of dmem is
  signal mem: ramtype;
 
  procedure memDump is
---   file dumpfile : text open write_mode is MEMORY_DUMP_FILE;
-   --FILE dumpfile: TEXT IS OUT MEMORY_DUMP_FILE;
-   --variable dumpline : line;
+   -- file dumpfile : text open write_mode is MEMORY_DUMP_FILE;
+   FILE dumpfile: TEXT IS OUT MEMORY_DUMP_FILE;
+   variable dumpline : line;
    variable i: natural := 0;
    begin
-		--write(dumpline, string'("Memoria RAM de Arm:"));
-		--writeline(dumpfile,dumpline);
-		--write(dumpline, string'("Address Data"));
-		--writeline(dumpfile,dumpline);
-      --while i <= MAX_BOUND-1 loop        
-		  --write(dumpline, i);
-		  --write(dumpline, string'(" "));
-		  --write(dumpline, to_bitvector(mem(i)));		
-		  -- Para obtener el resultado en hexa, reemplazar la línea anterior por: hwrite(dumpline, to_bitvector(mem(i)));
-		  -- Si Quartus da error, configurar: Settings - Compiler Settings - VHDL Input - VHDL 2008			  
-		  --writeline(dumpfile,dumpline);
-        --i:=i+1;
-     -- end loop;
+		write(dumpline, string'("Memoria RAM de Arm:"));
+		writeline(dumpfile,dumpline);
+		write(dumpline, string'("Address Data"));
+		writeline(dumpfile,dumpline);
+      while i <= MAX_BOUND-1 loop        
+		  write(dumpline, i);
+		  write(dumpline, string'(" "));
+		  write(dumpline, to_bitvector(mem(i)));		
+		   -- Para obtener el resultado en hexa, reemplazar la línea anterior por: hwrite(dumpline, to_bitvector(mem(i)));
+		   -- Si Quartus da error, configurar: Settings - Compiler Settings - VHDL Input - VHDL 2008			  
+		  writeline(dumpfile,dumpline);
+        i:=i+1;
+      end loop;
 		assert false report "fin del testdump" severity note;
    end procedure memDump;
 

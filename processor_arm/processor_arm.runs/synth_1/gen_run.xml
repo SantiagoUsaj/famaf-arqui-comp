@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <GenRun Id="synth_1" LaunchPart="xc7s50csga324-1" LaunchTime="1762527122" LaunchIncrCheckpoint="$PSRCDIR/utils_1/imports/synth_1/processor_arm.dcp">
-  <File Type="VDS-TIMINGSUMMARY" Name="processor_arm_timing_summary_synth.rpt"/>
-  <File Type="RDS-DCP" Name="processor_arm.dcp"/>
-  <File Type="RDS-UTIL-PB" Name="processor_arm_utilization_synth.pb"/>
-  <File Type="RDS-UTIL" Name="processor_arm_utilization_synth.rpt"/>
-  <File Type="RDS-PROPCONSTRS" Name="processor_arm_drc_synth.rpt"/>
-  <File Type="RDS-RDS" Name="processor_arm.vds"/>
   <File Type="REPORTS-TCL" Name="processor_arm_reports.tcl"/>
-  <File Type="VDS-TIMING-PB" Name="processor_arm_timing_summary_synth.pb"/>
+  <File Type="RDS-UTIL" Name="processor_arm_utilization_synth.rpt"/>
+  <File Type="RDS-UTIL-PB" Name="processor_arm_utilization_synth.pb"/>
   <File Type="PA-TCL" Name="processor_arm.tcl"/>
+  <File Type="RDS-RDS" Name="processor_arm.vds"/>
+  <File Type="RDS-DCP" Name="processor_arm.dcp"/>
   <FileSet Name="sources" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1" RelGenDir="$PGENDIR/sources_1">
     <Filter Type="Srcs"/>
     <File Path="$PPRDIR/src/7seg_controller.sv">

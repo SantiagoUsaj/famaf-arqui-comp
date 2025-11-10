@@ -8,12 +8,18 @@
 - Murphy Ronnie
 - Usaj Santiago
 
+### Preliminares
+
 Antes de iniciar con los ejercicios del laboratorio se nos pide que integremos el pipeline. Para esto copiamos y reemplazamos los modulos dados por los profesores.
 Una vez realizado el reemplazo de los modulos se debia verificar su correcto funcionamiento con el codigo dado, pero se debia agregar instrucciones NOP por los problemas de hazard.
 
-Para poder usar el codigo modificado se debio modificar:
+Antes de comenzar con los ejercicios del laboratorio se nos pide integrar el pipeline y verificar su funcionamiento con un código en assembler al cual se le deben agregar los NOPS.
 
-- `imem.sv` - Se agrego un bit al input addr para poder direccionar 128 instrucciones.
+Para integrar el pipeline se reemplazaron los archivos dados por los profesores.
+
+Para poder probar el código se debieron modificar los siguientes módulos:
+
+- `imem.sv` - Se agregó un bit al input addr para poder direccionar 128 instrucciones.
 
 ```verilog
 (
@@ -24,7 +30,7 @@ Para poder usar el codigo modificado se debio modificar:
 logic [N-1:0] ROM [0:127] = '{default: 32'h0}; // Se agrega espacio para 128 instrucciones
 ```
 
-- `regfile` - Se implemento que si alguno, o ambos registros leídos por una instrucción en la etapa #decode, están siendo escritos como resultado de una instrucción anterior en la etapa #writeback se obtenga a la salida de #regfile el valor actualizado del registro.
+- `regfile` - Si alguno o ambos registros leídos por una instrucción en la etapa #decode, están siendo escritos como resultado de una instrucción anterior en la etapa #writeback se obtiene a la salida de #regfile el valor actualizado del registro.
 
 ```verilog
 assign rd1 = (we3 && (wa3 == ra1) && (wa3 != 5'd31)) ? wd3 : registers[ra1];
@@ -32,14 +38,14 @@ assign rd1 = (we3 && (wa3 == ra1) && (wa3 != 5'd31)) ? wd3 : registers[ra1];
 assign rd2 = (we3 && (wa3 == ra2) && (wa3 != 5'd31)) ? wd3 : registers[ra2];
 ```
 
-- `processor_arm.sv` - Se agrego un bit a la entrada de la instrMem para que coincida con el nuevo tamaño del input.
+- `processor_arm.sv` - Se agregó un bit a la entrada de la instrMem para que coincida con el nuevo tamaño del input.
 
 ```verilog
 imem    instrMem (  .addr(IM_address[8:2]), // se cambio de 7:2 a 8:2
                     .q(q));
 ```
 
-Codigo original modificado con NOPS:
+Código de prueba modificado con NOPS:
 
 ```verilog
     .text
@@ -139,9 +145,9 @@ finloop: CBZ XZR, finloop // Bucle infinito
 
 ### Parte 1 - LSL y LSR
 
-Se nos pide agregar las instrucciones LSL y LSR. Para poder realizar esto se hicieron las siguientes modificaciones:
+Se nos pide agregar las instrucciones LSL y LSR. Para poder implementarlas se realizaron las siguientes modificaciones:
 
-- `alu.sv` - Agregamos las operaciones de shift
+- `alu.sv` - Se agregaron las operaciones de shift
 
 ```verilog
 4'b1000:
@@ -150,7 +156,7 @@ Se nos pide agregar las instrucciones LSL y LSR. Para poder realizar esto se hic
     result= a >> b;  //LSR
 ```
 
-- `aludec.sv` - Agregamos las señales de control para las operaciones LSL y LSR segun el aluop y sus respectivos opcodes.
+- `aludec.sv` - Se agregaron las señales de control para LSL y LSR junto a la identificación segun sus aluop y opcode.
 
 ```verilog
 else if ((aluop == 2'b10) & (funct == 11'b11010011010)) alucontrol = 4'b1001;	//LSR
@@ -158,7 +164,7 @@ else if ((aluop == 2'b10) & (funct == 11'b11010011010)) alucontrol = 4'b1001;	//
 else if ((aluop == 2'b10) & (funct == 11'b11010011011)) alucontrol = 4'b1000;	//LSL
 ```
 
-- `signext.sv` - Agregamos para identificar las instrucciones LSL y LSR con sus opcodes y se extiende el shamt a 64 bits para poder operar con el.
+- `signext.sv` - Se identifican las operaciones LSL y LSR para extender a 64 bits el valor de shamt y poder operar con él.
 
 ```verilog
 // LSL
@@ -170,7 +176,7 @@ else if ((aluop == 2'b10) & (funct == 11'b11010011011)) alucontrol = 4'b1000;	//
     y = {58'd0, a[15:10]};
 ```
 
-- `maindec.sv` - Agregamos la identificacion de las instrucciones LSL y LSR segun sus respectivos opcodes y se asignan las señales de control correspondientes.
+- `maindec.sv` - Se agregó la identificacion y decodificación de las instrucciones LSL y LSR.
 
 ```verilog
 11'b110_1001_101?: //LSL and LSR CASE
@@ -186,7 +192,7 @@ else if ((aluop == 2'b10) & (funct == 11'b11010011011)) alucontrol = 4'b1000;	//
     end
 ```
 
-Codigo base para probar el funcionamiento de LSL y LSR:
+Código utilizado para probar el funcionamiento de LSL y LSR:
 
 ```verilog
 .text
@@ -205,7 +211,7 @@ finloop: CBZ XZR, finloop // Bucle infinito
 
 ```
 
-Se nos pidio que probemos el codigo original con los nops y le agreguemos las nuevas instrucciones para ver que las instrucciones nuevas funciones y que las anteriores sigan funcionando correctamente
+Se nos pidió probar el código original con los NOPS y agregarle las nuevas instrucciones para comprobar el correcto funcionamiento de estas y que las anteriormentes sigan funcionando.
 
 Codigo original modificado con NOPS y LSL y LSR:
 
@@ -304,10 +310,21 @@ finloop: CBZ XZR, finloop // Bucle infinito
 
 ```
 
-Como el makefile que genera las instrucciones tenia un problema para armar las instrucciones de LSL y LSR, se utilizo un script que un compañero paso por Zulip. Gracias a el se nos facilito mucho el armar las instrucciones.
+Como el makefile que genera las instrucciones tenía un problema para armar las instrucciones de LSL y LSR, se utilizó un script que un compañero paso por Zulip. Gracias a él se nos facilitó mucho el armar las instrucciones.
 
 ### Parte 2 - LEDS y SWITCHES
 
-Escribimos un programa en assembler para gestionar recursos de E/S.
+Escribimos programas en assembler para gestionar recursos de E/S.
 
-Se realizo una animacion donde los leds se van prendiendo de a uno de derecha a izquierda (Led 0 al 15) y al apretar el Switch 0, se cambia el sentido de la animacion, yendo de izquierda a derecha (led 15 al 0). La animacion se ejecuta en un loop infinito, aunque estamos teniendo problemas en los bordes. Los leds de los bordes permanecen por menos tiempo encendidos.
+Fuimos creando distintos programas y experimentando el funcionamiento de los LEDs y switches.
+
+Primero creamos en `expansion.s` un loop en el que se encienden los LEDs del centro y se van expandiendo hacia los costados hasta llegar a estar las 16 luces encendidas, luego vuelven a estar unicamente las del centro. Si durante el loop se enciende la señal del switch 0 este se interrumpe y vuelve a iniciar.
+
+Este es un ejemplo donde la primera iteración del loop es interrumpida por la señal del switch.
+![expansion](/img/expansion.png)
+
+Luego probamos implementar distintos comportamientos segun que switch está encendido. En el archivo `off_on_even.s` creamos un programa con el cual los LEDs permanecen apagados si todos los switches estan en la posición 0. Si únicamente se activa el switch 0 se encienden todas las luces y si únicamente se activa el switch 1 se encienden solo las luces de posiciones pares.
+![off_on_even](/img/off_on_even.png) 
+
+Finalmente `leds_and_switches.s` combina estos códigos. Nuevamente el switch 0 enciende todos los LEDs y el switch 1 solo las posiciones pares. Además, el switch 2 comienza el loop infinito de expansion, el cual puede ser interrumpido con el switch 0.
+![l_and_s](/img/leds_and_switches.png) 

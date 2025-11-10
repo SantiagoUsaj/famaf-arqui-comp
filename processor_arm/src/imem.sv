@@ -29,7 +29,9 @@ module imem
 
     logic [N-1:0] ROM [0:255] = '{default: 32'h0}; // Se agrega espacio para 128 instrucciones - Luego se cambio a 256 instrucciones para los leds y switches
 
-	initial begin      
+	initial begin 
+
+        /********* Ejercicio 1 **********/
 
         // original_code_nops.s
         /*
@@ -122,63 +124,7 @@ module imem
                         32'hf81f83d9,
                         32'hb400001f
                     };
-        */
-
-        // Codigo original sin NOPS
-        ROM [0:52] ='{  32'hf8000001,
-                        32'hf8008002,
-                        32'hf8010003,
-                        32'h8b050083,
-                        32'hf8018003,
-                        32'hcb050083,
-                        32'hf8020003,
-                        32'hcb0a03e4,
-                        32'hf8028004,
-                        32'h8b040064,
-                        32'hf8030004,
-                        32'hcb030025,
-                        32'hf8038005,
-                        32'h8a1f0145,
-                        32'hf8040005,
-                        32'h8a030145,
-                        32'hf8048005,
-                        32'h8a140294,
-                        32'hf8050014,
-                        32'haa1f0166,
-                        32'hf8058006,
-                        32'haa030166,
-                        32'hf8060006,
-                        32'hf840000c,
-                        32'h8b1f0187,
-                        32'hf8068007,
-                        32'hf807000c,
-                        32'h8b0e01bf,
-                        32'hf807801f,
-                        32'hb40000a0,
-                        32'h8b1f03ff,
-                        32'h8b1f03ff,
-                        32'h8b1f03ff,
-                        32'hf8080015,
-                        32'hf8088015,
-                        32'h8b0103e2,
-                        32'hcb010042,
-                        32'h8b0103f8,
-                        32'hf8090018,
-                        32'h8b080000,
-                        32'hb4ffff82,
-                        32'h8b1f03ff,
-                        32'h8b1f03ff,
-                        32'h8b1f03ff,
-                        32'hf809001e,
-                        32'h8b1e03de,
-                        32'hcb1503f5,
-                        32'h8b1403de,
-                        32'hf85f83d9,
-                        32'h8b1e03de,
-                        32'h8b1003de,
-                        32'hf81f83d9,
-                        32'hb400001f
-                    };
+        */        
 
         // basic_shift.s
         /*
@@ -193,69 +139,6 @@ module imem
                         32'hf8020006,
                         32'hb400001f};
         */   
-        
-        // Codigo test_HDU_FU.s sin salto
-        /*
-        ROM [0:22] ='{
-                        32'hf8000001,
-                        32'hf800800f,
-                        32'h8b1f03ff,
-                        32'h8b1f03ff,
-                        32'h8b1f03ff,
-                        32'h8b1f03ff,
-                        32'hf8400001,
-                        32'h8b030022,
-                        32'hcb0100a4,
-                        32'h8b040046,
-                        32'h8b0100c7,
-                        32'h8b0600e8,
-                        32'h8b0b0149,
-                        32'h8b0e01ac,
-                        32'hf840800f,
-                        32'hb400004f,
-                        32'h8b1101f0,
-                        32'hf8010012,
-                        32'hf8410013,
-                        32'h8b120274,
-                        32'h8b1f03ff,
-                        32'h8b1f03ff,
-                        32'hb400001f
-                    };
-        */
-
-        // Codigo test_HDU_FU modificado para que salte
-        /*
-       ROM [0:25] ='{   32'hf8000001,
-                        32'hf8008000,
-                        32'h8b1f03ff,
-                        32'h8b1f03ff,
-                        32'h8b1f03ff,
-                        32'h8b1f03ff,
-                        32'hf8400001,
-                        32'h8b030022,
-                        32'hcb0100a4,
-                        32'h8b040046,
-                        32'h8b0100c7,
-                        32'h8b0600e8,
-                        32'h8b0b0149,
-                        32'h8b0e01ac,
-                        32'hf840800f,
-                        32'hb40000af,
-                        32'h8b1f03ff,
-                        32'h8b1f03ff,
-                        32'h8b1f03ff,
-                        32'h8b1101f0,
-                        32'hf8010012,
-                        32'hf8410013,
-                        32'h8b120274,
-                        32'h8b1f03ff,
-                        32'h8b1f03ff,
-                        32'hb400001f
-                    };
-        */
-                      
-                        
-                
 
         // original_code_nops_ls.s
         /*
@@ -770,6 +653,124 @@ module imem
                         32'h8b1f03ff
                     };            
                 */
+
+        /********* Ejercicio 2 **********/
+
+        // test_HDU_FU.s sin salto
+        /*
+        ROM [0:22] ='{
+                        32'hf8000001,
+                        32'hf800800f,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'hf8400001,
+                        32'h8b030022,
+                        32'hcb0100a4,
+                        32'h8b040046,
+                        32'h8b0100c7,
+                        32'h8b0600e8,
+                        32'h8b0b0149,
+                        32'h8b0e01ac,
+                        32'hf840800f,
+                        32'hb400004f,
+                        32'h8b1101f0,
+                        32'hf8010012,
+                        32'hf8410013,
+                        32'h8b120274,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'hb400001f
+                    };
+        */
+
+        // test_HDU_FU modificado para que salte
+        /*
+       ROM [0:25] ='{   32'hf8000001,
+                        32'hf8008000,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'hf8400001,
+                        32'h8b030022,
+                        32'hcb0100a4,
+                        32'h8b040046,
+                        32'h8b0100c7,
+                        32'h8b0600e8,
+                        32'h8b0b0149,
+                        32'h8b0e01ac,
+                        32'hf840800f,
+                        32'hb40000af,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'h8b1101f0,
+                        32'hf8010012,
+                        32'hf8410013,
+                        32'h8b120274,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'hb400001f
+                    };
+        */     
+
+        // original_code.s
+        ROM [0:52] ='{  32'hf8000001,
+                        32'hf8008002,
+                        32'hf8010003,
+                        32'h8b050083,
+                        32'hf8018003,
+                        32'hcb050083,
+                        32'hf8020003,
+                        32'hcb0a03e4,
+                        32'hf8028004,
+                        32'h8b040064,
+                        32'hf8030004,
+                        32'hcb030025,
+                        32'hf8038005,
+                        32'h8a1f0145,
+                        32'hf8040005,
+                        32'h8a030145,
+                        32'hf8048005,
+                        32'h8a140294,
+                        32'hf8050014,
+                        32'haa1f0166,
+                        32'hf8058006,
+                        32'haa030166,
+                        32'hf8060006,
+                        32'hf840000c,
+                        32'h8b1f0187,
+                        32'hf8068007,
+                        32'hf807000c,
+                        32'h8b0e01bf,
+                        32'hf807801f,
+                        32'hb40000a0,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'hf8080015,
+                        32'hf8088015,
+                        32'h8b0103e2,
+                        32'hcb010042,
+                        32'h8b0103f8,
+                        32'hf8090018,
+                        32'h8b080000,
+                        32'hb4ffff82,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'h8b1f03ff,
+                        32'hf809001e,
+                        32'h8b1e03de,
+                        32'hcb1503f5,
+                        32'h8b1403de,
+                        32'hf85f83d9,
+                        32'h8b1e03de,
+                        32'h8b1003de,
+                        32'hf81f83d9,
+                        32'hb400001f
+                    };
 	end
 	always_comb begin
 		q = ROM[addr];

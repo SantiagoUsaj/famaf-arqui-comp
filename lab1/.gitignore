@@ -92,3 +92,4 @@
 #########
 !armv8_createAssembly/*
 !img/*
+!*.pdf

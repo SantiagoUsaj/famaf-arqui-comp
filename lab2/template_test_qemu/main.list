@@ -1,0 +1,190 @@
+
+main.elf:     formato del fichero elf64-littleaarch64
+
+
+Desensamblado de la sección .text:
+
+0000000040080000 <_start>:
+    40080000:	d5381041 	mrs	x1, cpacr_el1
+    40080004:	d2a00600 	mov	x0, #0x300000              	// #3145728
+    40080008:	aa000020 	orr	x0, x1, x0
+    4008000c:	d5181040 	msr	cpacr_el1, x0
+    40080010:	58000284 	ldr	x4, 40080060 <_start+0x60>
+    40080014:	f9400084 	ldr	x4, [x4]
+    40080018:	5800028a 	ldr	x10, 40080068 <_start+0x68>
+    4008001c:	fd40014a 	ldr	d10, [x10]
+    40080020:	58000281 	ldr	x1, 40080070 <_start+0x70>
+    40080024:	580002a2 	ldr	x2, 40080078 <_start+0x78>
+    40080028:	580002c3 	ldr	x3, 40080080 <_start+0x80>
+    4008002c:	d2800005 	mov	x5, #0x0                   	// #0
+    40080030:	eb0400bf 	cmp	x5, x4
+    40080034:	5400010a 	b.ge	40080054 <_start+0x54>  // b.tcont
+    40080038:	fc657820 	ldr	d0, [x1, x5, lsl #3]
+    4008003c:	fc657841 	ldr	d1, [x2, x5, lsl #3]
+    40080040:	1e600942 	fmul	d2, d10, d0
+    40080044:	1e612843 	fadd	d3, d2, d1
+    40080048:	fc257863 	str	d3, [x3, x5, lsl #3]
+    4008004c:	910004a5 	add	x5, x5, #0x1
+    40080050:	17fffff8 	b	40080030 <_start+0x30>
+    40080054:	d2800ba8 	mov	x8, #0x5d                  	// #93
+    40080058:	d2800000 	mov	x0, #0x0                   	// #0
+    4008005c:	d4000001 	svc	#0x0
+    40080060:	40080088 	.inst	0x40080088 ; undefined
+    40080064:	00000000 	udf	#0
+    40080068:	40080090 	.inst	0x40080090 ; undefined
+    4008006c:	00000000 	udf	#0
+    40080070:	40080098 	.inst	0x40080098 ; undefined
+    40080074:	00000000 	udf	#0
+    40080078:	400800e8 	.inst	0x400800e8 ; undefined
+    4008007c:	00000000 	udf	#0
+    40080080:	40080138 	.inst	0x40080138 ; undefined
+    40080084:	00000000 	udf	#0
+
+Desensamblado de la sección .data:
+
+0000000040080088 <N>:
+    40080088:	0000000a 	udf	#10
+    4008008c:	00000000 	udf	#0
+
+0000000040080090 <Alpha>:
+    40080090:	00000000 	udf	#0
+    40080094:	40000000 	.inst	0x40000000 ; undefined
+
+0000000040080098 <X>:
+    40080098:	00000000 	udf	#0
+    4008009c:	3ff00000 	.inst	0x3ff00000 ; undefined
+    400800a0:	00000000 	udf	#0
+    400800a4:	40000000 	.inst	0x40000000 ; undefined
+    400800a8:	00000000 	udf	#0
+    400800ac:	40080000 	.inst	0x40080000 ; undefined
+    400800b0:	00000000 	udf	#0
+    400800b4:	40100000 	.inst	0x40100000 ; undefined
+    400800b8:	00000000 	udf	#0
+    400800bc:	40140000 	.inst	0x40140000 ; undefined
+    400800c0:	00000000 	udf	#0
+    400800c4:	3ff00000 	.inst	0x3ff00000 ; undefined
+    400800c8:	00000000 	udf	#0
+    400800cc:	40000000 	.inst	0x40000000 ; undefined
+    400800d0:	00000000 	udf	#0
+    400800d4:	40080000 	.inst	0x40080000 ; undefined
+    400800d8:	00000000 	udf	#0
+    400800dc:	40100000 	.inst	0x40100000 ; undefined
+    400800e0:	00000000 	udf	#0
+    400800e4:	40140000 	.inst	0x40140000 ; undefined
+
+00000000400800e8 <Y>:
+    400800e8:	00000000 	udf	#0
+    400800ec:	3ff00000 	.inst	0x3ff00000 ; undefined
+    400800f0:	00000000 	udf	#0
+    400800f4:	40000000 	.inst	0x40000000 ; undefined
+    400800f8:	00000000 	udf	#0
+    400800fc:	40080000 	.inst	0x40080000 ; undefined
+    40080100:	00000000 	udf	#0
+    40080104:	40100000 	.inst	0x40100000 ; undefined
+    40080108:	00000000 	udf	#0
+    4008010c:	40140000 	.inst	0x40140000 ; undefined
+    40080110:	00000000 	udf	#0
+    40080114:	3ff00000 	.inst	0x3ff00000 ; undefined
+    40080118:	00000000 	udf	#0
+    4008011c:	40000000 	.inst	0x40000000 ; undefined
+    40080120:	00000000 	udf	#0
+    40080124:	40080000 	.inst	0x40080000 ; undefined
+    40080128:	00000000 	udf	#0
+    4008012c:	40100000 	.inst	0x40100000 ; undefined
+    40080130:	00000000 	udf	#0
+    40080134:	40140000 	.inst	0x40140000 ; undefined
+
+0000000040080138 <Z>:
+	...
+
+Desensamblado de la sección .debug_line:
+
+0000000000000000 <.debug_line>:
+   0:	0000004a 	udf	#74
+   4:	001a0002 	.inst	0x001a0002 ; undefined
+   8:	01040000 	.inst	0x01040000 ; undefined
+   c:	000a0efb 	.inst	0x000a0efb ; undefined
+  10:	01010101 	.inst	0x01010101 ; undefined
+  14:	01000000 	.inst	0x01000000 ; undefined
+  18:	69616d00 	ldpsw	x0, x27, [x8, #-248]
+  1c:	00732e6e 	.inst	0x00732e6e ; undefined
+  20:	00000000 	udf	#0
+  24:	00020900 	.inst	0x00020900 ; undefined
+  28:	00400800 	.inst	0x00400800 ; undefined
+  2c:	03000000 	.inst	0x03000000 ; undefined
+  30:	1e1e010c 	.inst	0x1e1e010c ; undefined
+  34:	1e1e201e 	.inst	0x1e1e201e ; undefined
+  38:	1e1e1e1e 	.inst	0x1e1e1e1e ; undefined
+  3c:	201e201f 	.inst	0x201e201f ; undefined
+  40:	1e1e1e1e 	.inst	0x1e1e1e1e ; undefined
+  44:	1e211f20 	fcsel	s0, s25, s1, ne	// ne = any
+  48:	000b021e 	.inst	0x000b021e ; undefined
+  4c:	Address 0x4c is out of bounds.
+
+
+Desensamblado de la sección .debug_info:
+
+0000000000000000 <.debug_info>:
+   0:	0000002a 	udf	#42
+   4:	00000002 	udf	#2
+   8:	01080000 	.inst	0x01080000 ; undefined
+   c:	00000000 	udf	#0
+  10:	40080000 	.inst	0x40080000 ; undefined
+  14:	00000000 	udf	#0
+  18:	40080088 	.inst	0x40080088 ; undefined
+	...
+  24:	00000007 	udf	#7
+  28:	00000056 	udf	#86
+  2c:	Address 0x2c is out of bounds.
+
+
+Desensamblado de la sección .debug_abbrev:
+
+0000000000000000 <.debug_abbrev>:
+   0:	10001101 	adr	x1, 220 <_start-0x4007fde0>
+   4:	12011106 	and	w6, w8, #0x8000000f
+   8:	1b0e0301 	madd	w1, w24, w14, w0
+   c:	130e250e 	sbfiz	w14, w8, #18, #10
+  10:	00000005 	udf	#5
+
+Desensamblado de la sección .debug_aranges:
+
+0000000000000000 <.debug_aranges>:
+   0:	0000002c 	udf	#44
+   4:	00000002 	udf	#2
+   8:	00080000 	.inst	0x00080000 ; undefined
+   c:	00000000 	udf	#0
+  10:	40080000 	.inst	0x40080000 ; undefined
+  14:	00000000 	udf	#0
+  18:	00000088 	udf	#136
+	...
+
+Desensamblado de la sección .debug_str:
+
+0000000000000000 <.debug_str>:
+   0:	6e69616d 	rsubhn2	v13.8h, v11.4s, v9.4s
+   4:	2f00732e 	.inst	0x2f00732e ; undefined
+   8:	656d6f68 	fnmls	z8.h, p3/m, z27.h, z13.h
+   c:	6465662f 	.inst	0x6465662f ; undefined
+  10:	72666465 	.inst	0x72666465 ; undefined
+  14:	636f442f 	.inst	0x636f442f ; undefined
+  18:	6e656d75 	umin	v21.8h, v11.8h, v5.8h
+  1c:	2f736f74 	.inst	0x2f736f74 ; undefined
+  20:	48746947 	.inst	0x48746947 ; undefined
+  24:	412f6275 	.inst	0x412f6275 ; undefined
+  28:	69757172 	ldpsw	x18, x28, [x11, #-88]
+  2c:	62616c2f 	.inst	0x62616c2f ; undefined
+  30:	616c2f32 	.inst	0x616c2f32 ; undefined
+  34:	612d3262 	.inst	0x612d3262 ; undefined
+  38:	30326364 	adr	x4, 64ca5 <_start-0x4001b35b>
+  3c:	672d3432 	.inst	0x672d3432 ; undefined
+  40:	742f3833 	.inst	0x742f3833 ; undefined
+  44:	6c706d65 	ldnp	d5, d27, [x11, #-256]
+  48:	5f657461 	sqshl	d1, d3, #37
+  4c:	74736574 	.inst	0x74736574 ; undefined
+  50:	6d65715f 	ldp	d31, d28, [x10, #-432]
+  54:	4e470075 	.inst	0x4e470075 ; undefined
+  58:	53412055 	.inst	0x53412055 ; undefined
+  5c:	342e3220 	cbz	w0, 5c6a0 <_start-0x40023960>
+  60:	Address 0x60 is out of bounds.
+

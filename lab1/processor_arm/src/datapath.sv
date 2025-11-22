@@ -1,0 +1,157 @@
+// DATAPATH
+
+module datapath #(parameter N = 64)
+					(	input logic reset, clk,
+						input logic reg2loc,									
+						input logic AluSrc,
+						input logic [3:0] AluControl,
+						input logic	Branch,
+						input logic memRead,
+						input logic memWrite,
+						input logic regWrite,	
+						input logic memtoReg,									
+						input logic [31:0] IM_readData,
+						input logic [N-1:0] DM_readData,
+						output logic [N-1:0] IM_addr, DM_addr, DM_writeData,
+						output logic DM_writeEnable, DM_readEnable,
+						output logic stall 
+					);					
+					
+	logic PCSrc;
+	logic [N-1:0] PCBranch_E, aluResult_E, writeData_E, writeData3; 
+	logic [N-1:0] signImm_D, readData1_D, readData2_D;
+	logic zero_E;
+	logic [95:0] qIF_ID;
+	logic [280:0] qID_EX;
+	logic [202:0] qEX_MEM;
+	logic [134:0] qMEM_WB;
+
+	// Señal de stall desde la unidad de hazard
+	logic stall;
+	
+	// Señales de control modificadas (NOP si hay stall)
+	logic AluSrc_ID_mux, Branch_ID_mux, memRead_ID_mux, memWrite_ID_mux, regWrite_ID_mux, memtoReg_ID_mux;
+	logic [3:0] AluControl_ID_mux;	
+
+	// Señales de forwarding
+	logic [1:0] forwardA, forwardB;
+	logic [4:0] FU_rs2;
+	logic [4:0] rs2_R, rs2_D, rs2_CB;
+
+	
+	fetch 	#(64) 	FETCH 	(.PCSrc_F(PCSrc),
+										.clk(clk),
+										.reset(reset),
+										.enable(~stall),
+										.PCBranch_F(qEX_MEM[197:134]),
+										.imem_addr_F(IM_addr));								
+					
+	
+	flopr_e 	#(96)		IF_ID 	(.clk(clk),
+										.reset(reset),
+										.enable(~stall),
+										.d({IM_addr, IM_readData}),
+										.q(qIF_ID));
+										
+	
+	decode 	#(64) 	DECODE 	(.regWrite_D(qMEM_WB[134]),
+										.reg2loc_D(reg2loc), 
+										.clk(clk),
+										.writeData3_D(writeData3),
+										.instr_D(qIF_ID[31:0]), 
+										.signImm_D(signImm_D), 
+										.readData1_D(readData1_D),
+										.readData2_D(readData2_D),
+										.wa3_D(qMEM_WB[4:0]));				
+
+
+	// Mux para forzar a 0 si hay stall
+	assign AluSrc_ID_mux     = stall ? 1'b0 : AluSrc;
+	assign AluControl_ID_mux = stall ? 4'b0000 : AluControl;
+	assign Branch_ID_mux     = stall ? 1'b0 : Branch;
+	assign memRead_ID_mux    = stall ? 1'b0 : memRead;
+	assign memWrite_ID_mux   = stall ? 1'b0 : memWrite;
+	assign regWrite_ID_mux   = stall ? 1'b0 : regWrite;
+	assign memtoReg_ID_mux   = stall ? 1'b0 : memtoReg;																		
+									
+	flopr 	#(281)	ID_EX 	(	.clk(clk),
+								.reset(reset), 
+								.d({qIF_ID[20:16],qIF_ID[9:5],AluSrc_ID_mux, AluControl_ID_mux, Branch_ID_mux, memRead_ID_mux, memWrite_ID_mux, regWrite_ID_mux, memtoReg_ID_mux,	
+									qIF_ID[95:32], signImm_D, readData1_D, readData2_D, qIF_ID[4:0]}),
+								.q(qID_EX));
+	
+	// Cálculo de rs1 y rs2 para la unidad de forwarding
+	assign rs2_R  = qID_EX[280:276]; // Rn para tipo R
+	assign rs2_D  = qID_EX[4:0];     // Rt para tipo D (STUR/LDUR)
+	assign rs2_CB = qID_EX[4:0];     // Rt para tipo CB (CBZ)
+
+	assign FU_rs2 = qID_EX[263] ? rs2_D : (qID_EX[265] ? rs2_CB : rs2_R);
+
+	forwarding_unit FU (
+							.ID_EX_rs1(qID_EX[275:271]), // rs1 de la instrucción en EX
+							.ID_EX_rs2(FU_rs2),   // rs2 de la instrucción en EX
+							.EX_MEM_rd(qEX_MEM[4:0]),  // rd de la instrucción en MEM
+							.EX_MEM_regWrite(qEX_MEM[199]), // regWrite de la instrucción en MEM
+							.MEM_WB_rd(qMEM_WB[4:0]),  // rd de la instrucción en WB
+							.MEM_WB_regWrite(qMEM_WB[134]), // regWrite de la instrucción en WB
+							.forwardA(forwardA),
+							.forwardB(forwardB)
+	);				
+
+
+	execute #(64) EXECUTE (
+							.AluSrc(qID_EX[270]),
+							.AluControl(qID_EX[269:266]),
+							.PC_E(qID_EX[260:197]),
+							.signImm_E(qID_EX[196:133]),
+							.readData1_E(qID_EX[132:69]),
+							.readData2_E(qID_EX[68:5]),
+							.forwardA(forwardA),
+							.forwardB(forwardB),
+							.aluResult_MEM(qEX_MEM[132:69]),
+							.writeData_WB(writeData3),
+							.PCBranch_E(PCBranch_E),
+							.aluResult_E(aluResult_E),
+							.writeData_E(writeData_E),
+							.zero_E(zero_E)
+	);
+
+
+	hazard_unit		HDU		(	.ID_rs1(qIF_ID[9:5]),
+								.ID_rs2(reg2loc ? qIF_ID[4:0] : qIF_ID[20:16]),
+								.EX_rd(qID_EX[4:0]),
+								.EX_memRead(qID_EX[264]),
+								.stall(stall));		
+
+									
+	flopr 	#(203)	EX_MEM 	(.clk(clk),
+										.reset(reset), 
+										.d({qID_EX[265:261], PCBranch_E, zero_E, aluResult_E, writeData_E, qID_EX[4:0]}),
+										.q(qEX_MEM));	
+	
+										
+	memory				MEMORY	(.Branch_M(qEX_MEM[202]), 
+										.zero_M(qEX_MEM[133]), 
+										.PCSrc_M(PCSrc));
+			
+	
+	// Salida de señales a Data Memory
+	assign DM_writeData = qEX_MEM[68:5];
+	assign DM_addr = qEX_MEM[132:69];
+	
+	// Salida de señales de control:
+	assign DM_writeEnable = qEX_MEM[200];
+	assign DM_readEnable = qEX_MEM[201];
+	
+	flopr 	#(135)	MEM_WB 	(.clk(clk),
+										.reset(reset), 
+										.d({qEX_MEM[199:198], qEX_MEM[132:69],	DM_readData, qEX_MEM[4:0]}),
+										.q(qMEM_WB));
+		
+	
+	writeback #(64) 	WRITEBACK (.aluResult_W(qMEM_WB[132:69]), 
+										.DM_readData_W(qMEM_WB[68:5]), 
+										.memtoReg(qMEM_WB[133]), 
+										.writeData3_W(writeData3));		
+		
+endmodule
